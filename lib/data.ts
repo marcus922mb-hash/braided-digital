@@ -6,6 +6,7 @@ export const navItems = [
   { href: "/o-mnie", label: "O mnie" },
   { href: "/proces", label: "Proces" },
   { href: "/cennik", label: "Cennik" },
+  { href: "/wycena", label: "Wycena" },
   { href: "/faq", label: "FAQ" },
 ];
 
