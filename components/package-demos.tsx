@@ -31,14 +31,14 @@ export function PackageDemo({ slug, config: c }: { slug: string; config: DemoCon
   // ── Cyfrowa wizytówka ──
   if (slug === "cyfrowa-wizytowka") return (
     <div style={{ backgroundColor: c.bgColor, color: tc, transition: trans }} className="min-h-[78vh]">
-      <nav style={{ color: tc }} className="mx-auto flex max-w-6xl justify-between px-6 py-7 text-xs uppercase tracking-[.18em]">
+      <nav style={{ color: tc }} className="mx-auto flex max-w-6xl items-center justify-between px-6 py-7 text-xs uppercase tracking-[.18em]">
         <b>{c.brandName}</b>
-        <span style={{ color: mc }}>Projektowanie wnętrz · Kontakt</span>
+        <span style={{ color: mc }} className="hidden md:inline">Projektowanie wnętrz · Kontakt</span>
       </nav>
       <div className="mx-auto grid min-h-[62vh] max-w-6xl items-center gap-10 px-6 py-14 md:grid-cols-[1.1fr_.9fr]">
         <div>
           <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-[.22em]">{c.tagline}</p>
-          <h1 className="mt-7 font-serif text-6xl leading-[.9] md:text-8xl">
+          <h1 className="mt-7 font-serif text-5xl leading-[.9] md:text-8xl">
             {c.headline}<br/>
             <i style={{ color: c.accentColor }}>{c.headlineItalic}</i>
           </h1>
@@ -64,7 +64,7 @@ export function PackageDemo({ slug, config: c }: { slug: string; config: DemoCon
             <a key={link} style={i === 0
               ? { backgroundColor: c.accentColor, color: lum(c.accentColor) > 0.5 ? "#1a1413" : "#fff" }
               : { backgroundColor: "rgba(255,255,255,0.25)", borderColor: `${c.accentColor}50`, color: tc }
-            } className="flex cursor-pointer items-center justify-between border px-5 py-4 text-xs font-semibold transition hover:-translate-y-1">
+            } className="flex cursor-pointer items-center justify-between border px-5 py-4 text-xs font-semibold transition hover:-translate-y-1 hover:bg-white/60">
               <span>{link}</span><span>↗</span>
             </a>
           ))}
@@ -79,12 +79,12 @@ export function PackageDemo({ slug, config: c }: { slug: string; config: DemoCon
     <div style={{ backgroundColor: c.bgColor, color: tc, transition: trans }}>
       <nav style={{ color: tc }} className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 text-xs uppercase tracking-widest">
         <b className="font-serif text-2xl">{c.brandName}</b>
-        <span style={{ color: mc }}>O mnie · Zabiegi · Kontakt</span>
+        <span style={{ color: mc }} className="hidden md:inline">O mnie · Zabiegi · Kontakt</span>
       </nav>
       <section className="mx-auto grid min-h-[65vh] max-w-6xl items-center md:grid-cols-2">
         <div className="px-6 py-16">
           <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-[.2em]">{c.tagline}</p>
-          <h1 className="mt-6 font-serif text-7xl leading-[.85]">
+          <h1 className="mt-6 font-serif text-5xl leading-[.9] md:text-7xl">
             {c.headline}<br/>
             <i style={{ color: c.accentColor }}>{c.headlineItalic}</i>
           </h1>
@@ -110,12 +110,12 @@ export function PackageDemo({ slug, config: c }: { slug: string; config: DemoCon
     <div style={{ backgroundColor: c.bgColor, color: tc, transition: trans }} className="min-h-[78vh]">
       <nav style={{ color: tc }} className="flex items-center justify-between bg-white px-6 py-6 text-xs uppercase tracking-[.18em] md:px-12">
         <b>{c.brandName}</b>
-        <span style={{ color: mc }}>Projekty · Studio · Proces · Kontakt</span>
+        <span style={{ color: mc }} className="hidden md:inline">Projekty · Studio · Proces · Kontakt</span>
       </nav>
       <section className="grid min-h-[65vh] md:grid-cols-[.8fr_1.2fr]">
         <div className="flex flex-col justify-center px-8 py-16 md:px-16">
           <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-[.2em]">{c.tagline}</p>
-          <h1 className="mt-8 font-serif text-6xl leading-none md:text-8xl">
+          <h1 className="mt-8 font-serif text-5xl leading-none md:text-8xl">
             {c.headline}<br/>
             <i style={{ color: c.accentColor }}>{c.headlineItalic}</i>
           </h1>
@@ -141,13 +141,16 @@ export function PackageDemo({ slug, config: c }: { slug: string; config: DemoCon
       <div style={{ backgroundColor: tc, color: c.bgColor }} className="py-2 text-center text-[.6rem] uppercase tracking-[.2em]">
         Darmowa dostawa od 150 zł
       </div>
-      <nav style={{ borderColor: bc }} className="mx-auto flex max-w-6xl justify-between border-b px-6 py-6 text-xs uppercase tracking-widest">
+      <nav style={{ borderColor: bc }} className="mx-auto flex max-w-6xl items-center justify-between border-b px-6 py-6 text-xs uppercase tracking-widest">
         <b className="font-serif text-xl">{c.brandName}</b>
-        <span style={{ color: mc }}>Sklep · O marce · Koszyk (0)</span>
+        <span style={{ color: mc }} className="hidden md:inline">Sklep · O marce · Koszyk (0)</span>
       </nav>
       <header className="mx-auto max-w-4xl px-6 py-16 text-center">
         <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-[.2em]">{c.tagline}</p>
-        <h1 className="mt-5 font-serif text-6xl">{c.headline} {c.headlineItalic && <i>{c.headlineItalic}</i>}</h1>
+        <h1 className="mt-5 font-serif text-4xl md:text-5xl">
+          {c.headline}<br/>
+          {c.headlineItalic && <i>{c.headlineItalic}</i>}
+        </h1>
         <p style={{ color: mc }} className="mx-auto mt-5 max-w-lg text-sm">{c.body}</p>
       </header>
       <section className="mx-auto grid max-w-6xl gap-5 px-6 pb-20 sm:grid-cols-2 md:grid-cols-3">
@@ -171,15 +174,15 @@ export function PackageDemo({ slug, config: c }: { slug: string; config: DemoCon
       <div style={{ backgroundColor: tc, color: c.bgColor }} className="py-2 text-center text-[.6rem] uppercase tracking-[.2em]">
         New collection available now
       </div>
-      <nav style={{ borderColor: bc }} className="flex justify-between border-b px-6 py-6 text-xs uppercase tracking-[.18em] md:px-12">
+      <nav style={{ borderColor: bc }} className="flex items-center justify-between border-b px-6 py-6 text-xs uppercase tracking-[.18em] md:px-12">
         <b>{c.brandName}</b>
-        <span style={{ color: mc }}>New · Woman · Objects · Bag (0)</span>
+        <span style={{ color: mc }} className="hidden md:inline">New · Woman · Objects · Bag (0)</span>
       </nav>
       <section className="grid min-h-[70vh] md:grid-cols-2">
         <div className="min-h-[520px]" style={{ background: `linear-gradient(155deg, color-mix(in srgb, ${c.accentColor} 80%, #202020), color-mix(in srgb, ${c.accentColor} 30%, #acacac))` }} />
         <div className="flex flex-col justify-center px-8 py-16 md:px-20">
           <p style={{ color: mc }} className="text-xs uppercase tracking-[.2em]">{c.tagline}</p>
-          <h1 className="mt-7 text-7xl font-light leading-[.85] md:text-8xl">
+          <h1 className="mt-7 text-5xl font-light leading-[.9] md:text-7xl">
             {c.headline}<br/>
             {c.headlineItalic}
           </h1>
@@ -212,25 +215,23 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
   // ── Cyfrowa wizytówka ──
   if (slug === "cyfrowa-wizytowka") return (
     <>
-      {/* Services */}
       <section style={{ backgroundColor: lum(c.bgColor) > 0.5 ? c.bgColor : "#f4ead8" }}>
         <div className="mx-auto grid max-w-6xl gap-8 px-6 py-16 md:grid-cols-3">
           {c.services.map((svc, i) => (
             <article key={svc} className="border-t pt-5" style={{ borderColor: `${tc}25` }}>
               <span style={{ color: c.accentColor }} className="text-xs">0{i + 1}</span>
-              <h2 className="mt-5 font-serif text-3xl">{svc}</h2>
+              <h2 className="mt-5 font-serif text-2xl md:text-3xl">{svc}</h2>
               <p className="mt-3 text-sm text-black/50">Indywidualny projekt dopasowany do potrzeb i charakteru wnętrza.</p>
             </article>
           ))}
         </div>
       </section>
-      {/* About */}
       <section className="bg-white">
         <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 md:grid-cols-2">
           <div className="aspect-[4/3]" style={{ background: `linear-gradient(145deg, color-mix(in srgb, ${c.accentColor} 30%, #c9b892), color-mix(in srgb, ${c.accentColor} 10%, #e8dcc8))` }} />
           <div>
             <span style={{ color: c.accentColor }} className="text-xs uppercase tracking-[.2em]">O studio</span>
-            <h2 className="mt-5 font-serif text-5xl" style={{ color: "#1a1413" }}>Projekt to<br/>rozmowa.</h2>
+            <h2 className="mt-5 font-serif text-4xl md:text-5xl" style={{ color: "#1a1413" }}>Projekt to<br/>rozmowa.</h2>
             <p className="mt-5 text-sm leading-7 text-black/50">Projektuję razem z Tobą – słuchając, pokazując i dopasowując kierunek do Twojego gustu, stylu życia i budżetu.</p>
             <div className="mt-10 grid grid-cols-3 gap-4 border-y border-black/10 py-6 text-center">
               {[["7","lat praktyki"],["120+","projektów"],["4,9/5","opinie"]].map(([val, lbl]) => (
@@ -240,15 +241,13 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
           </div>
         </div>
       </section>
-      {/* CTA */}
       <section style={{ backgroundColor: c.accentColor, color: lum(c.accentColor) > 0.5 ? "#1a1413" : "#fff" }} className="px-6 py-16 text-center">
         <p className="text-xs uppercase tracking-widest opacity-60">Nowy projekt</p>
-        <h2 className="mt-4 font-serif text-5xl">Porozmawiajmy o Twoim wnętrzu.</h2>
+        <h2 className="mt-4 font-serif text-4xl md:text-5xl">Porozmawiajmy o Twoim wnętrzu.</h2>
         <a style={{ borderColor: lum(c.accentColor) > 0.5 ? "#1a1413" : "#fff", color: lum(c.accentColor) > 0.5 ? "#1a1413" : "#fff" }} className="mt-7 inline-block cursor-pointer border px-7 py-4 text-xs uppercase tracking-widest">
           Umów rozmowę
         </a>
       </section>
-      {/* Footer */}
       <footer style={{ backgroundColor: c.bgColor, color: tc }} className="px-6 py-10">
         <div className="mx-auto flex max-w-6xl flex-col justify-between gap-5 text-sm md:flex-row">
           <b className="font-serif text-2xl">{c.brandName}</b>
@@ -273,13 +272,12 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
   // ── One page ──
   if (slug === "one-page") return (
     <>
-      {/* About */}
       <section style={{ backgroundColor: tc, color: c.bgColor }}>
         <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-24 md:grid-cols-2">
           <div className="aspect-[4/5]" style={{ background: `linear-gradient(145deg, color-mix(in srgb, ${c.accentColor} 60%, #6f443a), color-mix(in srgb, ${c.accentColor} 30%, #dbab92))` }} />
           <div>
             <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-[.2em]">O mnie</p>
-            <h2 className="mt-6 font-serif text-6xl">Ciało pamięta<br/>czułość.</h2>
+            <h2 className="mt-6 font-serif text-4xl md:text-6xl">Ciało pamięta<br/>czułość.</h2>
             <p className="mt-6 max-w-md text-sm leading-7 opacity-55">Stworzyłam to miejsce jako spokojną przestrzeń bez pośpiechu, oceniania i gotowych schematów. Każda wizyta to rytuał szyty na miarę.</p>
             <div style={{ borderColor: `${c.bgColor}18` }} className="mt-9 grid grid-cols-2 gap-5 border-y py-6 text-xs">
               <span>8 lat doświadczenia</span><span>Naturalne kosmetyki</span>
@@ -287,11 +285,10 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
           </div>
         </div>
       </section>
-      {/* Process */}
       <section style={{ backgroundColor: c.bgColor, color: tc }} className="px-6 py-24">
         <div className="mx-auto max-w-6xl">
           <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-[.2em]">Jak wygląda wizyta</p>
-          <h2 className="mt-5 font-serif text-5xl">Twój rytuał krok po kroku</h2>
+          <h2 className="mt-5 font-serif text-4xl md:text-5xl">Twój rytuał krok po kroku</h2>
           <div className="mt-12 grid md:grid-cols-3">
             {["Krótka rozmowa i diagnoza potrzeb","Indywidualnie dobrany rytuał","Zalecenia do domowej pielęgnacji"].map((step, i) => (
               <article key={step} style={{ borderColor: `${tc}18` }} className="border-t py-7 md:border-l md:px-7">
@@ -302,14 +299,12 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
           </div>
         </div>
       </section>
-      {/* Booking CTA */}
       <section style={{ backgroundColor: `color-mix(in srgb, ${c.accentColor} 20%, ${c.bgColor})`, color: tc }} className="px-6 py-20 text-center">
         <p className="text-xs uppercase tracking-widest opacity-60">Rezerwacja</p>
-        <h2 className="mt-4 font-serif text-5xl">Znajdź czas dla siebie.</h2>
+        <h2 className="mt-4 font-serif text-4xl md:text-5xl">Znajdź czas dla siebie.</h2>
         <p style={{ color: mc }} className="mt-4 text-sm">Gabinet pokazowy · ul. Spokojna 1 · Miasto</p>
         <button style={{ backgroundColor: tc, color: c.bgColor }} className="mt-7 cursor-pointer px-7 py-4 text-xs uppercase tracking-widest">{c.cta}</button>
       </section>
-      {/* Footer */}
       <footer style={{ backgroundColor: tc, color: c.bgColor }} className="flex flex-col justify-between gap-4 px-8 py-10 text-xs md:flex-row">
         <b className="font-serif text-2xl">{c.brandName}</b>
         <span className="opacity-55">Oferta · O mnie · Kontakt · Prywatność</span>
@@ -321,13 +316,12 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
   // ── Strona firmowa ──
   if (slug === "strona-firmowa") return (
     <>
-      {/* Portfolio */}
-      <section className="bg-white px-6 py-24" style={{ color: tc === "#1a1413" ? tc : "#142a3b" }}>
+      <section className="bg-white px-6 py-24" style={{ color: "#142a3b" }}>
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div>
               <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-[.2em]">Wybrane realizacje</p>
-              <h2 className="mt-5 font-serif text-6xl">Architektura blisko życia.</h2>
+              <h2 className="mt-5 font-serif text-4xl md:text-6xl">Architektura blisko życia.</h2>
             </div>
             <p className="max-w-sm text-sm leading-7 text-black/45">Każdy projekt zaczynamy od rozmowy o potrzebach, rytmie dnia i miejscu.</p>
           </div>
@@ -345,12 +339,11 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
           </div>
         </div>
       </section>
-      {/* Studio */}
       <section style={{ backgroundColor: c.bgColor, color: tc }} className="px-6 py-24">
         <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-2">
           <div>
             <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-widest">Studio</p>
-            <h2 className="mt-5 font-serif text-6xl">Projektujemy<br/>od środka.</h2>
+            <h2 className="mt-5 font-serif text-4xl md:text-6xl">Projektujemy<br/>od środka.</h2>
           </div>
           <div>
             <p style={{ color: mc }} className="text-sm leading-7">Łączymy uważną analizę, prostą formę i materiały, które dobrze się starzeją. Każdy projekt to dialog między potrzebą a formą.</p>
@@ -362,17 +355,15 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
           </div>
         </div>
       </section>
-      {/* CTA */}
       <section style={{ backgroundColor: tc, color: c.bgColor }} className="px-6 py-20">
         <div className="mx-auto flex max-w-6xl flex-col justify-between gap-7 md:flex-row md:items-end">
           <div>
             <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-widest">Nowy projekt</p>
-            <h2 className="mt-4 font-serif text-5xl">Porozmawiajmy o Twojej przestrzeni.</h2>
+            <h2 className="mt-4 font-serif text-4xl md:text-5xl">Porozmawiajmy o Twojej przestrzeni.</h2>
           </div>
           <button style={{ borderColor: `${c.bgColor}50`, color: c.bgColor }} className="cursor-pointer border px-7 py-4 text-xs uppercase tracking-widest">Umów spotkanie</button>
         </div>
       </section>
-      {/* Footer */}
       <footer style={{ backgroundColor: c.bgColor === "#e9edf0" ? "#0c1b25" : tc, color: c.bgColor }} className="flex flex-col gap-4 px-8 py-10 text-xs md:flex-row md:justify-between">
         <b style={{ color: c.bgColor }}>{c.brandName}</b>
         <span className="opacity-45">Projekty · Studio · Proces · Kontakt</span>
@@ -384,34 +375,30 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
   // ── Mini sklep handmade ──
   if (slug === "mini-sklep-handmade") return (
     <>
-      {/* About */}
       <section style={{ backgroundColor: `color-mix(in srgb, ${c.accentColor} 15%, ${c.bgColor})`, color: tc }} className="px-6 py-24">
         <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
           <div>
             <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-[.2em]">O pracowni</p>
-            <h2 className="mt-5 font-serif text-6xl">Powstaje powoli.<br/>Zostaje na lata.</h2>
+            <h2 className="mt-5 font-serif text-4xl md:text-6xl">Powstaje powoli.<br/>Zostaje na lata.</h2>
             <p style={{ color: mc }} className="mt-6 max-w-md text-sm leading-7">{c.body}</p>
             <button style={{ borderColor: tc, color: tc }} className="mt-7 cursor-pointer border-b pb-2 text-xs uppercase tracking-widest">Poznaj moją historię</button>
           </div>
           <div className="aspect-square" style={{ background: `linear-gradient(145deg, color-mix(in srgb, ${c.accentColor} 50%, #8d7562), color-mix(in srgb, ${c.accentColor} 20%, #d1baa1))` }} />
         </div>
       </section>
-      {/* Testimonial */}
       <section style={{ backgroundColor: c.bgColor, color: tc }} className="px-6 py-20 text-center">
-        <p style={{ color: c.accentColor }} className="font-serif text-4xl italic">"Każda paczka to jak mały prezent. Wracam tu zawsze."</p>
+        <p style={{ color: c.accentColor }} className="font-serif text-2xl italic md:text-4xl">"Każda paczka to jak mały prezent. Wracam tu zawsze."</p>
         <p style={{ color: mc }} className="mt-5 text-xs uppercase tracking-widest">— Kasia, stała klientka</p>
       </section>
-      {/* Newsletter */}
       <section style={{ backgroundColor: `color-mix(in srgb, ${c.accentColor} 10%, ${c.bgColor})`, color: tc }} className="px-6 py-20 text-center">
         <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-widest">Newsletter</p>
-        <h2 className="mt-4 font-serif text-5xl">Listy z pracowni</h2>
+        <h2 className="mt-4 font-serif text-4xl md:text-5xl">Listy z pracowni</h2>
         <p style={{ color: mc }} className="mx-auto mt-4 max-w-md text-sm">Nowe kolekcje, kulisy pracy i małe inspiracje. Bez pośpiechu i spamu.</p>
         <div style={{ borderColor: `${tc}30` }} className="mx-auto mt-7 flex max-w-md border-b">
           <span style={{ color: mc }} className="flex-1 py-3 text-left text-xs">Twój adres e-mail</span>
           <button style={{ color: tc }} className="cursor-pointer text-xs uppercase tracking-widest">Zapisz się</button>
         </div>
       </section>
-      {/* Footer */}
       <footer style={{ backgroundColor: tc, color: c.bgColor }} className="px-6 py-12">
         <div className="mx-auto grid max-w-6xl gap-8 text-xs md:grid-cols-3">
           <div>
@@ -428,7 +415,6 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
   // ── Sklep online ──
   return (
     <>
-      {/* Categories */}
       <section style={{ backgroundColor: `color-mix(in srgb, ${c.accentColor} 5%, #efefed)`, color: tc }} className="px-6 py-20">
         <div className="mx-auto max-w-7xl">
           <p style={{ color: mc }} className="text-xs uppercase tracking-[.2em]">Shop by category</p>
@@ -448,27 +434,24 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
           </div>
         </div>
       </section>
-      {/* Journal / editorial */}
       <section style={{ backgroundColor: tc, color: c.bgColor }} className="grid md:grid-cols-2">
-        <div className="min-h-[600px]" style={{ background: `linear-gradient(145deg, color-mix(in srgb, ${c.accentColor} 60%, #9a9a9a), color-mix(in srgb, ${c.accentColor} 30%, #282828))` }} />
+        <div className="min-h-[400px] md:min-h-[600px]" style={{ background: `linear-gradient(145deg, color-mix(in srgb, ${c.accentColor} 60%, #9a9a9a), color-mix(in srgb, ${c.accentColor} 30%, #282828))` }} />
         <div className="flex flex-col justify-center px-8 py-20 md:px-20">
           <p style={{ color: `${c.bgColor}55` }} className="text-xs uppercase tracking-[.2em]">Journal / 01</p>
-          <h2 className="mt-7 text-6xl font-light leading-none">Less, but<br/>better.</h2>
+          <h2 className="mt-7 text-4xl font-light leading-none md:text-6xl">Less, but<br/>better.</h2>
           <p style={{ color: `${c.bgColor}55` }} className="mt-7 max-w-sm text-sm leading-7">O projektowaniu przedmiotów, które opierają się sezonowym trendom i zostają na dłużej.</p>
           <button style={{ borderColor: `${c.bgColor}80`, color: c.bgColor }} className="mt-8 w-fit cursor-pointer border-b pb-2 text-xs uppercase tracking-widest">Read the story</button>
         </div>
       </section>
-      {/* Newsletter */}
       <section style={{ backgroundColor: c.bgColor, color: tc }} className="px-6 py-24 text-center">
         <p style={{ color: mc }} className="text-xs uppercase tracking-widest">Join our list</p>
-        <h2 className="mt-4 text-5xl font-light">Notes on form.</h2>
+        <h2 className="mt-4 text-4xl font-light md:text-5xl">Notes on form.</h2>
         <p style={{ color: mc }} className="mt-4 text-sm">Nowości, historie i wcześniejszy dostęp do kolekcji.</p>
         <div style={{ borderColor: `${tc}30` }} className="mx-auto mt-8 flex max-w-lg border-b">
           <span style={{ color: mc }} className="flex-1 py-3 text-left text-xs">Email address</span>
           <button style={{ color: tc }} className="cursor-pointer text-xs uppercase tracking-widest">Subscribe</button>
         </div>
       </section>
-      {/* Footer */}
       <footer style={{ backgroundColor: tc, color: c.bgColor }} className="grid gap-8 px-8 py-14 text-xs md:grid-cols-4">
         <b>{c.brandName}</b>
         <span className="opacity-45">Shop<br/>New arrivals<br/>Gift cards</span>
@@ -489,14 +472,14 @@ export function DemoTopbar({ title }: { title: string }) {
         <span className="ml-3 text-xs text-muted">Demo pakietu: {title}</span>
       </div>
       <div className="flex gap-2">
-        <Link href="/cennik" className="btn-secondary !min-h-9 !px-4">Wróć do cennika</Link>
-        <Link href={`/kontakt?pakiet=${encodeURIComponent(title)}`} className="btn-primary !min-h-9 !px-4">Chcę podobną <Arrow /></Link>
+        <Link href="/cennik" className="btn-secondary min-h-9! px-4!">Wróć do cennika</Link>
+        <Link href={`/kontakt?pakiet=${encodeURIComponent(title)}`} className="btn-primary min-h-9! px-4!">Chcę podobną <Arrow /></Link>
       </div>
     </div>
   );
 }
 
-// ─── Internal helper (duplicated from demo-configs to keep this file self-contained) ──
+// ─── Internal helper ──────────────────────────────────────────────────────────
 function lum(hex: string): number {
   if (hex.length < 7) return 0.5;
   const r = parseInt(hex.slice(1, 3), 16) / 255;

@@ -21,7 +21,7 @@ export function Header() {
         <nav className="hidden items-center gap-6 xl:flex" aria-label="Główna nawigacja">
           {navItems.map((item) => <Link key={item.href} href={item.href} className={`text-[.66rem] font-bold uppercase tracking-[.12em] transition hover:text-gold ${pathname === item.href ? "text-gold" : ""}`}>{item.label}</Link>)}
         </nav>
-        <Link href="/kontakt" className="btn-primary hidden !min-h-[2.75rem] lg:inline-flex">Porozmawiajmy</Link>
+        <Link href="/kontakt" className="btn-primary hidden min-h-[2.75rem]! lg:inline-flex">Porozmawiajmy</Link>
         <button type="button" className="grid size-11 place-items-center border border-black/15 xl:hidden" aria-label={open ? "Zamknij menu" : "Otwórz menu"} aria-expanded={open} onClick={() => setOpen(!open)}>
           {open ? <CloseIcon className="size-5" /> : <MenuIcon className="size-5" />}
         </button>

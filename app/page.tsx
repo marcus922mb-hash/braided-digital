@@ -1,7 +1,19 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Arrow, CheckIcon } from "@/components/icons";
 import { CtaBand, FaqList, PortfolioMockup, ServiceGrid } from "@/components/ui";
 import { processSteps } from "@/lib/data";
+
+export const metadata: Metadata = {
+  title: "Braided Digital | Strony i sklepy internetowe dla małych marek",
+  description:
+    "Projektuję estetyczne strony i sklepy dla małych firm, marek handmade i usługodawców. Indywidualny projekt, mobile-first, jasny proces, wdrożenie. Ceny od 390 zł.",
+  openGraph: {
+    title: "Braided Digital | Strony i sklepy dla małych marek",
+    description:
+      "Studio tworzące strony i sklepy dla małych marek. Indywidualny design, jasny proces, wsparcie po starcie. Ceny od 390 zł.",
+  },
+};
 
 export default function Home() {
   return <>
