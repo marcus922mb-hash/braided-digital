@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Braided Digital
 
-## Getting Started
+Profesjonalna, wielostronicowa witryna usługowa Braided Digital. Projekt prezentuje ofertę tworzenia stron, sklepów internetowych, linków w bio oraz wsparcia WordPress i WooCommerce dla małych firm i marek handmade.
 
-First, run the development server:
+## Technologie
+
+- Next.js 16 z App Routerem
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- statyczne generowanie stron (SSG)
+
+## Uruchomienie lokalne
+
+Wymagany jest Node.js 20.9 lub nowszy.
 
 ```bash
+npm ci
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Strona będzie dostępna pod adresem [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Kontrola jakości
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run build
+```
 
-## Learn More
+Oba polecenia wykonuje również skrót:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run check
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Konfiguracja
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Projekt nie wymaga sekretów ani bazy danych. Dostępna jest jedna publiczna zmienna:
 
-## Deploy on Vercel
+```env
+NEXT_PUBLIC_SITE_URL=https://braideddigital.pl
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Ustaw ją w Vercel dla środowiska Production, jeżeli docelowa domena będzie inna. Zmienna jest używana w metadatach SEO, `robots.txt` i `sitemap.xml`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Publikacja na GitHub
+
+Po utworzeniu pustego repozytorium na GitHub:
+
+```bash
+git remote add origin https://github.com/NAZWA-UZYTKOWNIKA/braided-digital.git
+git push -u origin main
+```
+
+Workflow w `.github/workflows/ci.yml` automatycznie uruchamia lint i build dla każdego push oraz pull requestu do gałęzi `main`.
+
+## Wdrożenie na Vercel
+
+1. Zaloguj się do Vercel i wybierz **Add New → Project**.
+2. Zaimportuj repozytorium `braided-digital` z GitHub.
+3. Framework Preset pozostaw jako **Next.js**.
+4. Build Command pozostaw jako `next build`, a Output Directory bez zmian.
+5. Dodaj `NEXT_PUBLIC_SITE_URL` w **Environment Variables**.
+6. Kliknij **Deploy**.
+7. Po podpięciu własnej domeny zaktualizuj wartość zmiennej i wykonaj redeploy.
+
+Vercel będzie automatycznie tworzyć podgląd dla pull requestów i wdrażać produkcję po pushu do `main`.
+
+## Ważne adresy
+
+- `/oferta` - zakres usług
+- `/portfolio` - case study MA Atelier
+- `/cennik` - pakiety i prezentacje demo
+- `/regulamin` - regulamin usług
+- `/polityka-prywatnosci` - polityka prywatności
+- `/polityka-cookies` - polityka cookies
+
+© Braided Digital
