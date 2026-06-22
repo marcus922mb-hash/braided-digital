@@ -210,7 +210,6 @@ export function PackageDemo({ slug, config: c }: { slug: string; config: DemoCon
 export function DemoContinuation({ slug, config: c }: { slug: string; config: DemoConfig }) {
   const tc = textColor(c.bgColor);
   const mc = mutedColor(c.bgColor);
-  const bc = borderColor(c.bgColor);
 
   // ── Cyfrowa wizytówka ──
   if (slug === "cyfrowa-wizytowka") return (
@@ -387,7 +386,7 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
         </div>
       </section>
       <section style={{ backgroundColor: c.bgColor, color: tc }} className="px-6 py-20 text-center">
-        <p style={{ color: c.accentColor }} className="font-serif text-2xl italic md:text-4xl">"Każda paczka to jak mały prezent. Wracam tu zawsze."</p>
+        <p style={{ color: c.accentColor }} className="font-serif text-2xl italic md:text-4xl">&ldquo;Każda paczka to jak mały prezent. Wracam tu zawsze.&rdquo;</p>
         <p style={{ color: mc }} className="mt-5 text-xs uppercase tracking-widest">— Kasia, stała klientka</p>
       </section>
       <section style={{ backgroundColor: `color-mix(in srgb, ${c.accentColor} 10%, ${c.bgColor})`, color: tc }} className="px-6 py-20 text-center">

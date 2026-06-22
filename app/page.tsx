@@ -38,6 +38,20 @@ export default function Home() {
     <section className="section-space bg-ink text-white"><div className="container-page"><div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr]"><div><p className="eyebrow">Proces</p><h2 className="section-heading mt-6">Spokojnie.<br/><em className="font-normal text-gold-light">Krok po kroku.</em></h2><p className="mt-6 max-w-sm text-sm leading-7 text-white/55">Wiesz, co dzieje się na każdym etapie i czego potrzebuję od Ciebie. Bez technicznego żargonu i z przestrzenią na dobre decyzje.</p></div><div className="grid md:grid-cols-2">{processSteps.map((step) => <article key={step.number} className="border-b border-white/10 p-7 first:border-t md:border-l md:first:border-t-0"><span className="text-[.62rem] font-bold text-gold-light">{step.number}</span><h3 className="mt-8 font-serif text-3xl">{step.title}</h3><p className="mt-4 text-xs leading-6 text-white/50">{step.text}</p></article>)}</div></div></div></section>
 
     <section className="section-space"><div className="container-page grid gap-12 lg:grid-cols-[.75fr_1.25fr]"><div><p className="eyebrow">Najczęstsze pytania</p><h2 className="section-heading mt-6">Zanim<br/>zaczniemy.</h2><Link href="/faq" className="mt-7 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gold">Wszystkie pytania <Arrow /></Link></div><FaqList limit={4}/></div></section>
+
+    <section className="border-t border-black/8 bg-cream/60">
+      <div className="container-page py-20 text-center">
+        <p className="eyebrow mx-auto w-fit">Darmowa wycena</p>
+        <h2 className="section-heading mx-auto mt-6 max-w-3xl">
+          Sprawdź orientacyjną wycenę<br/><em className="text-gold font-normal">swojej strony.</em>
+        </h2>
+        <p className="mx-auto mt-6 max-w-xl text-sm leading-7 text-muted">
+          Odpowiedz na kilka pytań i dowiedz się, ile może kosztować Twój projekt. Zajmuje to 2 minuty — bez zobowiązań, bez spamu.
+        </p>
+        <Link href="/wycena" className="btn-primary mt-8">Rozpocznij darmową wycenę <Arrow /></Link>
+      </div>
+    </section>
+
     <CtaBand />
   </>;
 }
