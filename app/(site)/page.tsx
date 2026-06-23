@@ -1,0 +1,59 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Arrow, CheckIcon } from "@/components/icons";
+import { CtaBand, FaqList, PortfolioMockup, ServiceGrid } from "@/components/ui";
+import { processSteps } from "@/lib/data";
+import { canonical } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Braided Digital | Strony i sklepy internetowe dla małych marek",
+  description:
+    "Projektuję estetyczne strony i sklepy dla małych firm, marek handmade i usługodawców. Indywidualny projekt, mobile-first, jasny proces, wdrożenie. Ceny od 390 zł.",
+  alternates: canonical("/"),
+  openGraph: {
+    title: "Braided Digital | Strony i sklepy dla małych marek",
+    description:
+      "Studio tworzące strony i sklepy dla małych marek. Indywidualny design, jasny proces, wsparcie po starcie. Ceny od 390 zł.",
+  },
+};
+
+export default function Home() {
+  return <>
+    <section className="hero-grid grain relative overflow-hidden bg-ink text-white">
+      <div className="container-page relative grid min-h-[calc(100svh-76px)] items-center gap-10 py-16 lg:grid-cols-[1.25fr_.75fr] lg:py-20">
+        <div className="relative z-10"><p className="eyebrow reveal">Studio stron i sklepów internetowych</p><h1 className="display reveal-delay mt-8 max-w-5xl text-[clamp(4.1rem,9vw,8.5rem)]">Twoja marka.<br/><em className="font-normal text-gold-light">Dobrze spleciona</em><br/>w sieci.</h1><p className="reveal-delay mt-8 max-w-lg text-sm leading-7 text-white/60 md:text-base">Projektuję estetyczne, przemyślane strony i sklepy, które pomagają małym markom wyglądać profesjonalnie i działać z większą pewnością.</p><div className="reveal-delay mt-9 flex flex-col gap-3 sm:flex-row"><Link href="/kontakt" className="btn-primary">Zacznijmy projekt <Arrow /></Link><Link href="/portfolio" className="btn-light">Zobacz realizację</Link></div></div>
+        <div className="relative hidden min-h-[580px] lg:block"><div className="float-slow absolute right-5 top-16 h-[460px] w-[310px] border border-gold/30 bg-[#211f1a] p-3 shadow-2xl"><div className="h-full border border-white/10 bg-[#d8cbb9] p-5 text-ink"><div className="flex justify-between border-b border-black/20 pb-3 text-[.48rem] font-bold tracking-[.2em]"><span>MA ATELIER</span><span>MENU</span></div><div className="mt-5 h-[68%] bg-[linear-gradient(145deg,#8b7562,#d7c4aa)] p-5"><p className="mt-56 font-serif text-4xl leading-none text-white">Piękno<br/>w detalu.</p></div><p className="mt-5 text-center font-serif text-2xl">Autorska marka online</p></div></div><div className="absolute bottom-8 left-4 border border-white/15 bg-ink/90 p-5 backdrop-blur"><p className="text-[.55rem] uppercase tracking-[.2em] text-gold-light">Od pomysłu do sprzedaży</p><p className="mt-2 font-serif text-2xl">MA Atelier</p></div></div>
+        <div className="absolute bottom-6 right-0 hidden -rotate-90 text-[.55rem] uppercase tracking-[.3em] text-white/30 lg:block">Strategia · Design · Wdrożenie</div>
+      </div>
+    </section>
+
+    <section className="border-b border-black/8 bg-cream/50"><div className="container-page grid grid-cols-2 divide-x divide-black/10 py-7 md:grid-cols-4">{["Indywidualny projekt", "Mobile first", "Jasny proces", "Wsparcie po starcie"].map((item) => <div key={item} className="flex items-center justify-center gap-2 px-2 py-2 text-center text-[.58rem] font-bold uppercase tracking-[.1em] md:text-[.65rem]"><CheckIcon className="size-4 text-gold"/>{item}</div>)}</div></section>
+
+    <section className="section-space overflow-hidden"><div className="container-page grid gap-12 lg:grid-cols-[.9fr_1.1fr] lg:items-center"><div><p className="eyebrow">Dla małych marek</p><h2 className="section-heading mt-6">Mały biznes<br/><em className="font-normal text-gold">zasługuje na dobry design.</em></h2><p className="mt-6 max-w-lg text-sm leading-7 text-muted">Nie musisz mieć dużego zespołu, setek produktów ani wielkiego budżetu. Pomagam markom handmade, lokalnym usługom i osobom, które budują biznes własnymi rękami.</p><Link href="/cennik" className="btn-secondary mt-8">Pakiety już od 390 zł <Arrow/></Link></div><div className="grid grid-cols-2 gap-3 md:grid-cols-3">{[{n:"01",t:"Rękodzieło",d:"Biżuteria, świece, ceramika, dekoracje"},{n:"02",t:"Usługi",d:"Beauty, fotografia, wnętrza, edukacja"},{n:"03",t:"Marki osobiste",d:"Twórcy, eksperci i freelancerzy"},{n:"04",t:"Lokalne firmy",d:"Pracownie, gabinety i małe sklepy"},{n:"05",t:"Startujący",d:"Pierwsza profesjonalna obecność online"},{n:"06",t:"Rosnące sklepy",d:"Porządek, poprawki i dalszy rozwój"}].map(x=><article key={x.n} className="card-lift min-h-44 border border-black/10 bg-cream/45 p-5"><span className="text-[.55rem] text-gold">{x.n}</span><h3 className="mt-7 font-serif text-2xl">{x.t}</h3><p className="mt-2 text-[.68rem] leading-5 text-muted">{x.d}</p></article>)}</div></div></section>
+
+    <section className="section-space border-t border-black/8"><div className="container-page"><div className="mb-14 grid gap-7 md:grid-cols-2 md:items-end"><div><p className="eyebrow">Oferta</p><h2 className="section-heading mt-6">Cyfrowe rozwiązania<br/><em className="font-normal text-gold">skrojone na miarę.</em></h2></div><div className="md:justify-self-end"><p className="max-w-md text-sm leading-7 text-muted">Nie wciskam marki w gotowy szablon. Dobieram zakres, technologię i charakter projektu do tego, gdzie jesteś i dokąd chcesz dojść.</p><Link href="/oferta" className="mt-5 inline-flex items-center gap-2 text-[.68rem] font-bold uppercase tracking-[.15em] text-gold">Poznaj całą ofertę <Arrow /></Link></div></div><ServiceGrid /></div></section>
+
+    <section className="bg-cream/70"><div className="container-page grid lg:grid-cols-2"><PortfolioMockup/><div className="flex flex-col justify-center px-2 py-16 md:px-16 lg:py-20"><p className="eyebrow">Wybrana realizacja</p><h2 className="section-heading mt-6">MA Atelier</h2><p className="mt-6 max-w-lg text-sm leading-7 text-muted">Sklep stworzyłam od podstaw dla własnej marki. To tutaj przeszłam całą drogę: od pomysłu i identyfikacji, przez strukturę oferty, aż po codzienną obsługę sprzedaży.</p><div className="mt-8 grid grid-cols-2 gap-5 border-y border-black/10 py-6 text-xs"><div><span className="block text-gold">Zakres</span><span className="mt-1 block">Design + e-commerce</span></div><div><span className="block text-gold">Rola</span><span className="mt-1 block">Twórczyni i właścicielka</span></div></div><Link href="/portfolio" className="btn-secondary mt-8 self-start">Zobacz case study <Arrow /></Link></div></div></section>
+
+    <section className="section-space"><div className="container-page"><div className="text-center"><p className="eyebrow mx-auto w-fit">Co zyskujesz</p><h2 className="section-heading mx-auto mt-6 max-w-3xl">Stronę, która pracuje<br/><em className="text-gold">równie uważnie jak Ty.</em></h2></div><div className="mt-14 grid gap-px bg-black/10 md:grid-cols-2 lg:grid-cols-4">{[{n:"01",t:"Wiarygodność",d:"Marka od pierwszego spojrzenia wygląda na dopracowaną i godną zaufania."},{n:"02",t:"Mniej pytań",d:"Klient łatwo znajduje ofertę, ceny, zasady i sposób kontaktu."},{n:"03",t:"Własne miejsce",d:"Nie zależysz wyłącznie od zasięgów i zmian w mediach społecznościowych."},{n:"04",t:"Prosty rozwój",d:"Zaczynasz od potrzebnego zakresu i rozbudowujesz go, gdy biznes rośnie."}].map(x=><article key={x.n} className="bg-paper p-7 md:p-9"><span className="text-[.55rem] text-gold">{x.n}</span><h3 className="mt-8 font-serif text-3xl">{x.t}</h3><p className="mt-4 text-xs leading-6 text-muted">{x.d}</p></article>)}</div></div></section>
+
+    <section className="section-space bg-ink text-white"><div className="container-page"><div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr]"><div><p className="eyebrow">Proces</p><h2 className="section-heading mt-6">Spokojnie.<br/><em className="font-normal text-gold-light">Krok po kroku.</em></h2><p className="mt-6 max-w-sm text-sm leading-7 text-white/55">Wiesz, co dzieje się na każdym etapie i czego potrzebuję od Ciebie. Bez technicznego żargonu i z przestrzenią na dobre decyzje.</p></div><div className="grid md:grid-cols-2">{processSteps.map((step) => <article key={step.number} className="border-b border-white/10 p-7 first:border-t md:border-l md:first:border-t-0"><span className="text-[.62rem] font-bold text-gold-light">{step.number}</span><h3 className="mt-8 font-serif text-3xl">{step.title}</h3><p className="mt-4 text-xs leading-6 text-white/50">{step.text}</p></article>)}</div></div></div></section>
+
+    <section className="section-space"><div className="container-page grid gap-12 lg:grid-cols-[.75fr_1.25fr]"><div><p className="eyebrow">Najczęstsze pytania</p><h2 className="section-heading mt-6">Zanim<br/>zaczniemy.</h2><Link href="/faq" className="mt-7 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gold">Wszystkie pytania <Arrow /></Link></div><FaqList limit={4}/></div></section>
+
+    <section className="border-t border-black/8 bg-cream/60">
+      <div className="container-page py-20 text-center">
+        <p className="eyebrow mx-auto w-fit">Darmowa wycena</p>
+        <h2 className="section-heading mx-auto mt-6 max-w-3xl">
+          Sprawdź orientacyjną wycenę<br/><em className="text-gold font-normal">swojej strony.</em>
+        </h2>
+        <p className="mx-auto mt-6 max-w-xl text-sm leading-7 text-muted">
+          Odpowiedz na kilka pytań i dowiedz się, ile może kosztować Twój projekt. Zajmuje to 2 minuty — bez zobowiązań, bez spamu.
+        </p>
+        <Link href="/wycena" className="btn-primary mt-8">Rozpocznij darmową wycenę <Arrow /></Link>
+      </div>
+    </section>
+
+    <CtaBand />
+  </>;
+}
