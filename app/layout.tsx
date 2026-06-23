@@ -5,6 +5,7 @@ import { AnnouncementBar } from "@/components/announcement-bar";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { CookieConsent } from "@/components/cookie-consent";
+import { HideOnMaWeb } from "@/components/route-guard";
 import { ScrollEffects } from "@/components/scroll-effects";
 import { canonical } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
@@ -86,13 +87,17 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
       </head>
       <body>
-        <div data-scroll-progress className="scroll-progress" aria-hidden="true" />
-        <ScrollEffects />
-        <AnnouncementBar />
-        <Header />
+        <HideOnMaWeb>
+          <div data-scroll-progress className="scroll-progress" aria-hidden="true" />
+          <ScrollEffects />
+          <AnnouncementBar />
+          <Header />
+        </HideOnMaWeb>
         <main>{children}</main>
-        <Footer />
-        <CookieConsent />
+        <HideOnMaWeb>
+          <Footer />
+          <CookieConsent />
+        </HideOnMaWeb>
         <Analytics />
         <SpeedInsights />
       </body>
