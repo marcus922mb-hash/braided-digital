@@ -119,6 +119,63 @@ details summary::-webkit-details-marker { display: none; }
 details[open] .faq-plus { transform: rotate(45deg); }
 .faq-plus { transition: transform .25s ease; }
 
+/* ── MA Atelier Web dark theme ── */
+[data-ma="dark"] {
+  --ink: #F0F0F0;
+  --paper: #0A0A0A;
+  --cream: #0D0D0D;
+  --gold: #D4AF37;
+  --gold-light: #f0d878;
+  --muted: #A0A0A0;
+}
+[data-ma="dark"] body,
+[data-ma="dark"] { background: #0A0A0A; color: #F0F0F0; }
+
+/* bg-ink was the contrast dark section; keep it very dark */
+[data-ma="dark"] .bg-ink { background-color: #060606 !important; }
+
+/* Hardcoded black borders → subtle white */
+[data-ma="dark"] .border-black\/10 { border-color: rgb(255 255 255 / 7%); }
+[data-ma="dark"] .border-black\/8  { border-color: rgb(255 255 255 / 5%); }
+[data-ma="dark"] .border-t.border-black\/10 { border-top-color: rgb(255 255 255 / 7%); }
+
+/* divide-black → white */
+[data-ma="dark"] .divide-black\/10 > :not([hidden]) ~ :not([hidden]) { border-color: rgb(255 255 255 / 7%); }
+[data-ma="dark"] .divide-y > :not([hidden]) ~ :not([hidden]) { border-color: rgb(255 255 255 / 7%); }
+
+/* Hardcoded bg-white overlays */
+[data-ma="dark"] .bg-white\/40 { background-color: rgb(255 255 255 / 5%); }
+
+/* Hardcoded warm/light colours in pricing & portfolio */
+[data-ma="dark"] [class*="bg-[#f1"] { background-color: #111 !important; }
+[data-ma="dark"] [class*="bg-[#d9"] { background-color: #111 !important; }
+
+/* Buttons */
+[data-ma="dark"] .btn-primary:hover       { background: #f0d878; }
+[data-ma="dark"] .btn-secondary           { border-color: rgb(255 255 255 / 18%); color: #F0F0F0; }
+[data-ma="dark"] .btn-secondary:hover     { border-color: #D4AF37; color: #D4AF37; }
+[data-ma="dark"] .btn-light:hover         { background: rgb(255 255 255 / 10%); color: white; }
+
+/* Cards */
+[data-ma="dark"] .card-lift:hover {
+  border-color: rgba(212,175,55,.3) !important;
+  box-shadow: 0 24px 60px rgba(0,0,0,.5);
+}
+[data-ma="dark"] article::after {
+  background: radial-gradient(circle, rgba(212,175,55,.07), transparent 70%);
+}
+
+/* Legal pages */
+[data-ma="dark"] .legal-copy h2        { border-top-color: rgb(255 255 255 / 8%); }
+[data-ma="dark"] .legal-table          { border-color: rgb(255 255 255 / 8%); }
+[data-ma="dark"] .legal-table > div    { border-bottom-color: rgb(255 255 255 / 7%); }
+[data-ma="dark"] .legal-table strong   { background: #111; }
+[data-ma="dark"] .legal-copy code      { background: #1a1a1a; color: #F0F0F0; }
+
+/* cursor glow gold update */
+[data-ma="dark"] ~ * body::before,
+[data-ma="dark"] body::before { background: radial-gradient(circle, rgba(212,175,55,.08), transparent 68%); }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
