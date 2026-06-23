@@ -32,4 +32,4 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          NEXT_PUBLIC_SITE_URL: https://braideddigital.pl
+          NEXT_PUBLIC_SITE_URL: https://web.ma-atelier.pl

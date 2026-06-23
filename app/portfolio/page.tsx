@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Arrow, CheckIcon } from "@/components/icons";
 import { CtaBand, PageHero, PortfolioMockup } from "@/components/ui";
+import { canonical } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Portfolio", description: "Case study sklepu internetowego MA Atelier - aktualny podgląd strony, zakres prac i rozwiązania sprzedażowe." };
+export const metadata: Metadata = { title: "Portfolio", description: "Case study sklepu internetowego MA Atelier - aktualny podgląd strony, zakres prac i rozwiązania sprzedażowe.", alternates: canonical("/portfolio") };
 
 const scope = ["koncepcja i kierunek wizualny", "architektura informacji", "strona główna i sklep", "karty oraz kategorie produktów", "koszyk i proces zamówienia", "płatności i sposoby dostawy", "projekty indywidualne", "blog i podstawy SEO", "wersja mobilna", "analityka i dalszy rozwój"];
 

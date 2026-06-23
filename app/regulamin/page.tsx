@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal-page";
+import { canonical } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Regulamin", description: "Regulamin świadczenia usług i korzystania z serwisu Braided Digital." };
+export const metadata: Metadata = { title: "Regulamin", description: "Regulamin świadczenia usług i korzystania z serwisu Braided Digital.", alternates: canonical("/regulamin") };
 
 export default function TermsPage() { return <LegalPage eyebrow="Dokumenty" title="Regulamin usług" intro="Zasady korzystania ze strony oraz współpracy przy projektowaniu stron internetowych, sklepów i usługach technicznych.">
   <h2>1. Informacje ogólne</h2><p>Usługi pod marką Braided Digital świadczy Marek Białkowski w ramach działalności nierejestrowanej w rozumieniu art. 5 ustawy Prawo przedsiębiorców, dalej „Usługodawca”. Adres korespondencyjny: Chylin 35, 62-710 Władysławów. Kontakt: e-mail <a href="mailto:ma.atelier.kontakt@gmail.com">ma.atelier.kontakt@gmail.com</a>, telefon i WhatsApp <a href="https://wa.me/48730195530">+48 730 195 530</a>. Pełne dane stron są również wskazywane w indywidualnej ofercie przed zawarciem umowy.</p><p>Regulamin określa zasady korzystania z serwisu oraz zawierania i wykonywania umów dotyczących między innymi stron internetowych, sklepów, linków w bio, konsultacji i wsparcia WordPress lub WooCommerce.</p>

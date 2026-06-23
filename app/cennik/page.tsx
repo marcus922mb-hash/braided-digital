@@ -4,8 +4,9 @@ import { Arrow, CheckIcon } from "@/components/icons";
 import { CtaBand, PageHero } from "@/components/ui";
 import { pricing } from "@/lib/data";
 import { PackagePreview } from "@/components/package-demos";
+import { canonical } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Cennik stron internetowych", description: "Orientacyjne ceny: strona internetowa od 390 zł, sklep handmade od 2490 zł, link w bio od 490 zł. Każdy projekt wyceniam indywidualnie." };
+export const metadata: Metadata = { title: "Cennik stron internetowych", description: "Orientacyjne ceny: strona internetowa od 390 zł, sklep handmade od 2490 zł, link w bio od 490 zł. Każdy projekt wyceniam indywidualnie.", alternates: canonical("/cennik") };
 
 export default function PricingPage() { return <><PageHero eyebrow="Cennik orientacyjny" title="Dobra strona na" italic="każdą kieszeń." text="Nie musisz być dużą firmą, żeby mieć profesjonalne miejsce w sieci. Pakiety ułożyłam tak, aby można było zacząć małym krokiem i rozwijać stronę razem z marką."/>
   <section className="border-b border-black/10 bg-cream/70"><div className="container-page grid gap-5 py-8 text-center sm:grid-cols-3"><div><strong className="block font-serif text-2xl">od 390 zł</strong><span className="text-[.6rem] uppercase tracking-widest text-muted">najmniejszy pakiet</span></div><div><strong className="block font-serif text-2xl">0 zł</strong><span className="text-[.6rem] uppercase tracking-widest text-muted">za pierwszą rozmowę</span></div><div><strong className="block font-serif text-2xl">2-3 części</strong><span className="text-[.6rem] uppercase tracking-widest text-muted">możliwy podział płatności</span></div></div></section>

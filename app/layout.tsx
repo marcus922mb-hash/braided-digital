@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { AnnouncementBar } from "@/components/announcement-bar";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { CookieConsent } from "@/components/cookie-consent";
 import { ScrollEffects } from "@/components/scroll-effects";
+import { canonical } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
@@ -56,6 +58,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Braided Digital" }],
   creator: "Braided Digital",
+  alternates: canonical("/"),
   openGraph: {
     type: "website",
     locale: "pl_PL",
@@ -85,6 +88,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <div data-scroll-progress className="scroll-progress" aria-hidden="true" />
         <ScrollEffects />
+        <AnnouncementBar />
         <Header />
         <main>{children}</main>
         <Footer />

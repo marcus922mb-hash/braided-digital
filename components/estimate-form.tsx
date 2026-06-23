@@ -115,10 +115,10 @@ function Toggle({
 const STEPS = 6;
 
 const PROJECT_OPTIONS: { id: ProjectType; label: string; sub: string; icon: string }[] = [
-  { id: "wizytowka", label: "Strona wizytówka", sub: "900–1800 zł", icon: "💼" },
-  { id: "sklep", label: "Sklep internetowy", sub: "1800–4500 zł", icon: "🛍️" },
-  { id: "landing", label: "Landing page", sub: "500–900 zł", icon: "🚀" },
-  { id: "bio", label: "Link w bio", sub: "300–700 zł", icon: "🔗" },
+  { id: "wizytowka", label: "Strona wizytówka", sub: "990–1890 zł", icon: "💼" },
+  { id: "sklep", label: "Sklep internetowy", sub: "2490–3990 zł", icon: "🛍️" },
+  { id: "landing", label: "Landing page", sub: "390–990 zł", icon: "🚀" },
+  { id: "bio", label: "Link w bio", sub: "od 490 zł", icon: "🔗" },
   { id: "wordpress", label: "Poprawki WordPress", sub: "200–1000 zł", icon: "🔧" },
   { id: "ai", label: "Automatyzacja AI", sub: "800–3000 zł", icon: "🤖" },
 ];
@@ -519,7 +519,7 @@ function ResultCard({
   onReset: () => void;
 }) {
   const waMsg = [
-    "Cześć! Właśnie uzupełniłam/em kalkulator wyceny na braideddigital.pl.",
+    "Cześć! Właśnie uzupełniłam/em kalkulator wyceny na web.ma-atelier.pl.",
     "",
     `Projekt: ${estimate.projectTypeLabel}`,
     `Orientacyjna cena: ${estimate.minPrice.toLocaleString("pl-PL")}–${estimate.maxPrice.toLocaleString("pl-PL")} zł`,

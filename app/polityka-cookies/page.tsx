@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { CookieSettingsButton } from "@/components/cookie-settings-button";
 import { LegalPage } from "@/components/legal-page";
+import { canonical } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Polityka cookies", description: "Zasady korzystania z cookies i pamięci przeglądarki w serwisie Braided Digital." };
+export const metadata: Metadata = { title: "Polityka cookies", description: "Zasady korzystania z cookies i pamięci przeglądarki w serwisie Braided Digital.", alternates: canonical("/polityka-cookies") };
 
 export default function CookiesPage() { return <LegalPage eyebrow="Dokumenty" title="Polityka cookies" intro="Serwis został zaprojektowany tak, aby działał bez reklamowego śledzenia i zbędnych plików cookies.">
   <h2>1. Czym są cookies i podobne technologie</h2><p>Cookies to małe informacje zapisywane na urządzeniu podczas korzystania ze strony. Podobną funkcję może pełnić pamięć lokalna przeglądarki (localStorage). Technologie te mogą być niezbędne, funkcjonalne, analityczne albo marketingowe.</p>

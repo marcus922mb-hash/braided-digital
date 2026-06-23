@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { defaultConfigs } from "@/lib/demo-configs";
 import { DemoContinuation, DemoTopbar, PackageDemo } from "@/components/package-demos";
 import { pricing } from "@/lib/data";
+import { canonical } from "@/lib/seo";
 
 export function generateStaticParams() {
   return pricing.map((plan) => ({ slug: plan.slug }));
@@ -15,6 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `Demo: ${plan.title}`,
     description: `Przykładowa prezentacja strony w pakiecie ${plan.title} od Braided Digital. Zobacz jak może wyglądać Twoje miejsce w sieci.`,
+    alternates: canonical(`/demo/${slug}`),
     robots: { index: false, follow: true },
   };
 }

@@ -43,7 +43,7 @@ Skopiuj `.env.example` do `.env.local` i uzupełnij wartości:
 
 ```env
 # Publiczny adres produkcyjny (wymagany dla SEO)
-NEXT_PUBLIC_SITE_URL=https://braideddigital.pl
+NEXT_PUBLIC_SITE_URL=https://web.ma-atelier.pl
 
 # Resend — wysyłanie maili po wypełnieniu kalkulatora wyceny (opcjonalne)
 RESEND_API_KEY=re_xxxxxxxxxx

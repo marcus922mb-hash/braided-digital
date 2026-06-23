@@ -1,12 +1,17 @@
 import type { EstimateResult, LeadFormData, ProjectType } from "./types";
 
+// Base ranges align with the cennik packages in lib/data.ts:
+// landing   → Cyfrowa wizytówka (390) … One page (990)
+// wizytowka → One page (990) … Strona firmowa (1890)
+// bio       → Link w bio (od 490)
+// sklep     → Mini sklep (2490) … Sklep online (3990)
 const BASE_PRICES: Record<ProjectType, [number, number]> = {
-  landing:   [500,   900],
-  wizytowka: [900,  1800],
-  bio:       [300,   700],
-  sklep:    [1800,  4500],
-  wordpress: [200,  1000],
-  ai:        [800,  3000],
+  landing:   [ 390,   990],
+  wizytowka: [ 990,  1890],
+  bio:       [ 490,   790],
+  sklep:    [2490,  3990],
+  wordpress: [ 200,  1000],
+  ai:        [ 800,  3000],
 };
 
 export const PROJECT_LABELS: Record<ProjectType, string> = {
@@ -24,30 +29,34 @@ export function calculateEstimate(data: LeadFormData): EstimateResult {
   let max = baseMax;
   const features: string[] = [];
 
+  // Domain / hosting — setup cost when missing
+  if (!data.hasDomain) { min += 50; max += 100; features.push("rejestracja domeny"); }
+  if (!data.hasHosting) { min += 100; max += 200; features.push("konfiguracja hostingu"); }
+
   // Pages
-  if (data.pagesCount === "2-5") { min += 200; max += 400; features.push("2–5 podstron"); }
-  if (data.pagesCount === "6-10") { min += 500; max += 800; features.push("6–10 podstron"); }
-  if (data.pagesCount === "10+") { min += 900; max += 1400; features.push("ponad 10 podstron"); }
+  if (data.pagesCount === "2-5") { min += 100; max += 200; features.push("2–5 podstron"); }
+  if (data.pagesCount === "6-10") { min += 200; max += 400; features.push("6–10 podstron"); }
+  if (data.pagesCount === "10+") { min += 400; max += 700; features.push("ponad 10 podstron"); }
   if (data.pagesCount === "1") features.push("one-page / single view");
 
   // Shop
   const isShop = data.projectType === "sklep" || data.needsShop;
   if (data.needsShop && data.projectType !== "sklep") {
-    min += 900; max += 1800; features.push("sklep online");
+    min += 500; max += 900; features.push("sklep online");
   }
   if (isShop) {
-    if (data.productsCount === "11-30") { min += 200; max += 400; features.push("11–30 produktów"); }
-    else if (data.productsCount === "30+") { min += 500; max += 900; features.push("30+ produktów"); }
+    if (data.productsCount === "11-30") { min += 100; max += 200; features.push("11–30 produktów"); }
+    else if (data.productsCount === "30+") { min += 250; max += 500; features.push("30+ produktów"); }
     else features.push("do 10 produktów na start");
   }
 
   // Features
-  if (data.needsSEO) { min += 200; max += 400; features.push("optymalizacja SEO"); }
-  if (data.needsWhatsApp) { min += 100; max += 200; features.push("integracja WhatsApp"); }
+  if (data.needsSEO) { min += 150; max += 300; features.push("optymalizacja SEO"); }
+  if (data.needsWhatsApp) { min += 50; max += 100; features.push("integracja WhatsApp"); }
   if (data.needsContactForm) features.push("formularz kontaktowy");
 
   // Content
-  if (!data.hasContent) { min += 200; max += 400; features.push("wsparcie przy treściach i grafice"); }
+  if (!data.hasContent) { min += 100; max += 200; features.push("wsparcie przy treściach i grafice"); }
 
   // Urgency surcharge
   if (data.timeline === "asap") {

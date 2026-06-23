@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalPage } from "@/components/legal-page";
+import { canonical } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Polityka prywatności", description: "Informacje o przetwarzaniu danych osobowych w serwisie Braided Digital." };
+export const metadata: Metadata = { title: "Polityka prywatności", description: "Informacje o przetwarzaniu danych osobowych w serwisie Braided Digital.", alternates: canonical("/polityka-prywatnosci") };
 
 export default function PrivacyPage() { return <LegalPage eyebrow="Dokumenty" title="Polityka prywatności" intro="Dowiedz się, jakie dane mogą być przetwarzane podczas korzystania ze strony i kontaktu z Braided Digital.">
   <h2>1. Administrator danych</h2><p>Administratorem danych osobowych jest Marek Białkowski, prowadzący działalność nierejestrowaną pod marką Braided Digital (dalej: „Administrator”), adres korespondencyjny: Chylin 35, 62-710 Władysławów. Kontakt z Administratorem jest możliwy przez e-mail <a href="mailto:ma.atelier.kontakt@gmail.com">ma.atelier.kontakt@gmail.com</a>, telefonicznie lub przez WhatsApp pod numerem <a href="https://wa.me/48730195530">+48 730 195 530</a>.</p>
