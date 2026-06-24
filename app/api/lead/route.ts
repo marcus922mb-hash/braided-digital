@@ -1,41 +1,70 @@
-import { NextRequest, NextResponse } from "next/server";
-import type { LeadFormData, ApiResponse, LeadSubmission } from "@/lib/types";
+import { after, NextRequest, NextResponse } from "next/server";
+import type { ApiResponse, LeadFormData, LeadSubmission, ProjectType } from "@/lib/types";
 import { calculateEstimate } from "@/lib/estimate";
 import { processLead } from "@/lib/lead-workflow";
 
+const PROJECT_TYPES = new Set<ProjectType>(["website", "shop", "landing", "bio", "wordpress"]);
+
 export async function POST(request: NextRequest): Promise<NextResponse<ApiResponse>> {
   try {
-    const body = (await request.json()) as Partial<LeadFormData>;
-
-    if (!body.projectType) {
-      return NextResponse.json(
-        { success: false, error: "Wybierz rodzaj projektu." },
-        { status: 400 }
-      );
+    const raw = await request.json() as Partial<LeadFormData>;
+    if (!raw.projectType || !PROJECT_TYPES.has(raw.projectType)) {
+      return NextResponse.json({ success: false, error: "Wybierz prawidłowy rodzaj projektu." }, { status: 400 });
     }
 
+    const text = (value: unknown, max: number) => typeof value === "string" ? value.trim().slice(0, max) : "";
     const formData: LeadFormData = {
-      projectType: body.projectType,
-      hasDomain: body.hasDomain ?? false,
-      hasHosting: body.hasHosting ?? false,
-      pagesCount: body.pagesCount ?? "1",
-      needsShop: body.needsShop ?? false,
-      productsCount: body.productsCount ?? "1-10",
-      needsContactForm: body.needsContactForm ?? true,
-      needsWhatsApp: body.needsWhatsApp ?? false,
-      needsSEO: body.needsSEO ?? false,
-      hasContent: body.hasContent ?? false,
-      budget: body.budget ?? "1000-3000",
-      timeline: body.timeline ?? "1-miesiac",
-      description: body.description ?? "",
-      name: body.name ?? "",
-      email: body.email ?? "",
-      phone: body.phone ?? "",
+      projectType: raw.projectType,
+      hasDomain: raw.hasDomain === true,
+      hasHosting: raw.hasHosting === true,
+      contentStatus: raw.contentStatus ?? "czesciowe",
+      budget: raw.budget ?? "1000-2500",
+      timeline: raw.timeline ?? "1-miesiac",
+      websitePages: raw.websitePages ?? "one-page",
+      serviceCount: raw.serviceCount ?? "1-3",
+      hasBrandAssets: raw.hasBrandAssets !== false,
+      needsContactForm: raw.needsContactForm !== false,
+      needsAnalytics: raw.needsAnalytics === true,
+      needsBlog: raw.needsBlog === true,
+      needsBooking: raw.needsBooking === true,
+      needsMultilanguage: raw.needsMultilanguage === true,
+      productCount: raw.productCount ?? "1-10",
+      productContentReady: raw.productContentReady !== false,
+      shopCategoryCount: raw.shopCategoryCount ?? "1-3",
+      needsVariants: raw.needsVariants === true,
+      needsPayments: raw.needsPayments !== false,
+      needsShipping: raw.needsShipping !== false,
+      needsInvoicing: raw.needsInvoicing === true,
+      needsMigration: raw.needsMigration === true,
+      needsCustomerAccounts: raw.needsCustomerAccounts === true,
+      needsPromoCodes: raw.needsPromoCodes === true,
+      landingSize: raw.landingSize ?? "standard",
+      hasBrandAssetsLanding: raw.hasBrandAssetsLanding !== false,
+      needsCopywriting: raw.needsCopywriting === true,
+      needsAdsTracking: raw.needsAdsTracking === true,
+      formComplexity: raw.formComplexity ?? "simple",
+      needsVideoSection: raw.needsVideoSection === true,
+      needsSocialProof: raw.needsSocialProof === true,
+      bioLinks: raw.bioLinks ?? "1-5",
+      needsGallery: raw.needsGallery === true,
+      needsNewsletter: raw.needsNewsletter === true,
+      needsBioProducts: raw.needsBioProducts === true,
+      needsCustomDomain: raw.needsCustomDomain === true,
+      needsLinkAnalytics: raw.needsLinkAnalytics === true,
+      wordpressTask: raw.wordpressTask ?? "small-fix",
+      workHours: raw.workHours ?? "1",
+      isUrgentFix: raw.isUrgentFix === true,
+      hasAdminAccess: raw.hasAdminAccess !== false,
+      isLiveSite: raw.isLiveSite !== false,
+      hasPluginIssues: raw.hasPluginIssues === true,
+      description: text(raw.description, 2000),
+      name: text(raw.name, 120),
+      email: text(raw.email, 200),
+      phone: text(raw.phone, 40),
     };
 
     const estimate = calculateEstimate(formData);
-    const leadId = `lead_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-
+    const leadId = `lead_${Date.now()}_${crypto.randomUUID().slice(0, 6)}`;
     const submission: LeadSubmission = {
       id: leadId,
       submittedAt: new Date().toISOString(),
@@ -43,15 +72,10 @@ export async function POST(request: NextRequest): Promise<NextResponse<ApiRespon
       estimate,
     };
 
-    // Fire and forget — does not block the response
-    void processLead(submission);
-
+    after(() => processLead(submission));
     return NextResponse.json({ success: true, estimate, leadId });
-  } catch (err) {
-    console.error("[API /lead] Error:", err);
-    return NextResponse.json(
-      { success: false, error: "Wystąpił błąd po stronie serwera. Spróbuj ponownie." },
-      { status: 500 }
-    );
+  } catch (error) {
+    console.error("[API /lead]", error);
+    return NextResponse.json({ success: false, error: "Nie udało się obliczyć wyceny. Spróbuj ponownie." }, { status: 500 });
   }
 }

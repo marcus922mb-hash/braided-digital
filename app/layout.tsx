@@ -1,52 +1,47 @@
 import type { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { canonical } from "@/lib/seo";
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://web.ma-atelier.pl"),
   title: {
-    default: "MA Atelier Web Studio | Strony, które zarabiają",
-    template: "%s | MA Atelier Web",
+    default: "Braided Digital | Strony i sklepy dla małych marek",
+    template: "%s | Braided Digital",
   },
   description:
-    "Nowoczesne strony internetowe, sklepy WooCommerce i automatyzacje AI. Indywidualny projekt, mobile-first, SEO od pierwszej linii kodu. Ceny od 390 zł.",
+    "Projektuję strony, małe sklepy internetowe i linki w bio dla rękodzieła, lokalnych usług i małych firm. Ceny od 390 zł.",
   keywords: [
     "strony internetowe",
     "sklep internetowy WooCommerce",
-    "automatyzacje AI",
     "projektowanie stron",
-    "MA Atelier Web",
-    "web studio Polska",
+    "Braided Digital",
+    "strony dla handmade",
   ],
-  authors: [{ name: "MA Atelier Web Studio" }],
-  creator: "MA Atelier Web Studio",
+  authors: [{ name: "Marek Białkowski" }],
+  creator: "Braided Digital",
   alternates: canonical("/"),
   openGraph: {
     type: "website",
     locale: "pl_PL",
     url: "https://web.ma-atelier.pl",
-    siteName: "MA Atelier Web Studio",
-    title: "MA Atelier Web Studio | Strony, które zarabiają",
+    siteName: "Braided Digital",
+    title: "Braided Digital | Strony i sklepy dla małych marek",
     description:
-      "Nowoczesne strony internetowe, sklepy WooCommerce i automatyzacje AI stworzone z myślą o rozwoju Twojej firmy.",
+      "Strony, sklepy i linki w bio projektowane z myślą o małych firmach i markach handmade.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "MA Atelier Web Studio",
-    description: "Strony internetowe, sklepy WooCommerce i automatyzacje AI. Ceny od 390 zł.",
+    title: "Braided Digital",
+    description: "Strony i sklepy dla małych firm. Ceny od 390 zł.",
   },
   robots: { index: true, follow: true },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pl">
+    <html lang="pl" data-scroll-behavior="smooth">
       <body>
         {children}
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );

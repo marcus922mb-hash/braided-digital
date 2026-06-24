@@ -1,202 +1,105 @@
-"use client";
-
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Code2, Palette, Zap, Heart } from "lucide-react";
+import Image from "next/image";
+import { Arrow, CheckIcon } from "@/components/icons";
+import { CtaBand, PageHero } from "@/components/ui";
+import { canonical } from "@/lib/seo";
 
-const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
+export const metadata: Metadata = {
+  title: "O mnie",
+  description: "Marek Białkowski, twórca Braided Digital i właściciel sklepu MA Atelier.",
+  alternates: canonical("/o-mnie"),
+};
 
-function Fade({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
-  return (
-    <motion.div ref={ref} initial={{ opacity: 0, y: 28 }} animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay, ease }} className={className}>
-      {children}
-    </motion.div>
-  );
-}
-
-const values = [
-  { icon: Palette, title: "Estetyka z sensem", desc: "Strona musi być piękna — ale przede wszystkim musi działać. Projekt tworzy się z myślą o kliencie końcowym, nie o nagrodach." },
-  { icon: Code2, title: "Kod, który trwa", desc: "Piszę czysty, zoptymalizowany kod. Żadnych niepotrzebnych wtyczek, żadnego bloatware. Strona ma ładować się szybko za 5 lat." },
-  { icon: Zap, title: "Szybkość i wydajność", desc: "Google PageSpeed 90+ to standard, nie opcja. Szybka strona to więcej klientów i lepsze pozycje w wyszukiwarce." },
-  { icon: Heart, title: "Partnerstwo, nie usługa", desc: "Nie jestem anonimowym wykonawcą. Traktuję każdy projekt jak swój własny i zależy mi na Twoich wynikach." },
+const lessons = [
+  ["Strona żyje po publikacji", "Produkty się zmieniają, pojawiają się pytania klientów, a treści trzeba poprawiać. Projekt musi być wygodny także po stronie właściciela."],
+  ["Telefon jest pierwszym ekranem", "Klient ma szybko znaleźć produkt, cenę, dostawę i kontakt bez powiększania tekstu ani szukania przycisku."],
+  ["Mały budżet wymaga kolejności", "Nie każda funkcja jest potrzebna na start. Najpierw buduję podstawę, którą można rozwinąć wraz ze sprzedażą."],
+  ["Technologia ma być zrozumiała", "Domena, hosting i panel nie powinny być tajemnicą. Po wdrożeniu wiesz, co jest Twoje i jak działa."],
 ];
 
-const skills = [
-  { label: "Next.js / React", level: 95 },
-  { label: "TypeScript", level: 90 },
-  { label: "WordPress / WooCommerce", level: 88 },
-  { label: "SEO & Performance", level: 85 },
-  { label: "Automatyzacje AI (n8n, GPT)", level: 80 },
-  { label: "UI/UX Design", level: 82 },
+const timeline = [
+  ["01", "Własna marka", "MA Atelier zaczęło się od pomysłu na produkty i potrzebowało miejsca, które będzie czymś więcej niż profil w social media."],
+  ["02", "Pierwszy sklep", "Projektowałem strukturę, karty produktów, wersję mobilną oraz drogę od poznania marki do zamówienia."],
+  ["03", "Codzienna praktyka", "Obsługa produktów i klientów pokazała mi, gdzie estetyczny projekt spotyka się z realnym biznesem."],
+  ["04", "Braided Digital", "Dziś przekładam te doświadczenia na strony i sklepy dla innych małych marek, bez udawania wielkiej agencji."],
 ];
 
-export default function OMniePage() {
-  const skillsRef = useRef<HTMLDivElement>(null);
-  const skillsInView = useInView(skillsRef, { once: true, margin: "-50px" });
+export default function AboutPage() {
+  return <>
+    <PageHero visual="about" eyebrow="O mnie" title="Projektuję jako deweloper." italic="Myślę jak właściciel sklepu." text="Nazywam się Marek Białkowski. Stworzyłem MA Atelier, a doświadczenie zdobyte przy własnej marce przekładam na strony dla innych małych firm." />
 
-  return (
-    <div style={{ background: "#0A0A0A" }}>
-      {/* Hero */}
-      <section className="relative overflow-hidden px-6 pb-24 pt-36">
-        <div className="pointer-events-none absolute inset-0"
-          style={{ background: "radial-gradient(ellipse 70% 50% at 30% 50%, rgba(212,175,55,0.06), transparent)" }} />
-        <div className="mx-auto max-w-7xl grid items-center gap-16 lg:grid-cols-2">
-          <div>
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}
-              className="mb-5 text-[.65rem] font-bold uppercase tracking-[.22em] text-[#D4AF37]">O mnie</motion.p>
-            <motion.h1 initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.15, ease }}
-              className="text-[clamp(3rem,6vw,5.5rem)] font-light leading-[.95] text-white">
-              Cześć, jestem<br />
-              <span style={{ background: "linear-gradient(90deg,#D4AF37,#f0d878)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-                MA Atelier Web.
-              </span>
-            </motion.h1>
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.35, ease }}
-              className="mt-7 max-w-lg text-base leading-8 text-[#A0A0A0]">
-              Projektuję i buduję strony internetowe, sklepy WooCommerce i automatyzacje AI
-              dla polskich firm i marek. Działam zdalnie, pracuję solidnie.
-            </motion.p>
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5, ease }}
-              className="mt-10 flex flex-wrap gap-4">
-              <Link href="/kontakt" className="flex items-center gap-2 bg-[#D4AF37] px-7 py-3.5 text-[.7rem] font-bold uppercase tracking-[.14em] text-[#0A0A0A] transition hover:bg-[#f0d878]">
-                Porozmawiajmy <ArrowRight size={14} />
-              </Link>
-              <Link href="/portfolio" className="flex items-center gap-2 border border-white/20 px-7 py-3.5 text-[.7rem] font-bold uppercase tracking-[.14em] text-white/80 transition hover:border-white/50">
-                Zobacz realizacje
-              </Link>
-            </motion.div>
+    <section className="section-space">
+      <div className="container-page grid gap-14 lg:grid-cols-[.78fr_1.22fr]">
+        <div className="about-portrait about-portrait-rich" data-reveal>
+          <Image src="/images/hero-process.webp" alt="Stanowisko pracy przy projektowaniu sklepu internetowego" fill sizes="(max-width: 1024px) 100vw, 38vw" className="about-photo"/>
+          <div className="about-photo-overlay"/>
+          <div className="portrait-orbit"><span>MB</span><i/><i/></div>
+          <div className="portrait-code">
+            <span>01 / PROJEKT</span><span>02 / KOD</span><span>03 / SPRZEDAŻ</span>
           </div>
+          <p>Marek Białkowski<br/>Chylin / Polska<br/>projekty realizowane zdalnie</p>
+        </div>
+        <div data-reveal>
+          <p className="kicker">Skąd Braided Digital</p>
+          <h2 className="section-title mt-6">Kod, sprzedaż i codzienna praca<br/><em>w jednym splocie.</em></h2>
+          <div className="about-copy mt-8">
+            <p>Nie zaczynałem od wymyślenia nazwy studia i listy usług. Najpierw powstało MA Atelier – marka, przy której trzeba było połączyć produkt, estetykę, stronę, płatności oraz zwykłą codzienność małej sprzedaży.</p>
+            <p>Budując sklep, widziałem obie strony ekranu. Z jednej klient szukał produktu i informacji o dostawie. Z drugiej trzeba było dodawać zdjęcia, pilnować opisów, odpowiadać na wiadomości i realizować zamówienia.</p>
+            <p>To doświadczenie stało się podstawą Braided Digital. Projektuję spokojnie, tłumaczę decyzje i nie dokładam funkcji tylko po to, żeby projekt wyglądał na większy.</p>
+          </div>
+          <div className="mt-8 flex flex-wrap gap-3"><Link href="/portfolio" className="btn-primary">Zobacz MA Atelier <Arrow/></Link><Link href="/kontakt" className="btn-secondary">Porozmawiaj ze mną</Link></div>
+        </div>
+      </div>
+    </section>
 
-          {/* Avatar placeholder */}
-          <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3, ease }}
-            className="relative mx-auto aspect-square w-full max-w-sm lg:max-w-full">
-            <div className="relative z-10 aspect-square border border-[#D4AF37]/20 bg-[#0D0D0D]">
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                <div className="h-px w-12 bg-[#D4AF37]/40" />
-                <span className="text-[.6rem] font-bold uppercase tracking-widest text-[#D4AF37]/60">MA Atelier Web</span>
-                <div className="h-px w-12 bg-[#D4AF37]/40" />
-              </div>
-              <div className="absolute -right-4 -top-4 h-16 w-16 border border-[#D4AF37]/15" />
-              <div className="absolute -bottom-4 -left-4 h-12 w-12 border border-[#D4AF37]/10" />
+    <section className="about-story">
+      <div className="container-page grid gap-12 py-20 lg:grid-cols-[.62fr_1.38fr] lg:py-28">
+        <div data-reveal><p className="kicker kicker-light">Droga do studia</p><h2 className="section-title mt-6 text-white">Nie teoria.<br/><em>Własny projekt.</em></h2><p className="mt-6 max-w-sm text-sm leading-7 text-white/50">Każdy etap MA Atelier dołożył jeden element do sposobu, w jaki dziś pracuję z klientami.</p></div>
+        <div className="about-timeline">
+          {timeline.map(([n,title,text])=><article key={n} data-reveal><span>{n}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}
+        </div>
+      </div>
+    </section>
+
+    <section className="section-space">
+      <div className="container-page">
+        <div className="grid gap-10 lg:grid-cols-[.7fr_1.3fr]">
+          <div data-reveal><p className="kicker">Czego nauczył mnie własny sklep</p><h2 className="section-title mt-6">Projekt ma działać<br/><em>także w poniedziałek rano.</em></h2></div>
+          <div className="about-lessons">
+            {lessons.map(([title,text],i)=><article key={title} data-reveal><span>0{i+1}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section className="border-y border-ink/10 bg-[#e9e1d3]">
+      <div className="container-page py-16 md:py-20">
+        <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr]">
+          <div data-reveal><p className="kicker">Mój warsztat</p><h2 className="section-title mt-6">Technologia dobrana<br/>do zadania.</h2><p className="mt-6 max-w-md text-sm leading-7 text-ink/60">Nie sprzedaję jednego narzędzia każdemu. Dobieram rozwiązanie do tego, kto będzie później obsługiwać stronę i jak ma się rozwijać.</p></div>
+          <div className="workshop-board" data-reveal>
+            <div className="workshop-browser"><div><span/><span/><span/></div><strong>web.ma-atelier.pl</strong><i/><i/><i/></div>
+            <div className="workshop-tools">
+              {["Next.js","React","TypeScript","Tailwind CSS","WordPress","WooCommerce","Vercel","SEO techniczne"].map(tool=><span key={tool}>{tool}</span>)}
             </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Story */}
-      <section className="border-y border-white/5 bg-[#0D0D0D] px-6 py-24">
-        <div className="mx-auto max-w-7xl grid gap-16 lg:grid-cols-2">
-          <Fade>
-            <p className="mb-5 text-[.65rem] font-bold uppercase tracking-[.22em] text-[#D4AF37]">Historia</p>
-            <h2 className="text-[clamp(2rem,4vw,3.2rem)] font-light leading-tight text-white">
-              Strony, które<br />
-              <span style={{ background: "linear-gradient(90deg,#D4AF37,#f0d878)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-                mówią same za siebie.
-              </span>
-            </h2>
-          </Fade>
-          <div className="space-y-6">
-            {[
-              { text: "Zaczynałem od prostych stron wizytówkowych. Dziś buduję kompleksowe systemy: sklepy z integracjami kurierów, landing page'e z A/B testami i chatboty AI, które odpowiadają za firmę 24/7." },
-              { text: "Każdy projekt traktuję jak własny biznes. Nie wdrażam \"bo tak się robi\" — pytam o cele, analizuję grupę docelową i dobiera technologię, która naprawdę rozwiązuje problem." },
-              { text: "Ponad 50 projektów, zero szablonów. Każda strona jest unikatem — zaprojektowanym od zera z myślą o konkretnej marce i jej klientach." },
-            ].map((item, i) => (
-              <Fade key={i} delay={i * 0.1}>
-                <p className="text-sm leading-8 text-[#A0A0A0]">{item.text}</p>
-              </Fade>
-            ))}
+            <div className="workshop-note">Najpierw potrzeba.<br/>Potem narzędzie.</div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      {/* Values */}
-      <section className="px-6 py-24">
-        <div className="mx-auto max-w-7xl">
-          <Fade className="mb-14 text-center">
-            <p className="mb-4 text-[.65rem] font-bold uppercase tracking-[.22em] text-[#D4AF37]">Wartości</p>
-            <h2 className="text-[clamp(2rem,4vw,3.2rem)] font-light text-white">
-              Jak pracuję na co dzień.
-            </h2>
-          </Fade>
-          <div className="grid gap-px bg-white/5 sm:grid-cols-2">
-            {values.map((v, i) => {
-              const Icon = v.icon;
-              return (
-                <Fade key={v.title} delay={i * 0.1}>
-                  <div className="group bg-[#0A0A0A] p-8 transition hover:bg-[#0f0f0f]">
-                    <div className="mb-5 flex size-12 items-center justify-center border border-white/8 transition group-hover:border-[#D4AF37]/30">
-                      <Icon size={20} className="text-[#A0A0A0] transition group-hover:text-[#D4AF37]" />
-                    </div>
-                    <h3 className="mb-3 text-xl font-light text-white">{v.title}</h3>
-                    <p className="text-sm leading-7 text-[#A0A0A0]">{v.desc}</p>
-                  </div>
-                </Fade>
-              );
-            })}
-          </div>
+    <section className="section-space">
+      <div className="container-page">
+        <div className="text-center" data-reveal><p className="kicker mx-auto w-fit">Jak wygląda współpraca ze mną</p><h2 className="section-title mx-auto mt-6 max-w-4xl">Jedna osoba odpowiada<br/>za cały projekt.</h2></div>
+        <div className="mt-12 grid gap-px bg-ink/12 md:grid-cols-3">
+          {[
+            ["Rozmawiasz z wykonawcą", "Nie przekazuję projektu między działami. Ja ustalam zakres, projektuję, wdrażam i odpowiadam na pytania."],
+            ["Mówię wprost o granicach", "Jeśli coś nie ma sensu w Twoim budżecie albo na danym etapie, powiem to przed rozpoczęciem prac."],
+            ["Zostawiam porządek", "Po publikacji dostajesz dostęp, instrukcję i jasną informację, co można rozwijać później."],
+          ].map(([title,text],i)=><article key={title} className="bg-paper p-7 md:p-9" data-reveal><span className="index">0{i+1}</span><h3 className="mt-8 font-serif text-3xl">{title}</h3><p className="mt-4 text-sm leading-7 text-ink/60">{text}</p><CheckIcon className="mt-8 size-5 text-brass"/></article>)}
         </div>
-      </section>
-
-      {/* Skills */}
-      <section ref={skillsRef} className="border-y border-white/5 bg-[#0D0D0D] px-6 py-24">
-        <div className="mx-auto max-w-7xl grid gap-16 lg:grid-cols-2">
-          <Fade>
-            <p className="mb-5 text-[.65rem] font-bold uppercase tracking-[.22em] text-[#D4AF37]">Technologie</p>
-            <h2 className="text-[clamp(2rem,4vw,3.2rem)] font-light leading-tight text-white">
-              Narzędzia, które<br />
-              <span style={{ background: "linear-gradient(90deg,#D4AF37,#f0d878)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-                tworzą rezultaty.
-              </span>
-            </h2>
-            <p className="mt-5 text-sm leading-8 text-[#A0A0A0]">
-              Używam sprawdzonych, nowoczesnych technologii. Nic z nimi egzotycznego —
-              tylko to, co działa w produkcji i można utrzymać przez lata.
-            </p>
-          </Fade>
-          <div className="space-y-5">
-            {skills.map((s, i) => (
-              <motion.div key={s.label} initial={{ opacity: 0, x: 20 }} animate={skillsInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.6, delay: i * 0.08, ease }}>
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-sm text-white">{s.label}</span>
-                  <span className="text-[.62rem] text-[#D4AF37]">{s.level}%</span>
-                </div>
-                <div className="h-px bg-white/8">
-                  <motion.div className="h-full bg-gradient-to-r from-[#D4AF37] to-[#f0d878]"
-                    initial={{ scaleX: 0 }} animate={skillsInView ? { scaleX: 1 } : {}}
-                    transition={{ duration: 1, delay: 0.3 + i * 0.08, ease }}
-                    style={{ originX: 0, width: `${s.level}%` }} />
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="px-6 py-24 text-center">
-        <Fade className="mx-auto max-w-2xl">
-          <h2 className="text-[clamp(2rem,4vw,3.2rem)] font-light text-white">
-            Pracujmy<br />
-            <span style={{ background: "linear-gradient(90deg,#D4AF37,#f0d878)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-              razem.
-            </span>
-          </h2>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link href="/kontakt" className="flex items-center gap-2 bg-[#D4AF37] px-7 py-4 text-[.7rem] font-bold uppercase tracking-[.14em] text-[#0A0A0A] transition hover:bg-[#f0d878]">
-              Napisz do mnie <ArrowRight size={14} />
-            </Link>
-            <Link href="/wycena" className="flex items-center gap-2 border border-white/20 px-7 py-4 text-[.7rem] font-bold uppercase tracking-[.14em] text-white/70 transition hover:border-white/50 hover:text-white">
-              Bezpłatna wycena
-            </Link>
-          </div>
-        </Fade>
-      </section>
-    </div>
-  );
+      </div>
+    </section>
+    <CtaBand/>
+  </>;
 }

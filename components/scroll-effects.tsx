@@ -6,13 +6,15 @@ export function ScrollEffects() {
   useEffect(() => {
     const root = document.documentElement;
     const progress = document.querySelector<HTMLElement>("[data-scroll-progress]");
-    const revealTargets = document.querySelectorAll<HTMLElement>(
-      "main section > .container-page, main article, main .section-heading, main [data-reveal]",
-    );
+    const revealTargets = document.querySelectorAll<HTMLElement>("[data-reveal]");
 
-    revealTargets.forEach((element, index) => {
+    revealTargets.forEach((element) => {
+      const siblings = Array.from(
+        element.parentElement?.querySelectorAll(":scope > [data-reveal]") ?? []
+      );
+      const idx = siblings.indexOf(element);
       element.classList.add("scroll-reveal");
-      element.style.setProperty("--reveal-delay", `${Math.min(index % 4, 3) * 60}ms`);
+      element.style.setProperty("--reveal-delay", `${Math.min(idx, 5) * 80}ms`);
     });
 
     const observer = new IntersectionObserver(
@@ -27,8 +29,10 @@ export function ScrollEffects() {
     revealTargets.forEach((element) => observer.observe(element));
 
     const updateScroll = () => {
+      const y = window.scrollY;
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      if (progress) progress.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
+      if (progress) progress.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+      root.style.setProperty("--scroll-y", `${y}px`);
     };
     const updatePointer = (event: PointerEvent) => {
       root.style.setProperty("--pointer-x", `${event.clientX}px`);

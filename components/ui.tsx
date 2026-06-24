@@ -1,10 +1,41 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Arrow, CheckIcon, PlusIcon } from "./icons";
 import { faqs, services } from "@/lib/data";
 import { LivePortfolio } from "./live-portfolio";
 
-export function PageHero({ eyebrow, title, italic, text }: { eyebrow: string; title: string; italic?: string; text: string }) {
-  return <section className="grain overflow-hidden bg-ink text-white"><div className="container-page relative py-24 md:py-32"><div className="absolute -right-24 top-1/2 size-80 -translate-y-1/2 rounded-full border border-gold/20 md:size-[34rem]"/><div className="absolute -right-8 top-1/2 size-56 -translate-y-1/2 rounded-full border border-gold/10 md:size-[27rem]"/><p className="eyebrow reveal">{eyebrow}</p><h1 className="display reveal-delay mt-7 max-w-4xl text-[clamp(3.7rem,9vw,8.5rem)]">{title} {italic && <em className="font-normal text-gold-light">{italic}</em>}</h1><p className="reveal-delay mt-8 max-w-xl text-sm leading-7 text-white/60 md:text-base">{text}</p></div></section>;
+type HeroVisual = "offer" | "portfolio" | "process" | "pricing" | "faq" | "contact" | "estimate" | "about";
+
+export function PageHero({ eyebrow, title, italic, text, visual }: { eyebrow: string; title: string; italic?: string; text: string; visual?: HeroVisual }) {
+  return <section className="page-hero"><div className="thread page-hero-thread" aria-hidden="true"/><div className={`container-page relative grid items-center gap-12 py-20 md:py-28 ${visual ? "lg:grid-cols-[1.2fr_.8fr]" : ""}`}><div className="hero-copy-enter"><p className="kicker">{eyebrow}</p><h1 className={`editorial-title mt-7 ${visual ? "" : "max-w-5xl"}`}>{title} {italic && <em>{italic}</em>}</h1><p className="mt-8 max-w-2xl text-sm leading-7 text-ink/60 md:text-base">{text}</p></div>{visual && <EditorialVisual variant={visual}/>}</div></section>;
+}
+
+const heroImages: Record<HeroVisual, string> = {
+  offer:     "/images/hero-offer.webp",
+  portfolio: "/images/hero-portfolio.webp",
+  process:   "/images/hero-process.webp",
+  pricing:   "/images/hero-pricing.webp",
+  faq:       "/images/hero-faq.webp",
+  contact:   "/images/hero-contact.webp",
+  estimate:  "/images/hero-estimate.webp",
+  about:     "/images/hero-about.webp",
+};
+
+function EditorialVisual({ variant }: { variant: HeroVisual }) {
+  const image = heroImages[variant];
+  return <div className={`editorial-visual visual-${variant}`} aria-hidden="true">
+    <Image className="visual-photo" src={image} alt="" fill sizes="(max-width: 1024px) 100vw, 38vw" priority={variant === "about"}/>
+    <div className="visual-photo-shade"/>
+    <div className="visual-grid"/>
+    {variant === "offer" && <><div className="visual-screen screen-a"><span>WEB</span><i/><i/><i/></div><div className="visual-screen screen-b"><span>SHOP</span><i/><i/></div><div className="visual-phone"><i/><i/><i/></div></>}
+    {variant === "portfolio" && <><div className="visual-frame frame-a"><i/></div><div className="visual-frame frame-b"><i/></div><div className="visual-caption">MA / 01</div></>}
+    {variant === "process" && <><div className="visual-path"/>{["01","02","03","04"].map((n,i)=><span key={n} className={`visual-node node-${i+1}`}>{n}</span>)}</>}
+    {variant === "pricing" && <>{["390","990","2490"].map((price,i)=><div key={price} className={`visual-price price-${i+1}`}><small>OD</small><strong>{price}</strong><span>PLN</span></div>)}</>}
+    {variant === "faq" && <><div className="visual-bubble bubble-a">Ile trwa projekt?</div><div className="visual-bubble bubble-b">Czy pomagasz z treścią?</div><div className="visual-bubble bubble-c">Tak. Ustalamy zakres.</div></>}
+    {variant === "contact" && <><div className="visual-pin"><span>BD</span></div><div className="visual-contact-line"/><div className="visual-message">Napisz kilka zdań.<br/><b>Odpowiem osobiście.</b></div></>}
+    {variant === "estimate" && <><div className="visual-chart">{[34,58,82,68].map((h,i)=><i key={i} style={{height:`${h}%`}}/>)}</div><div className="visual-total"><small>TWÓJ ZAKRES</small><strong>z pozycji,<br/>nie z przypadku</strong></div></>}
+    {variant === "about" && <><div className="visual-desk"><div className="desk-screen"><span>&lt;/&gt;</span></div><div className="desk-note">MA ATELIER<br/>→ BRAIDED DIGITAL</div><div className="desk-cup"/></div></>}
+  </div>;
 }
 
 export function ServiceGrid({ limit }: { limit?: number }) {
@@ -12,7 +43,7 @@ export function ServiceGrid({ limit }: { limit?: number }) {
 }
 
 export function CtaBand() {
-  return <section className="bg-gold text-white"><div className="container-page flex flex-col items-start justify-between gap-8 py-14 md:flex-row md:items-center md:py-16"><div><p className="text-[.65rem] font-bold uppercase tracking-[.22em] text-white/70">Masz pomysł?</p><h2 className="mt-2 font-serif text-4xl leading-none md:text-5xl">Nadajmy mu cyfrową formę.</h2></div><Link href="/kontakt" className="btn-light shrink-0">Opowiedz mi o nim <Arrow /></Link></div></section>;
+  return <section className="contact-band"><div className="container-page flex flex-col items-start justify-between gap-8 py-16 md:flex-row md:items-end md:py-20" data-reveal><div><p className="kicker kicker-light">Masz już punkt zaczepienia?</p><h2 className="section-title mt-5 max-w-3xl text-white">Napisz kilka zdań.<br/><em>Resztę uporządkujemy.</em></h2></div><Link href="/kontakt" className="btn-brass shrink-0">Opowiedz o projekcie <Arrow /></Link></div></section>;
 }
 
 export function FaqList({ limit }: { limit?: number }) {

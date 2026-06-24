@@ -240,6 +240,31 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
           </div>
         </div>
       </section>
+      <section className="bg-[#eee4d4] px-6 py-20 text-[#1a1413]">
+        <div className="mx-auto max-w-6xl">
+          <p style={{ color:c.accentColor }} className="text-xs uppercase tracking-[.2em]">Współpraca</p>
+          <div className="mt-8 grid gap-px md:grid-cols-4" style={{backgroundColor:`${c.accentColor}35`}}>
+            {[
+              ["01","Rozmowa","Poznaję wnętrze, potrzeby i budżet."],
+              ["02","Koncepcja","Układ, materiały i kierunek wizualny."],
+              ["03","Projekt","Dokumentacja i konkretne rozwiązania."],
+              ["04","Realizacja","Wsparcie na etapie zmian i zakupów."],
+            ].map(([n,title,text])=><article key={n} className="bg-[#eee4d4] p-6"><span style={{color:c.accentColor}} className="text-xs">{n}</span><h3 className="mt-7 font-serif text-2xl">{title}</h3><p className="mt-3 text-xs leading-6 text-black/50">{text}</p></article>)}
+          </div>
+        </div>
+      </section>
+      <section className="bg-white px-6 py-20 text-[#1a1413]">
+        <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[.7fr_1.3fr]">
+          <div><p style={{color:c.accentColor}} className="text-xs uppercase tracking-[.2em]">FAQ</p><h2 className="mt-5 font-serif text-4xl">Zanim zaczniemy projekt.</h2></div>
+          <div className="divide-y divide-black/10">
+            {[
+              ["Czy konsultacja może odbyć się online?","Tak. Cały projekt może być prowadzony zdalnie na podstawie rozmów, planów i zdjęć."],
+              ["Czy pomagasz dobrać wykonawców?","Mogę przygotować listę potrzebnych specjalistów i wesprzeć rozmowy wykonawcze."],
+              ["Czy projekt uwzględnia konkretny budżet?","Tak. Budżet jest jednym z głównych punktów wyjścia do wyboru materiałów i zakresu."],
+            ].map(([q,a])=><details key={q} className="py-5"><summary className="flex justify-between gap-5 font-serif text-xl"><span>{q}</span><span style={{color:c.accentColor}}>+</span></summary><p className="max-w-xl pt-3 text-xs leading-6 text-black/50">{a}</p></details>)}
+          </div>
+        </div>
+      </section>
       <section style={{ backgroundColor: c.accentColor, color: lum(c.accentColor) > 0.5 ? "#1a1413" : "#fff" }} className="px-6 py-16 text-center">
         <p className="text-xs uppercase tracking-widest opacity-60">Nowy projekt</p>
         <h2 className="mt-4 font-serif text-4xl md:text-5xl">Porozmawiajmy o Twoim wnętrzu.</h2>
@@ -262,10 +287,91 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
 
   // ── Link w bio ──
   if (slug === "link-w-bio") return (
-    <footer style={{ backgroundColor: c.accentColor, color: lum(c.accentColor) > 0.5 ? "#1a1413" : "#fff" }} className="px-5 py-8 text-center text-xs">
-      <p className="font-serif text-xl">{c.brandName}</p>
-      <p className="mt-2 opacity-60">© Przykładowa marka · Polityka prywatności · Kontakt</p>
-    </footer>
+    <>
+      <section style={{ backgroundColor: c.bgColor, color: tc }} className="px-5 py-20">
+        <div className="mx-auto max-w-4xl">
+          <div className="text-center">
+            <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-[.2em]">Najnowsza kolekcja</p>
+            <h2 className="mt-4 font-serif text-4xl md:text-5xl">Przedmioty na małe rytuały.</h2>
+            <p style={{ color: mc }} className="mx-auto mt-4 max-w-lg text-sm leading-7">Każda forma powstaje ręcznie w krótkiej serii. Różnice w szkliwie i kształcie są częścią jej charakteru.</p>
+          </div>
+          <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3">
+            {[
+              ["Kubek Poranek", "89 zł", "70%"],
+              ["Misa Luna", "119 zł", "48%"],
+              ["Wazon Soft", "149 zł", "30%"],
+            ].map(([name, price, mix], index) => (
+              <article key={name} className={index === 2 ? "col-span-2 md:col-span-1" : ""}>
+                <div className="aspect-square rounded-t-[45%]" style={{ background: `linear-gradient(145deg, color-mix(in srgb, ${c.accentColor} ${mix}, #8d655c), color-mix(in srgb, ${c.accentColor} 12%, #f4dfd2))` }} />
+                <div className="flex items-center justify-between border-b px-1 py-4 text-xs" style={{ borderColor: `${c.accentColor}30` }}>
+                  <span>{name}</span><b>{price}</b>
+                </div>
+              </article>
+            ))}
+          </div>
+          <button style={{ backgroundColor: c.accentColor, color: "#fff" }} className="mx-auto mt-9 block px-7 py-4 text-xs font-bold uppercase tracking-widest">Przejdź do sklepu</button>
+        </div>
+      </section>
+
+      <section style={{ background: `color-mix(in srgb, ${c.accentColor} 16%, ${c.bgColor})`, color: tc }} className="px-5 py-20">
+        <div className="mx-auto grid max-w-4xl items-center gap-10 md:grid-cols-[.85fr_1.15fr]">
+          <div className="aspect-[4/5] rounded-t-full" style={{ background: `radial-gradient(circle at 50% 30%, color-mix(in srgb, ${c.accentColor} 35%, #efc7b7) 0 18%, transparent 18.5%), linear-gradient(145deg, color-mix(in srgb, ${c.accentColor} 75%, #5f3c36), #e7c6b6)` }} />
+          <div>
+            <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-[.2em]">Za kulisami</p>
+            <h2 className="mt-5 font-serif text-4xl md:text-5xl">Cześć, jestem Lena.</h2>
+            <p style={{ color: mc }} className="mt-5 text-sm leading-7">Lepię, szkliwię i wypalam każdą rzecz w małej pracowni. Lubię spokojne kolory, niedoskonałe linie i przedmioty, po które chce się sięgać codziennie.</p>
+            <div className="mt-7 grid grid-cols-2 gap-3 text-xs">
+              <span className="border px-4 py-3" style={{ borderColor: `${c.accentColor}35` }}>krótkie serie</span>
+              <span className="border px-4 py-3" style={{ borderColor: `${c.accentColor}35` }}>ręczna praca</span>
+              <span className="border px-4 py-3" style={{ borderColor: `${c.accentColor}35` }}>wysyłka w 2–4 dni</span>
+              <span className="border px-4 py-3" style={{ borderColor: `${c.accentColor}35` }}>pracownia w Polsce</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ backgroundColor: c.bgColor, color: tc }} className="px-5 py-20">
+        <div className="mx-auto max-w-3xl text-center">
+          <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-[.2em]">Warsztaty</p>
+          <h2 className="mt-4 font-serif text-4xl md:text-5xl">Dwie godziny z gliną.</h2>
+          <p style={{ color: mc }} className="mx-auto mt-5 max-w-lg text-sm leading-7">Kameralne spotkania dla początkujących. Poznasz podstawy lepienia i stworzysz własny kubek lub misę.</p>
+          <div className="mt-9 grid gap-px text-left md:grid-cols-3" style={{ backgroundColor: `${c.accentColor}25` }}>
+            {[["01","Wybierz termin","Soboty, godz. 11:00"],["02","Przyjdź bez przygotowania","Materiały są na miejscu"],["03","Odbierz gotową pracę","Po wypale i szkliwieniu"]].map(([n,title,text]) => (
+              <div key={n} style={{ backgroundColor: c.bgColor }} className="p-5"><span style={{ color: c.accentColor }} className="text-xs">{n}</span><h3 className="mt-5 font-serif text-xl">{title}</h3><p style={{ color: mc }} className="mt-2 text-xs leading-5">{text}</p></div>
+            ))}
+          </div>
+          <button style={{ borderColor: c.accentColor, color: c.accentColor }} className="mt-8 border px-7 py-4 text-xs font-bold uppercase tracking-widest">Zobacz wolne terminy</button>
+        </div>
+      </section>
+
+      <section style={{ backgroundColor: c.accentColor, color: "#fff" }} className="px-5 py-16">
+        <div className="mx-auto grid max-w-3xl gap-8 md:grid-cols-2 md:items-center">
+          <div><p className="text-xs uppercase tracking-widest opacity-60">Listy z pracowni</p><h2 className="mt-3 font-serif text-3xl">Nowe kolekcje jako pierwsza.</h2></div>
+          <div><div className="flex border-b border-white/40"><span className="flex-1 py-3 text-xs text-white/65">Twój adres e-mail</span><button className="text-xs font-bold uppercase tracking-widest">Zapisz mnie</button></div><p className="mt-3 text-[.6rem] text-white/55">Maksymalnie dwa listy w miesiącu.</p></div>
+        </div>
+      </section>
+
+      <section style={{ backgroundColor: c.bgColor, color: tc }} className="px-5 py-16">
+        <div className="mx-auto max-w-3xl">
+          <p style={{ color: c.accentColor }} className="text-center text-xs uppercase tracking-[.2em]">Najczęstsze pytania</p>
+          <div className="mt-7 divide-y" style={{ borderColor: `${c.accentColor}30` }}>
+            {[
+              ["Czy każdy produkt wygląda identycznie?","Nie. To przedmioty wykonane ręcznie, dlatego szkliwo i kształt mogą delikatnie się różnić."],
+              ["Jak zabezpieczasz ceramikę do wysyłki?","Każdy przedmiot pakuję warstwowo w materiały chroniące go podczas transportu."],
+              ["Czy realizujesz zamówienia indywidualne?","Tak, w wybranych miesiącach. Napisz przez formularz i opowiedz, czego potrzebujesz."],
+            ].map(([q,a]) => <details key={q} className="py-4"><summary className="flex justify-between gap-4 font-serif text-xl"><span>{q}</span><span style={{ color: c.accentColor }}>+</span></summary><p style={{ color: mc }} className="max-w-xl pt-3 text-xs leading-6">{a}</p></details>)}
+          </div>
+        </div>
+      </section>
+
+      <footer style={{ backgroundColor: c.accentColor, color: "#fff" }} className="px-5 py-10">
+        <div className="mx-auto grid max-w-4xl gap-7 text-xs md:grid-cols-3">
+          <div><p className="font-serif text-2xl">{c.brandName}</p><p className="mt-2 opacity-60">Ceramika tworzona powoli.</p></div>
+          <div className="leading-6 opacity-70">Sklep<br/>Warsztaty<br/>O pracowni<br/>Kontakt</div>
+          <div className="leading-6 opacity-70">Instagram<br/>Dostawa i zwroty<br/>Polityka prywatności<br/>© Demo 2026</div>
+        </div>
+      </footer>
+    </>
   );
 
   // ── One page ──
@@ -295,6 +401,47 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
                 <h3 className="mt-7 font-serif text-2xl">{step}</h3>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+      <section style={{ backgroundColor: `color-mix(in srgb, ${c.accentColor} 12%, ${c.bgColor})`, color: tc }} className="px-6 py-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <div><p style={{ color: c.accentColor }} className="text-xs uppercase tracking-[.2em]">Oferta i ceny</p><h2 className="mt-5 font-serif text-4xl md:text-5xl">Wybierz swój rytuał.</h2></div>
+            <p style={{ color: mc }} className="max-w-sm text-sm leading-7">Każdą pierwszą wizytę poprzedza krótka rozmowa o potrzebach skóry i Twoim samopoczuciu.</p>
+          </div>
+          <div className="mt-12 grid gap-px md:grid-cols-3" style={{ backgroundColor: `${tc}18` }}>
+            {[
+              ["Rytuał twarzy","90 min","260 zł","oczyszczenie · masaż · maska"],
+              ["Masaż kobido","75 min","220 zł","lifting · rozluźnienie · relaks"],
+              ["Czuły reset","120 min","340 zł","twarz · kark · dłonie"],
+            ].map(([name,time,price,desc],i)=><article key={name} style={{ backgroundColor: `color-mix(in srgb, ${c.accentColor} 12%, ${c.bgColor})` }} className="p-7"><span style={{ color:c.accentColor }} className="text-xs">0{i+1}</span><h3 className="mt-8 font-serif text-3xl">{name}</h3><p style={{ color:mc }} className="mt-3 text-xs">{desc}</p><div className="mt-8 flex items-end justify-between border-t pt-4" style={{borderColor:`${tc}18`}}><span className="text-xs">{time}</span><b className="font-serif text-2xl">{price}</b></div></article>)}
+          </div>
+        </div>
+      </section>
+      <section style={{ backgroundColor: tc, color: c.bgColor }} className="px-6 py-24">
+        <div className="mx-auto max-w-5xl">
+          <p style={{ color: c.accentColor }} className="text-center text-xs uppercase tracking-[.2em]">Treści demonstracyjne</p>
+          <h2 className="mt-5 text-center font-serif text-4xl md:text-5xl">Jak możesz się tu poczuć.</h2>
+          <div className="mt-12 grid gap-5 md:grid-cols-3">
+            {[
+              ["„Pierwszy raz ktoś tak spokojnie wyjaśnił mi potrzeby mojej skóry.”","Marta / rytuał twarzy"],
+              ["„Wyszłam z lżejszą twarzą i głową. Bez pośpiechu, dokładnie tak jak potrzebowałam.”","Ola / kobido"],
+              ["„Piękne miejsce i bardzo uważna opieka od początku do końca.”","Karolina / czuły reset"],
+            ].map(([quote,author])=><blockquote key={author} className="border p-6" style={{borderColor:`${c.bgColor}20`}}><p className="font-serif text-2xl leading-snug">{quote}</p><footer className="mt-7 text-[.6rem] uppercase tracking-widest opacity-50">{author}</footer></blockquote>)}
+          </div>
+        </div>
+      </section>
+      <section style={{ backgroundColor: c.bgColor, color: tc }} className="px-6 py-20">
+        <div className="mx-auto grid max-w-5xl gap-12 md:grid-cols-[.7fr_1.3fr]">
+          <div><p style={{ color:c.accentColor }} className="text-xs uppercase tracking-[.2em]">FAQ</p><h2 className="mt-5 font-serif text-4xl">Przed pierwszą wizytą.</h2></div>
+          <div className="divide-y" style={{borderColor:`${tc}18`}}>
+            {[
+              ["Czy muszę wiedzieć, jaki zabieg wybrać?","Nie. Możesz wybrać konsultację, a rytuał dobierzemy po rozmowie na miejscu."],
+              ["Jak przygotować się do wizyty?","Przyjdź bez makijażu, jeśli możesz. Resztą zajmę się w gabinecie."],
+              ["Czy zabiegi są odpowiednie dla skóry wrażliwej?","Tak, ale zawsze omawiamy aktualny stan skóry, alergie i przeciwwskazania."],
+              ["Jak odwołać termin?","Napisz najpóźniej 24 godziny wcześniej, aby termin mógł trafić do innej osoby."],
+            ].map(([q,a])=><details key={q} className="py-5"><summary className="flex justify-between gap-5 font-serif text-xl"><span>{q}</span><span style={{color:c.accentColor}}>+</span></summary><p style={{color:mc}} className="max-w-xl pt-3 text-xs leading-6">{a}</p></details>)}
           </div>
         </div>
       </section>
@@ -354,6 +501,37 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
           </div>
         </div>
       </section>
+      <section className="bg-white px-6 py-24" style={{color:"#142a3b"}}>
+        <div className="mx-auto max-w-6xl">
+          <div className="grid gap-10 md:grid-cols-2"><div><p style={{color:c.accentColor}} className="text-xs uppercase tracking-[.2em]">Proces</p><h2 className="mt-5 font-serif text-4xl md:text-5xl">Od pierwszego szkicu do kluczy.</h2></div><p className="max-w-md text-sm leading-7 text-black/50">Każdy etap kończy się konkretnym materiałem i decyzją. Dzięki temu inwestor wie, co dzieje się z projektem i kiedy potrzebna jest jego akceptacja.</p></div>
+          <div className="mt-12 grid gap-px md:grid-cols-4" style={{backgroundColor:`${c.accentColor}35`}}>
+            {[
+              ["01","Analiza","Działka, potrzeby, możliwości"],
+              ["02","Koncepcja","Bryła, układ i materiały"],
+              ["03","Dokumentacja","Rysunki i uzgodnienia"],
+              ["04","Nadzór","Wsparcie podczas realizacji"],
+            ].map(([n,title,text])=><article key={n} className="bg-white p-6"><span style={{color:c.accentColor}} className="text-xs">{n}</span><h3 className="mt-8 font-serif text-2xl">{title}</h3><p className="mt-3 text-xs text-black/45">{text}</p></article>)}
+          </div>
+        </div>
+      </section>
+      <section style={{backgroundColor:"#0c1b25",color:"#e9edf0"}} className="px-6 py-24">
+        <div className="mx-auto max-w-6xl">
+          <p style={{color:c.accentColor}} className="text-center text-xs uppercase tracking-[.2em]">Treści demonstracyjne</p>
+          <div className="mt-10 grid gap-5 md:grid-cols-2">
+            {[
+              ["„Studio potrafiło przełożyć nasz chaotyczny zbiór potrzeb na spokojny i funkcjonalny dom.”","Inwestorzy / Dom pod lasem"],
+              ["„Każda decyzja była wyjaśniona. Wiedzieliśmy, za co płacimy i co zmieni się na budowie.”","Inwestorzy / Apartament 62"],
+            ].map(([quote,author])=><blockquote key={author} className="border border-white/10 p-7"><p className="font-serif text-2xl leading-snug">{quote}</p><footer className="mt-7 text-[.6rem] uppercase tracking-widest text-white/40">{author}</footer></blockquote>)}
+          </div>
+          <div className="mx-auto mt-16 max-w-3xl divide-y divide-white/10">
+            {[
+              ["Jaki jest pierwszy krok?","Krótka rozmowa i przesłanie podstawowych informacji o działce lub wnętrzu."],
+              ["Czy można zamówić samą koncepcję?","Tak. Zakres może kończyć się na koncepcji albo obejmować pełną dokumentację i nadzór."],
+              ["Jak długo trwa projekt?","Termin zależy od skali i uzgodnień. Po rozmowie otrzymujesz harmonogram etapów."],
+            ].map(([q,a])=><details key={q} className="py-5"><summary className="flex justify-between gap-5 font-serif text-xl"><span>{q}</span><span style={{color:c.accentColor}}>+</span></summary><p className="max-w-xl pt-3 text-xs leading-6 text-white/45">{a}</p></details>)}
+          </div>
+        </div>
+      </section>
       <section style={{ backgroundColor: tc, color: c.bgColor }} className="px-6 py-20">
         <div className="mx-auto flex max-w-6xl flex-col justify-between gap-7 md:flex-row md:items-end">
           <div>
@@ -386,8 +564,47 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
         </div>
       </section>
       <section style={{ backgroundColor: c.bgColor, color: tc }} className="px-6 py-20 text-center">
-        <p style={{ color: c.accentColor }} className="font-serif text-2xl italic md:text-4xl">&ldquo;Każda paczka to jak mały prezent. Wracam tu zawsze.&rdquo;</p>
-        <p style={{ color: mc }} className="mt-5 text-xs uppercase tracking-widest">— Kasia, stała klientka</p>
+        <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-[.2em]">Treść demonstracyjna</p>
+        <p className="mx-auto mt-5 max-w-3xl font-serif text-3xl italic md:text-5xl">&ldquo;Każda paczka to jak mały prezent. Wracam tu zawsze.&rdquo;</p>
+        <p style={{ color: mc }} className="mt-5 text-xs uppercase tracking-widest">— przykładowa opinia klientki</p>
+      </section>
+      <section style={{ backgroundColor: c.bgColor, color: tc }} className="px-6 py-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="text-center"><p style={{color:c.accentColor}} className="text-xs uppercase tracking-[.2em]">Dlaczego Mila</p><h2 className="mt-5 font-serif text-4xl md:text-5xl">Mała rzecz. Dobrze przemyślana.</h2></div>
+          <div className="mt-12 grid gap-px md:grid-cols-4" style={{backgroundColor:`${tc}18`}}>
+            {[
+              ["01","Ręczna praca","Każda ozdoba powstaje pojedynczo."],
+              ["02","Naturalne materiały","Len, drewno i papier z odpowiedzialnych źródeł."],
+              ["03","Bezpieczna paczka","Pakowanie gotowe także na prezent."],
+              ["04","Kontakt z twórczynią","Bez infolinii i anonimowej obsługi."],
+            ].map(([n,title,text])=><article key={n} style={{backgroundColor:c.bgColor}} className="p-6"><span style={{color:c.accentColor}} className="text-xs">{n}</span><h3 className="mt-8 font-serif text-2xl">{title}</h3><p style={{color:mc}} className="mt-3 text-xs leading-6">{text}</p></article>)}
+          </div>
+        </div>
+      </section>
+      <section style={{ backgroundColor: `color-mix(in srgb, ${c.accentColor} 18%, ${c.bgColor})`, color: tc }} className="px-6 py-24">
+        <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-2">
+          <div><p style={{color:c.accentColor}} className="text-xs uppercase tracking-[.2em]">Od zamówienia do domu</p><h2 className="mt-5 font-serif text-4xl md:text-5xl">Co dzieje się po kliknięciu „kupuję”?</h2></div>
+          <div className="space-y-1">
+            {[
+              ["01","Potwierdzam i przygotowuję zamówienie","Otrzymujesz wiadomość z podsumowaniem i planowanym terminem wysyłki."],
+              ["02","Pakuję ręcznie","Produkt zabezpieczam i dokładam kartkę z informacją o pielęgnacji."],
+              ["03","Paczka rusza w drogę","Dostajesz numer śledzenia. Wysyłka trwa zwykle 1–2 dni robocze."],
+            ].map(([n,title,text])=><div key={n} className="grid grid-cols-[2.5rem_1fr] border-b py-5" style={{borderColor:`${tc}18`}}><span style={{color:c.accentColor}} className="text-xs">{n}</span><div><h3 className="font-serif text-2xl">{title}</h3><p style={{color:mc}} className="mt-2 text-xs leading-6">{text}</p></div></div>)}
+          </div>
+        </div>
+      </section>
+      <section style={{ backgroundColor: c.bgColor, color: tc }} className="px-6 py-20">
+        <div className="mx-auto max-w-4xl">
+          <p style={{color:c.accentColor}} className="text-center text-xs uppercase tracking-[.2em]">Pytania przed zakupem</p>
+          <div className="mt-8 divide-y" style={{borderColor:`${tc}18`}}>
+            {[
+              ["Czy mogę zamówić inny kolor?","Przy części produktów tak. Dostępne warianty znajdziesz na karcie produktu."],
+              ["Ile trwa realizacja?","Produkty dostępne od ręki wysyłam w 2–4 dni robocze. Zamówienia personalizowane mają osobny termin."],
+              ["Czy przyjmujesz zwroty?","Tak, zgodnie z regulaminem sklepu. Produkty personalizowane mogą podlegać wyjątkom."],
+              ["Czy pakujesz na prezent?","Tak. Możesz dodać krótką wiadomość podczas składania zamówienia."],
+            ].map(([q,a])=><details key={q} className="py-5"><summary className="flex justify-between gap-5 font-serif text-xl"><span>{q}</span><span style={{color:c.accentColor}}>+</span></summary><p style={{color:mc}} className="max-w-2xl pt-3 text-xs leading-6">{a}</p></details>)}
+          </div>
+        </div>
       </section>
       <section style={{ backgroundColor: `color-mix(in srgb, ${c.accentColor} 10%, ${c.bgColor})`, color: tc }} className="px-6 py-20 text-center">
         <p style={{ color: c.accentColor }} className="text-xs uppercase tracking-widest">Newsletter</p>
@@ -449,6 +666,27 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
         <div style={{ borderColor: `${tc}30` }} className="mx-auto mt-8 flex max-w-lg border-b">
           <span style={{ color: mc }} className="flex-1 py-3 text-left text-xs">Email address</span>
           <button style={{ color: tc }} className="cursor-pointer text-xs uppercase tracking-widest">Subscribe</button>
+        </div>
+      </section>
+      <section style={{backgroundColor:`color-mix(in srgb, ${c.accentColor} 4%, #efefed)`,color:tc}} className="px-6 py-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid gap-10 md:grid-cols-2"><div><p style={{color:mc}} className="text-xs uppercase tracking-[.2em]">Our standard</p><h2 className="mt-5 text-4xl font-light md:text-5xl">Designed to stay.</h2></div><p style={{color:mc}} className="max-w-md text-sm leading-7">Materiały, konstrukcja i forma są wybierane z myślą o długim użytkowaniu, prostym serwisie i odpowiedzialnej produkcji.</p></div>
+          <div className="mt-12 grid gap-px md:grid-cols-4" style={{backgroundColor:`${tc}18`}}>
+            {[["01","Small series","Kontrolowana produkcja"],["02","Better materials","Naturalne i trwałe włókna"],["03","Repair first","Wsparcie zamiast wymiany"],["04","Honest delivery","Jasne terminy i zwroty"]].map(([n,title,text])=><article key={n} style={{backgroundColor:`color-mix(in srgb, ${c.accentColor} 4%, #efefed)`}} className="p-6"><span style={{color:mc}} className="text-xs">{n}</span><h3 className="mt-8 text-xl font-light">{title}</h3><p style={{color:mc}} className="mt-3 text-xs">{text}</p></article>)}
+          </div>
+        </div>
+      </section>
+      <section style={{backgroundColor:c.bgColor,color:tc}} className="px-6 py-20">
+        <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-[.65fr_1.35fr]">
+          <div><p style={{color:mc}} className="text-xs uppercase tracking-[.2em]">Help</p><h2 className="mt-5 text-4xl font-light">Questions before ordering.</h2></div>
+          <div style={{borderColor:`${tc}18`}} className="divide-y">
+            {[
+              ["How do I choose a size?","Każda karta produktu zawiera wymiary produktu i tabelę rozmiarów."],
+              ["When will my order ship?","Produkty dostępne od ręki wysyłamy zwykle w ciągu 2–3 dni roboczych."],
+              ["Can I return an item?","Tak. Instrukcja zwrotu i termin znajdują się w paczce oraz w regulaminie."],
+              ["Do you ship internationally?","Wersja demonstracyjna pokazuje możliwość konfiguracji wielu stref dostawy."],
+            ].map(([q,a])=><details key={q} className="py-5"><summary className="flex justify-between gap-5 text-lg font-light"><span>{q}</span><span>+</span></summary><p style={{color:mc}} className="max-w-xl pt-3 text-xs leading-6">{a}</p></details>)}
+          </div>
         </div>
       </section>
       <footer style={{ backgroundColor: tc, color: c.bgColor }} className="grid gap-8 px-8 py-14 text-xs md:grid-cols-4">

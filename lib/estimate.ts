@@ -1,99 +1,172 @@
-import type { EstimateResult, LeadFormData, ProjectType } from "./types";
-
-// Base ranges align with the cennik packages in lib/data.ts:
-// landing   → Cyfrowa wizytówka (390) … One page (990)
-// wizytowka → One page (990) … Strona firmowa (1890)
-// bio       → Link w bio (od 490)
-// sklep     → Mini sklep (2490) … Sklep online (3990)
-const BASE_PRICES: Record<ProjectType, [number, number]> = {
-  landing:   [ 390,   990],
-  wizytowka: [ 990,  1890],
-  bio:       [ 490,   790],
-  sklep:    [2490,  3990],
-  wordpress: [ 200,  1000],
-  ai:        [ 800,  3000],
-};
+import type {
+  Budget,
+  EstimateBreakdownItem,
+  EstimateResult,
+  LeadFormData,
+  ProjectType,
+} from "./types";
 
 export const PROJECT_LABELS: Record<ProjectType, string> = {
-  landing:   "Landing page",
-  wizytowka: "Strona wizytówka",
-  bio:       "Link w bio",
-  sklep:     "Sklep internetowy",
-  wordpress: "Poprawki WordPress",
-  ai:        "Automatyzacja AI",
+  website: "Strona internetowa",
+  shop: "Sklep internetowy",
+  landing: "Landing page",
+  bio: "Link w bio",
+  wordpress: "WordPress / WooCommerce",
+};
+
+const BUDGET_MAX: Record<Budget, number> = {
+  "do-1000": 1000,
+  "1000-2500": 2500,
+  "2500-5000": 5000,
+  "5000+": Number.POSITIVE_INFINITY,
 };
 
 export function calculateEstimate(data: LeadFormData): EstimateResult {
-  const [baseMin, baseMax] = BASE_PRICES[data.projectType] ?? [500, 1000];
-  let min = baseMin;
-  let max = baseMax;
+  const breakdown: EstimateBreakdownItem[] = [];
   const features: string[] = [];
 
-  // Domain / hosting — setup cost when missing
-  if (!data.hasDomain) { min += 50; max += 100; features.push("rejestracja domeny"); }
-  if (!data.hasHosting) { min += 100; max += 200; features.push("konfiguracja hostingu"); }
+  const add = (label: string, min: number, max = min) => {
+    breakdown.push({ label, min, max });
+    features.push(label);
+  };
 
-  // Pages
-  if (data.pagesCount === "2-5") { min += 100; max += 200; features.push("2–5 podstron"); }
-  if (data.pagesCount === "6-10") { min += 200; max += 400; features.push("6–10 podstron"); }
-  if (data.pagesCount === "10+") { min += 400; max += 700; features.push("ponad 10 podstron"); }
-  if (data.pagesCount === "1") features.push("one-page / single view");
-
-  // Shop
-  const isShop = data.projectType === "sklep" || data.needsShop;
-  if (data.needsShop && data.projectType !== "sklep") {
-    min += 500; max += 900; features.push("sklep online");
-  }
-  if (isShop) {
-    if (data.productsCount === "11-30") { min += 100; max += 200; features.push("11–30 produktów"); }
-    else if (data.productsCount === "30+") { min += 250; max += 500; features.push("30+ produktów"); }
-    else features.push("do 10 produktów na start");
+  if (data.projectType === "website") {
+    if (data.websitePages === "one-page") add("projekt i wdrożenie strony one page", 690, 890);
+    if (data.websitePages === "2-5") add("strona firmowa do 5 podstron", 1390, 1790);
+    if (data.websitePages === "6-10") add("rozbudowana strona 6–10 podstron", 1990, 2690);
+    if (data.serviceCount === "4-8") add("rozbudowana prezentacja usług", 120, 220);
+    if (data.serviceCount === "9+") add("katalog wielu usług", 250, 450);
+    if (!data.hasBrandAssets) add("podstawowa identyfikacja wizualna (logo, kolory, typografia)", 250, 490);
+    if (data.needsContactForm) add("formularz kontaktowy", 60, 120);
+    if (data.needsAnalytics) add("konfiguracja analityki i baner cookie", 80, 150);
+    if (data.needsBlog) add("blog / aktualności z panelem", 250, 450);
+    if (data.needsBooking) add("rezerwacje lub kalendarz", 250, 490);
+    if (data.needsMultilanguage) add("druga wersja językowa", 390, 690);
   }
 
-  // Features
-  if (data.needsSEO) { min += 150; max += 300; features.push("optymalizacja SEO"); }
-  if (data.needsWhatsApp) { min += 50; max += 100; features.push("integracja WhatsApp"); }
-  if (data.needsContactForm) features.push("formularz kontaktowy");
-
-  // Content
-  if (!data.hasContent) { min += 100; max += 200; features.push("wsparcie przy treściach i grafice"); }
-
-  // Urgency surcharge
-  if (data.timeline === "asap") {
-    min = Math.round(min * 1.2);
-    max = Math.round(max * 1.2);
-    features.push("ekspresowa realizacja (+20%)");
+  if (data.projectType === "shop") {
+    if (data.productCount === "1-10") add("mini sklep do 10 produktów", 1790, 2290);
+    if (data.productCount === "11-30") add("sklep do 30 produktów", 2890, 3590);
+    if (data.productCount === "31-100") add("sklep 31–100 produktów", 3590, 5190);
+    if (data.productCount === "100+") add("rozbudowany sklep 100+ produktów", 4990, 6990);
+    if (!data.productContentReady) add("przygotowanie i wprowadzenie produktów", 200, data.productCount === "100+" ? 1200 : 600);
+    if (data.shopCategoryCount === "4-8") add("struktura kategorii i nawigacja (4–8 kategorii)", 120, 250);
+    if (data.shopCategoryCount === "9+") add("rozbudowana struktura kategorii (9+)", 250, 490);
+    if (data.needsVariants) add("warianty produktów", 180, 350);
+    if (data.needsPayments) add("konfiguracja płatności", 150, 270);
+    if (data.needsShipping) add("metody dostawy i kurierzy", 150, 300);
+    if (data.needsInvoicing) add("integracja fakturowania", 180, 380);
+    if (data.needsMigration) add("migracja produktów lub zamówień", 390, 1100);
+    if (data.needsCustomerAccounts) add("konta klientów i historia zamówień", 180, 380);
+    if (data.needsPromoCodes) add("kupony i reguły rabatowe", 100, 220);
   }
 
-  // Round to nearest 10
+  if (data.projectType === "landing") {
+    if (data.landingSize === "single-screen") add("cyfrowa wizytówka / pojedynczy ekran", 290, 390);
+    if (data.landingSize === "standard") add("landing page 4–6 sekcji", 490, 790);
+    if (data.landingSize === "sales") add("rozbudowany landing sprzedażowy", 790, 1290);
+    if (!data.hasBrandAssetsLanding) add("przygotowanie materiałów wizualnych (kolory, typografia)", 150, 350);
+    if (data.needsCopywriting) add("opracowanie treści sprzedażowej", 200, 450);
+    if (data.needsAdsTracking) add("analityka kampanii i zdarzeń", 130, 280);
+    if (data.formComplexity === "simple") add("formularz kontaktowy", 70, 140);
+    if (data.formComplexity === "advanced") add("rozbudowany formularz / brief", 180, 390);
+    if (data.needsVideoSection) add("sekcja wideo lub tło wideo", 120, 280);
+    if (data.needsSocialProof) add("sekcja opinii i logotypów klientów", 70, 160);
+  }
+
+  if (data.projectType === "bio") {
+    add("indywidualna strona link w bio", 390, 490);
+    if (data.bioLinks === "6-10") add("rozszerzony układ 6–10 linków", 60, 120);
+    if (data.bioLinks === "10+") add("ponad 10 linków i sekcji", 120, 220);
+    if (data.needsGallery) add("galeria lub wyróżnione realizacje", 90, 180);
+    if (data.needsNewsletter) add("zapis do newslettera", 90, 200);
+    if (data.needsBioProducts) add("sekcja produktów lub kolekcji", 100, 240);
+    if (data.needsCustomDomain) add("podpięcie własnej domeny", 40, 80);
+    if (data.needsLinkAnalytics) add("analityka kliknięć w linki", 60, 120);
+  }
+
+  if (data.projectType === "wordpress") {
+    const hourly: Record<LeadFormData["workHours"], [number, number]> = {
+      "1": [90, 120],
+      "2-3": [180, 360],
+      "4-6": [340, 620],
+      "7+": [600, 1100],
+    };
+    const taskLabels: Record<LeadFormData["wordpressTask"], string> = {
+      "small-fix": "drobna poprawka techniczna",
+      visual: "poprawki wyglądu i wersji mobilnej",
+      "new-page": "nowa sekcja lub podstrona",
+      woocommerce: "prace przy WooCommerce",
+      audit: "audyt i plan naprawy",
+    };
+    const [min, max] = hourly[data.workHours];
+    add(taskLabels[data.wordpressTask], min, max);
+    if (data.wordpressTask === "woocommerce") add("diagnostyka środowiska sklepu", 80, 190);
+    if (data.wordpressTask === "new-page") add("dopasowanie do istniejącego motywu", 80, 200);
+    if (data.hasPluginIssues) add("diagnostyka konfliktów wtyczek lub motywu", 150, 400);
+    if (data.isLiveSite && data.wordpressTask !== "audit") add("zabezpieczenie backupu przed pracami", 40, 80);
+  }
+
+  if (data.projectType !== "wordpress") {
+    if (!data.hasDomain) add("pomoc w rejestracji i podpięciu domeny", 40, 80);
+    if (!data.hasHosting) add("konfiguracja hostingu lub Vercel", 80, 160);
+    const landingCopyIncluded = data.projectType === "landing" && data.needsCopywriting;
+    if (!landingCopyIncluded && data.contentStatus === "czesciowe") add("uporządkowanie dostarczonych treści", 100, 220);
+    if (!landingCopyIncluded && data.contentStatus === "brak") add("wsparcie w przygotowaniu treści", 220, 490);
+  }
+
+  let min = breakdown.reduce((sum, item) => sum + item.min, 0);
+  let max = breakdown.reduce((sum, item) => sum + item.max, 0);
+
+  const urgent = data.timeline === "asap" || (data.projectType === "wordpress" && data.isUrgentFix);
+  if (urgent) {
+    const surchargeMin = Math.round(min * 0.2 / 10) * 10;
+    const surchargeMax = Math.round(max * 0.25 / 10) * 10;
+    breakdown.push({ label: "tryb pilny, jeśli termin będzie dostępny", min: surchargeMin, max: surchargeMax });
+    features.push("tryb pilny");
+    min += surchargeMin;
+    max += surchargeMax;
+  }
+
   min = Math.round(min / 10) * 10;
   max = Math.round(max / 10) * 10;
-
-  const avg = (min + max) / 2;
-  let timelineLabel: string;
-  if (avg < 800) timelineLabel = "3–7 dni";
-  else if (avg < 1500) timelineLabel = "1–2 tygodnie";
-  else if (avg < 2500) timelineLabel = "2–4 tygodnie";
-  else if (avg < 4000) timelineLabel = "4–6 tygodni";
-  else timelineLabel = "6–10 tygodni";
 
   return {
     minPrice: min,
     maxPrice: max,
-    timelineLabel,
+    timelineLabel: getTimeline(data, max),
     projectTypeLabel: PROJECT_LABELS[data.projectType],
     features,
+    breakdown,
+    budgetFit: getBudgetFit(data.budget, min, max),
     briefSummary: buildBrief(data, features),
   };
 }
 
+function getTimeline(data: LeadFormData, max: number): string {
+  if (data.projectType === "wordpress") {
+    if (data.workHours === "1") return "1–3 dni robocze";
+    if (data.workHours === "2-3") return "3–7 dni roboczych";
+    return "1–2 tygodnie";
+  }
+  if (data.projectType === "bio") return "5–7 dni roboczych";
+  if (data.projectType === "landing") return data.landingSize === "sales" ? "2–3 tygodnie" : "5–10 dni roboczych";
+  if (data.projectType === "shop") return max > 6000 ? "6–10 tygodni" : "3–6 tygodni";
+  return max > 2800 ? "3–5 tygodni" : "1–3 tygodnie";
+}
+
+function getBudgetFit(budget: Budget, min: number, max: number): EstimateResult["budgetFit"] {
+  const budgetMax = BUDGET_MAX[budget];
+  if (!Number.isFinite(budgetMax)) return "within";
+  if (max <= budgetMax) return "within";
+  if (min <= budgetMax) return "close";
+  if (min <= budgetMax * 1.2) return "close";
+  return "below";
+}
+
 function buildBrief(data: LeadFormData, features: string[]): string {
-  const parts: string[] = [];
-  parts.push(`Projekt: ${PROJECT_LABELS[data.projectType]}`);
-  const scope = features.filter((f) => !f.includes("ekspresowa") && !f.includes("one-page"));
-  if (scope.length) parts.push(`Zakres: ${scope.join(", ")}`);
-  if (!data.hasDomain) parts.push("Brak domeny — wymaga konfiguracji");
-  if (!data.hasHosting) parts.push("Brak hostingu — wymaga konfiguracji");
-  if (data.description) parts.push(`Opis klienta: ${data.description}`);
+  const parts = [`Projekt: ${PROJECT_LABELS[data.projectType]}`, `Zakres: ${features.join(", ")}`];
+  if (data.projectType === "wordpress" && !data.hasAdminAccess) parts.push("Dostęp administratora wymaga ustalenia");
+  if (data.description.trim()) parts.push(`Opis: ${data.description.trim()}`);
   return parts.join(" · ");
 }
