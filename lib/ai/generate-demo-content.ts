@@ -71,12 +71,73 @@ function fixHeading(h: unknown) {
   };
 }
 
-// Fixes common AI output mistakes before Zod validation
+function str(v: unknown, fallback = ""): string {
+  return typeof v === "string" ? v : fallback;
+}
+
+function fixLink(v: unknown, defaultHref = "#"): { label: string; href: string } {
+  if (typeof v !== "object" || v === null) return { label: "", href: defaultHref };
+  const l = v as Record<string, unknown>;
+  return {
+    label: str(l.label ?? l.text ?? l.name ?? l.title),
+    href: str(l.href ?? l.url ?? l.link, defaultHref),
+  };
+}
+
+function fixLinks(arr: unknown): Array<{ label: string; href: string }> {
+  if (!Array.isArray(arr)) return [];
+  return arr.map((item) => fixLink(item));
+}
+
+function fixColors(c: unknown): { primary: string; secondary: string; background: string; text: string } {
+  const d = { primary: "#000000", secondary: "#000000", background: "#ffffff", text: "#111111" };
+  if (typeof c !== "object" || c === null) return d;
+  const cc = c as Record<string, unknown>;
+  return {
+    primary: str(cc.primary, d.primary),
+    secondary: str(cc.secondary, d.secondary),
+    background: str(cc.background ?? cc.bg ?? cc.backgroundColor, d.background),
+    text: str(cc.text ?? cc.foreground ?? cc.textColor, d.text),
+  };
+}
+
+function fixContentItems(arr: unknown): Array<{ title: string; description: string; icon?: string }> {
+  if (!Array.isArray(arr)) return [];
+  return arr.map((item: unknown) => {
+    if (typeof item !== "object" || item === null) return { title: "", description: "" };
+    const it = item as Record<string, unknown>;
+    return {
+      title: str(it.title ?? it.name ?? it.heading),
+      description: str(it.description ?? it.content ?? it.text ?? it.body ?? it.summary),
+      ...(typeof it.icon === "string" && { icon: it.icon }),
+    };
+  });
+}
+
+// Fixes all known AI output quirks before Zod validation
 function normalizeAiOutput(raw: Record<string, unknown>): Record<string, unknown> {
-  // schemaVersion — AI sometimes returns "2" (string) or omits it
   raw.schemaVersion = 2;
 
-  // headings — fill missing keys with defaults
+  // site
+  const site = (typeof raw.site === "object" && raw.site !== null)
+    ? raw.site as Record<string, unknown>
+    : {};
+  site.name = str(site.name);
+  site.language = str(site.language, "pl");
+  site.style = str(site.style);
+  site.colors = fixColors(site.colors);
+  raw.site = site;
+
+  // navigation
+  const nav = (typeof raw.navigation === "object" && raw.navigation !== null)
+    ? raw.navigation as Record<string, unknown>
+    : {};
+  nav.logoText = str(nav.logoText ?? nav.logo ?? nav.brand);
+  nav.links = fixLinks(nav.links ?? nav.items ?? nav.menu);
+  nav.cta = fixLink(nav.cta ?? nav.ctaButton ?? nav.button, "#kontakt");
+  raw.navigation = nav;
+
+  // headings
   const HEADING_KEYS = ["services", "features", "process", "testimonials", "faq"] as const;
   const headings = (typeof raw.headings === "object" && raw.headings !== null)
     ? raw.headings as Record<string, unknown>
@@ -87,47 +148,142 @@ function normalizeAiOutput(raw: Record<string, unknown>): Record<string, unknown
   }
   raw.headings = fixedHeadings;
 
-  // images in hero, about
-  for (const section of ["hero", "about"] as const) {
-    const s = raw[section] as Record<string, unknown> | undefined;
-    if (s && typeof s === "object") {
-      s.eyebrow = s.eyebrow ?? "";
-      s.image = fixImage(s.image);
-    }
+  // hero
+  const hero = (typeof raw.hero === "object" && raw.hero !== null)
+    ? raw.hero as Record<string, unknown>
+    : {};
+  hero.eyebrow = str(hero.eyebrow ?? hero.badge ?? hero.tag);
+  hero.title = str(hero.title ?? hero.heading ?? hero.h1);
+  hero.subtitle = str(hero.subtitle ?? hero.description ?? hero.subheading ?? hero.tagline);
+  hero.cta = str(hero.cta ?? hero.ctaText ?? hero.buttonText);
+  hero.primaryCta = fixLink(hero.primaryCta ?? hero.cta_primary ?? hero.ctaPrimary ?? { label: hero.cta, href: "#kontakt" }, "#kontakt");
+  hero.secondaryCta = fixLink(hero.secondaryCta ?? hero.cta_secondary ?? hero.ctaSecondary, "#o-nas");
+  hero.image = fixImage(hero.image ?? hero.backgroundImage ?? hero.bg);
+  raw.hero = hero;
+
+  // about
+  const about = (typeof raw.about === "object" && raw.about !== null)
+    ? raw.about as Record<string, unknown>
+    : {};
+  about.eyebrow = str(about.eyebrow ?? about.badge);
+  about.title = str(about.title ?? about.heading);
+  about.content = str(about.content ?? about.description ?? about.text ?? about.body);
+  about.image = fixImage(about.image ?? about.photo);
+  raw.about = about;
+
+  // services, features, process — normalize items
+  for (const key of ["services", "features", "process"] as const) {
+    raw[key] = fixContentItems(raw[key]);
   }
 
-  // gallery items
-  const gallery = raw.gallery as Record<string, unknown> | undefined;
-  if (gallery && typeof gallery === "object") {
-    gallery.eyebrow = gallery.eyebrow ?? "";
-    if (Array.isArray(gallery.items)) {
-      gallery.items = gallery.items.map(fixImage);
-    }
-  }
+  // gallery
+  const gallery = (typeof raw.gallery === "object" && raw.gallery !== null)
+    ? raw.gallery as Record<string, unknown>
+    : {};
+  gallery.eyebrow = str(gallery.eyebrow ?? gallery.badge);
+  gallery.title = str(gallery.title ?? gallery.heading);
+  gallery.subtitle = str(gallery.subtitle ?? gallery.description);
+  gallery.items = Array.isArray(gallery.items) ? gallery.items.map(fixImage) : [];
+  raw.gallery = gallery;
 
-  // seo ogImage
-  const seo = raw.seo as Record<string, unknown> | undefined;
-  if (seo && typeof seo === "object") {
-    seo.ogImage = fixImage(seo.ogImage);
-    if (!Array.isArray(seo.keywords)) seo.keywords = [];
-  }
-
-  // testimonials — add missing role
+  // testimonials
   if (Array.isArray(raw.testimonials)) {
     raw.testimonials = raw.testimonials.map((t: unknown) => {
       if (typeof t !== "object" || t === null) return t;
       const tt = t as Record<string, unknown>;
-      return { role: "", ...tt };
+      return {
+        name: str(tt.name ?? tt.author ?? tt.person),
+        role: str(tt.role ?? tt.position ?? tt.title ?? tt.company),
+        content: str(tt.content ?? tt.quote ?? tt.text ?? tt.review ?? tt.testimonial ?? tt.body),
+        ...(tt.image !== undefined && { image: fixImage(tt.image) }),
+      };
     });
+  } else {
+    raw.testimonials = [];
   }
 
-  // structure — remove items with unrecognized types
+  // faq
+  if (Array.isArray(raw.faq)) {
+    raw.faq = raw.faq.map((item: unknown) => {
+      if (typeof item !== "object" || item === null) return { question: "", answer: "" };
+      const f = item as Record<string, unknown>;
+      return {
+        question: str(f.question ?? f.q ?? f.title),
+        answer: str(f.answer ?? f.a ?? f.content ?? f.text ?? f.response),
+      };
+    });
+  } else {
+    raw.faq = [];
+  }
+
+  // cta section
+  const cta = (typeof raw.cta === "object" && raw.cta !== null)
+    ? raw.cta as Record<string, unknown>
+    : {};
+  cta.eyebrow = str(cta.eyebrow ?? cta.badge);
+  cta.title = str(cta.title ?? cta.heading);
+  cta.description = str(cta.description ?? cta.subtitle ?? cta.content ?? cta.text);
+  cta.primaryCta = fixLink(cta.primaryCta ?? cta.cta_primary ?? cta.button, "#kontakt");
+  cta.secondaryCta = fixLink(cta.secondaryCta ?? cta.cta_secondary, "#galeria");
+  raw.cta = cta;
+
+  // contact
+  const contact = (typeof raw.contact === "object" && raw.contact !== null)
+    ? raw.contact as Record<string, unknown>
+    : {};
+  contact.eyebrow = str(contact.eyebrow ?? contact.badge);
+  contact.title = str(contact.title ?? contact.heading);
+  contact.description = str(contact.description ?? contact.subtitle ?? contact.content);
+  contact.cta = str(contact.cta ?? contact.ctaText ?? contact.buttonText);
+  contact.email = typeof contact.email === "string" ? contact.email || null : null;
+  contact.phone = typeof contact.phone === "string" ? contact.phone || null : null;
+  contact.address = typeof contact.address === "string" ? contact.address || null : null;
+  raw.contact = contact;
+
+  // footer
+  const footer = (typeof raw.footer === "object" && raw.footer !== null)
+    ? raw.footer as Record<string, unknown>
+    : {};
+  footer.description = str(footer.description ?? footer.tagline ?? footer.about);
+  footer.copyright = str(footer.copyright ?? footer.rights);
+  if (!Array.isArray(footer.columns)) footer.columns = [];
+  footer.columns = (footer.columns as unknown[]).map((col: unknown) => {
+    if (typeof col !== "object" || col === null) return { title: "", links: [] };
+    const c = col as Record<string, unknown>;
+    return {
+      title: str(c.title ?? c.heading ?? c.name),
+      links: fixLinks(c.links ?? c.items),
+    };
+  });
+  raw.footer = footer;
+
+  // seo
+  const seo = (typeof raw.seo === "object" && raw.seo !== null)
+    ? raw.seo as Record<string, unknown>
+    : {};
+  seo.title = str(seo.title);
+  seo.description = str(seo.description);
+  seo.keywords = Array.isArray(seo.keywords) ? seo.keywords.map((k: unknown) => str(k)) : [];
+  seo.ogImage = fixImage(seo.ogImage ?? seo.og_image ?? seo.image);
+  raw.seo = seo;
+
+  // structure
   if (Array.isArray(raw.structure)) {
-    raw.structure = raw.structure.filter(
-      (s: unknown) =>
+    raw.structure = raw.structure
+      .filter((s: unknown) =>
         typeof s === "object" && s !== null &&
         VALID_STRUCTURE_TYPES.includes((s as Record<string, unknown>).type as (typeof VALID_STRUCTURE_TYPES)[number])
-    );
+      )
+      .map((s: unknown) => {
+        const item = s as Record<string, unknown>;
+        return {
+          type: item.type,
+          id: str(item.id ?? item.sectionId ?? item.name, String(item.type)),
+          visible: item.visible !== false,
+        };
+      });
+  } else {
+    raw.structure = VALID_STRUCTURE_TYPES.map((type) => ({ type, id: type, visible: true }));
   }
 
   return raw;
@@ -141,11 +297,12 @@ export function parseGeneratedDemoContent(rawText: string) {
   } catch (error) {
     if (error instanceof AIJsonParseError) throw error;
     if (error instanceof Error && "issues" in error) {
-      // Zod error — extract first issue path for debugging
       const zodError = error as { issues: { path: (string | number)[]; message: string }[] };
-      const first = zodError.issues?.[0];
-      const path = first?.path?.join(".") ?? "?";
-      throw new AIJsonParseError(`AI zwróciło niepoprawną strukturę JSON. Błąd: ${path} — ${first?.message ?? "nieznany błąd"}`);
+      const allPaths = (zodError.issues ?? [])
+        .slice(0, 6)
+        .map((i) => `${i.path?.join(".") ?? "?"}: ${i.message}`)
+        .join(" | ");
+      throw new AIJsonParseError(`AI zwróciło niepoprawną strukturę JSON. Pola: ${allPaths}`);
     }
     throw new AIJsonParseError("AI zwróciło JSON, ale struktura treści jest niepoprawna.");
   }
