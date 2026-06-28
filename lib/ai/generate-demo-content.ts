@@ -362,6 +362,7 @@ export async function generateDemoContent(
         { role: "user", content: prompt },
       ],
       temperature: 0.55,
+      maxTokens: 8192,
       validateResponse: (text) => {
         parseGeneratedDemoContent(text);
       },
