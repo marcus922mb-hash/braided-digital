@@ -1,11 +1,12 @@
 "use client";
 
-import { AlertTriangle, Check, RefreshCw, X } from "lucide-react";
+import { AlertTriangle, Check, Clock, RefreshCw, X } from "lucide-react";
 import type { DemoContent } from "@/features/demos/types";
 import type { AIProvider, GenerateDemoContentOutput } from "@/lib/ai/types";
 
 type Props = {
   result: GenerateDemoContentOutput;
+  durationSeconds: number | null;
   isSaving: boolean;
   saveError: string | null;
   saveSuccess: string | null;
@@ -51,6 +52,7 @@ function FaqList({ items }: { items: DemoContent["faq"] }) {
 
 export function AIGenerationPreview({
   result,
+  durationSeconds,
   isSaving,
   saveError,
   saveSuccess,
@@ -61,12 +63,26 @@ export function AIGenerationPreview({
 }: Props) {
   const content = result.content;
 
+  const stats = [
+    content.services?.length && `${content.services.length} usług`,
+    content.features?.length && `${content.features.length} wyróżniki`,
+    content.gallery?.items?.length && `${content.gallery.items.length} zdjęć`,
+    content.testimonials?.length && `${content.testimonials.length} opinie`,
+    content.faq?.length && `${content.faq.length} FAQ`,
+  ].filter(Boolean).join(" · ");
+
   return (
     <div className="ai-preview">
       <div className="ai-preview-meta">
         <span className="ai-provider-badge">{PROVIDER_LABELS[result.provider]}</span>
-        <span>{result.model}</span>
-        <span>{new Date(result.generatedAt).toLocaleString("pl-PL")}</span>
+        <span className="ai-preview-model">{result.model}</span>
+        {durationSeconds !== null && (
+          <span className="ai-preview-duration">
+            <Clock size={11} />
+            {durationSeconds}s
+          </span>
+        )}
+        {stats && <span className="ai-preview-stats">{stats}</span>}
       </div>
 
       <div className="ai-warning">

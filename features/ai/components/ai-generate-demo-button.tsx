@@ -1,8 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { useEffect, useState, useTransition } from "react";
-import { CheckCircle2, Circle, Image, Loader2, Mail, MessageSquareQuote, Sparkles, Star, Text, Type, Users, Zap } from "lucide-react";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { Loader2, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   generateDemoContentAction,
@@ -16,53 +15,71 @@ type Props = {
   demoId: string;
 };
 
-const STEPS: { id: string; label: string; delay: number; icon: ReactNode }[] = [
-  { id: "analyze",      icon: <Zap size={12} />,              label: "Analizuję branżę, firmę i usługi...",        delay: 0 },
-  { id: "hero",         icon: <Type size={12} />,             label: "Generuję sekcję Hero i nagłówki strony...",  delay: 6000 },
-  { id: "about",        icon: <Users size={12} />,            label: "Piszę sekcję O nas...",                      delay: 16000 },
-  { id: "services",     icon: <Text size={12} />,             label: "Tworzę opisy usług i ofertę...",             delay: 27000 },
-  { id: "testimonials", icon: <MessageSquareQuote size={12}/>, label: "Generuję opinie klientów i FAQ...",          delay: 40000 },
-  { id: "contact",      icon: <Mail size={12} />,             label: "Przygotowuję kontakt i meta SEO...",         delay: 54000 },
-  { id: "images",       icon: <Image size={12} />,            label: "Dobieram zdjęcia z Pexels...",               delay: 68000 },
-  { id: "finalize",     icon: <Star size={12} />,             label: "Finalizuję i sprawdzam jakość treści...",    delay: 76000 },
-];
-
-function GenerationProgress({ isGenerating }: { isGenerating: boolean }) {
-  const [activeStep, setActiveStep] = useState(-1);
+function GenerationStatus({
+  isGenerating,
+  businessDescription,
+  services,
+  targetAudience,
+  tone,
+}: {
+  isGenerating: boolean;
+  businessDescription: string;
+  services: string;
+  targetAudience: string;
+  tone: string;
+}) {
+  const [elapsed, setElapsed] = useState(0);
+  const startRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!isGenerating) {
-      const reset = setTimeout(() => setActiveStep(-1), 0);
-      return () => clearTimeout(reset);
+      const t = setTimeout(() => setElapsed(0), 0);
+      startRef.current = null;
+      return () => clearTimeout(t);
     }
-    const timers = STEPS.map((step, i) =>
-      setTimeout(() => setActiveStep(i), step.delay)
-    );
-    return () => timers.forEach(clearTimeout);
+    startRef.current = Date.now();
+    const interval = setInterval(() => {
+      setElapsed(Math.floor((Date.now() - (startRef.current ?? Date.now())) / 1000));
+    }, 1000);
+    return () => clearInterval(interval);
   }, [isGenerating]);
 
   if (!isGenerating) return null;
 
+  const min = Math.floor(elapsed / 60);
+  const sec = elapsed % 60;
+  const timeStr = `${min}:${String(sec).padStart(2, "0")}`;
+
+  const rows = [
+    businessDescription.trim() && { label: "Opis", value: businessDescription.trim() },
+    services.trim() && { label: "Usługi", value: services.trim() },
+    targetAudience.trim() && { label: "Grupa docelowa", value: targetAudience.trim() },
+    tone.trim() && { label: "Ton", value: tone.trim() },
+  ].filter(Boolean) as { label: string; value: string }[];
+
   return (
     <div className="ai-progress">
+      {rows.length > 0 ? (
+        <div className="ai-progress-input">
+          <div className="ai-progress-input-label">Dane wysłane do AI:</div>
+          {rows.map((row) => (
+            <div key={row.label} className="ai-progress-input-row">
+              <span className="ai-progress-input-key">{row.label}:</span>
+              <span className="ai-progress-input-val">
+                {row.value.length > 100 ? `${row.value.slice(0, 100)}…` : row.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="ai-progress-input">
+          <div className="ai-progress-input-label">Generowanie na podstawie danych klienta z CRM</div>
+        </div>
+      )}
       <div className="ai-progress-header">
         <Loader2 size={14} className="bldr-spin" />
-        <span>AI pracuje nad treściami</span>
-      </div>
-      <div className="ai-progress-steps">
-        {STEPS.map((step, i) => {
-          const isDone = i < activeStep;
-          const isActive = i === activeStep;
-          return (
-            <div key={step.id} className={`ai-progress-step${isDone ? " is-done" : isActive ? " is-active" : ""}`}>
-              <span className="ai-progress-step-icon">
-                {isDone ? <CheckCircle2 size={12} /> : isActive ? <Loader2 size={12} className="bldr-spin" /> : <Circle size={12} />}
-              </span>
-              <span className="ai-progress-step-section">{step.icon}</span>
-              <span>{step.label}</span>
-            </div>
-          );
-        })}
+        <span>AI generuje treści…</span>
+        <span className="ai-progress-timer">{timeStr}</span>
       </div>
     </div>
   );
@@ -76,16 +93,19 @@ export function AIGenerateDemoButton({ demoId }: Props) {
   const [targetAudience, setTargetAudience] = useState("");
   const [tone, setTone] = useState("profesjonalny, ciepły, konkretny");
   const [result, setResult] = useState<GenerateDemoContentOutput | null>(null);
+  const [durationSeconds, setDurationSeconds] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState<string | null>(null);
   const [isGenerating, startGenerating] = useTransition();
   const [isSaving, startSaving] = useTransition();
+  const generationStartRef = useRef<number | null>(null);
 
   function generate() {
     setError(null);
     setSaveError(null);
     setSaveSuccess(null);
+    generationStartRef.current = Date.now();
 
     startGenerating(async () => {
       const response = await generateDemoContentAction({
@@ -96,6 +116,10 @@ export function AIGenerateDemoButton({ demoId }: Props) {
         targetAudience,
         tone,
       });
+
+      if (generationStartRef.current !== null) {
+        setDurationSeconds(Math.round((Date.now() - generationStartRef.current) / 1000));
+      }
 
       if (response.success) {
         setResult(response.data);
@@ -197,7 +221,13 @@ export function AIGenerateDemoButton({ demoId }: Props) {
 
         {error && <div className="crm-form-alert">{error}</div>}
 
-        <GenerationProgress isGenerating={isGenerating} />
+        <GenerationStatus
+          isGenerating={isGenerating}
+          businessDescription={businessDescription}
+          services={services}
+          targetAudience={targetAudience}
+          tone={tone}
+        />
 
         <button type="button" className="crm-btn crm-btn--primary" onClick={generate} disabled={isGenerating || isSaving}>
           <Sparkles size={14} />
@@ -208,6 +238,7 @@ export function AIGenerateDemoButton({ demoId }: Props) {
       {result && (
         <AIGenerationPreview
           result={result}
+          durationSeconds={durationSeconds}
           isSaving={isSaving}
           saveError={saveError}
           saveSuccess={saveSuccess}
@@ -216,6 +247,7 @@ export function AIGenerateDemoButton({ demoId }: Props) {
             setResult(null);
             setSaveError(null);
             setSaveSuccess(null);
+            setDurationSeconds(null);
           }}
           onRegenerate={generate}
           isRegenerating={isGenerating}

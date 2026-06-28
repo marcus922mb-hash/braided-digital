@@ -3021,29 +3021,44 @@ body:has(.login-shell) {
   letter-spacing: .1em;
   text-transform: uppercase;
 }
-.ai-progress-steps {
+.ai-progress-input {
   display: flex;
   flex-direction: column;
-  gap: .45rem;
+  gap: .3rem;
+  padding: .6rem .75rem;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 5px;
 }
-.ai-progress-step {
+.ai-progress-input-label {
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(200,196,188,.45);
+  margin-bottom: .15rem;
+}
+.ai-progress-input-row {
   display: flex;
-  align-items: center;
-  gap: .45rem;
+  gap: .4rem;
   font-size: .63rem;
-  color: rgba(200,196,188,.22);
-  transition: color .4s;
+  line-height: 1.4;
+  color: rgba(232,232,232,.65);
 }
-.ai-progress-step.is-active { color: rgba(201,169,110,.9); }
-.ai-progress-step.is-done { color: rgba(130,210,140,.75); }
-.ai-progress-step-icon { flex-shrink: 0; display: flex; }
-.ai-progress-step-section {
+.ai-progress-input-key {
   flex-shrink: 0;
-  display: flex;
-  opacity: .5;
+  color: #c9a96e;
+  font-weight: 650;
+  min-width: 80px;
 }
-.ai-progress-step.is-active .ai-progress-step-section { opacity: 1; }
-.ai-progress-step.is-done .ai-progress-step-section { opacity: .7; }
+.ai-progress-input-val {
+  color: rgba(232,232,232,.75);
+}
+.ai-progress-timer {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  color: rgba(201,169,110,.7);
+}
 .ai-preview {
   display: grid;
   gap: .85rem;
@@ -3067,6 +3082,21 @@ body:has(.login-shell) {
   font-weight: 750;
   letter-spacing: .08em;
   text-transform: uppercase;
+}
+.ai-preview-model {
+  font-family: monospace;
+  font-size: .6rem;
+  color: rgba(232,232,232,.5);
+}
+.ai-preview-duration {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+  color: rgba(130,210,140,.7);
+}
+.ai-preview-stats {
+  margin-left: auto;
+  color: rgba(232,232,232,.35);
 }
 .ai-warning,
 .ai-success {
