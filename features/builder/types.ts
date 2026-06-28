@@ -7,7 +7,13 @@ export type ComponentType =
   | "linkinbio"
   // Nowe sekcje
   | "separator" | "text" | "logos" | "portfolio"
-  | "banner" | "columns" | "quote" | "image";
+  | "banner" | "columns" | "quote" | "image"
+  // Warianty nawigacji
+  | "navbar-minimal" | "navbar-centered"
+  // Warianty stopki
+  | "footer-minimal" | "footer-extended"
+  // Dodatkowe sekcje
+  | "hero-split" | "process" | "awards" | "comparison" | "countdown" | "careers";
 
 export type ComponentCategory =
   | "layout" | "content" | "media" | "commerce" | "social";

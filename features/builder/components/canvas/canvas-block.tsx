@@ -9,7 +9,7 @@ import {
   Phone, Anchor, Video, MapPin, Mail,
   ShoppingBag, FileText, Newspaper, Play,
   Minus, AlignLeft, Building2, Briefcase, LayoutTemplate,
-  Quote, ImageIcon,
+  Quote, ImageIcon, Menu, Award, Table2, Timer, Clipboard,
 } from "lucide-react";
 import type { BuilderComponent } from "@/features/builder/types";
 import { useBuilderStore } from "@/features/builder/store/builder-store";
@@ -47,6 +47,16 @@ const TYPE_ICONS: Record<string, React.ElementType> = {
   columns: LayoutTemplate,
   quote: Quote,
   image: ImageIcon,
+  "navbar-minimal": Menu,
+  "navbar-centered": Layout,
+  "footer-minimal": Anchor,
+  "footer-extended": Mail,
+  "hero-split": Image,
+  process: List,
+  awards: Award,
+  comparison: Table2,
+  countdown: Timer,
+  careers: Clipboard,
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -70,6 +80,10 @@ const COMPONENT_CATEGORIES: Record<string, string> = {
   separator: "layout", text: "content", logos: "content",
   portfolio: "content", banner: "content", columns: "layout",
   quote: "content", image: "media",
+  "navbar-minimal": "layout", "navbar-centered": "layout",
+  "footer-minimal": "layout", "footer-extended": "layout",
+  "hero-split": "content", process: "content", awards: "content",
+  comparison: "content", countdown: "content", careers: "content",
 };
 
 function BlockPreview({ component }: { component: BuilderComponent }) {
@@ -503,6 +517,171 @@ function BlockPreview({ component }: { component: BuilderComponent }) {
           {Boolean(p.caption) && <div className="bldr-preview-caption">{p.caption as string}</div>}
         </div>
       );
+
+    case "navbar-minimal":
+      return (
+        <div className="bldr-preview bldr-preview--navbar">
+          <div className="bldr-preview-nav-logo">{(p.logoText as string) || "Logo"}</div>
+          <div style={{ flex: 1 }} />
+          {Boolean(p.ctaText) && <div className="bldr-preview-btn bldr-preview-btn--sm">{p.ctaText as string}</div>}
+          <div className="bldr-preview-hamburger"><span /><span /><span /></div>
+        </div>
+      );
+
+    case "navbar-centered":
+      return (
+        <div className="bldr-preview bldr-preview--navbar-centered">
+          <div className="bldr-preview-nav-logo" style={{ textAlign: "center", width: "100%" }}>{(p.logoText as string) || "Logo"}</div>
+          <div className="bldr-preview-nav-links" style={{ justifyContent: "center", width: "100%" }}>
+            {((p.links || []) as Array<{ label: string }>).slice(0, 5).map((l, i) => (
+              <span key={i} className="bldr-preview-nav-link">{l.label}</span>
+            ))}
+          </div>
+        </div>
+      );
+
+    case "footer-minimal":
+      return (
+        <div className="bldr-preview bldr-preview--footer-minimal" style={{ background: component.styles.background || "#111" }}>
+          <div className="bldr-preview-footer-logo">{(p.logoText as string) || "Logo"}</div>
+          <div className="bldr-preview-footer-minimal-links">
+            {((p.links || []) as Array<{ label: string }>).map((l, i) => (
+              <span key={i} className="bldr-preview-nav-link">{l.label}</span>
+            ))}
+          </div>
+          <div className="bldr-preview-footer-copy">{(p.copyright as string) || "© 2025"}</div>
+        </div>
+      );
+
+    case "footer-extended":
+      return (
+        <div className="bldr-preview bldr-preview--footer" style={{ background: component.styles.background || "#0f0f1a" }}>
+          <div className="bldr-preview-footer-logo">{(p.logoText as string) || "Logo"}</div>
+          <div className="bldr-preview-footer-cols">
+            {((p.columns || []) as Array<{ title: string }>).map((col, i) => (
+              <div key={i} className="bldr-preview-footer-col">
+                <div className="bldr-preview-footer-col-title">{col.title}</div>
+                <div className="bldr-preview-footer-link-ph" />
+                <div className="bldr-preview-footer-link-ph" />
+              </div>
+            ))}
+            <div className="bldr-preview-footer-col">
+              <div className="bldr-preview-footer-col-title">{(p.newsletterTitle as string) || "Newsletter"}</div>
+              <div className="bldr-preview-newsletter-row" style={{ marginTop: ".25rem" }}>
+                <div className="bldr-preview-input" style={{ flexGrow: 1, fontSize: ".55rem" }}>Email</div>
+                <div className="bldr-preview-btn bldr-preview-btn--sm">{(p.newsletterButton as string) || "OK"}</div>
+              </div>
+            </div>
+          </div>
+          <div className="bldr-preview-footer-copy">{(p.copyright as string) || "© 2025"}</div>
+        </div>
+      );
+
+    case "hero-split":
+      return (
+        <div className="bldr-preview bldr-preview--two-col">
+          <div className="bldr-preview-text-block">
+            {Boolean(p.eyebrow) && <div className="bldr-preview-tag">{p.eyebrow as string}</div>}
+            <div className="bldr-preview-h1">{(p.title as string) || "Tytuł hero"}</div>
+            <div className="bldr-preview-sub">{((p.subtitle as string) || "").slice(0, 80)}</div>
+            <div className="bldr-preview-buttons">
+              <div className="bldr-preview-btn bldr-preview-btn--primary">{(p.ctaText as string) || "CTA"}</div>
+              {Boolean(p.ctaSecondText) && <div className="bldr-preview-btn bldr-preview-btn--ghost">{p.ctaSecondText as string}</div>}
+            </div>
+          </div>
+          <div className="bldr-preview-image-placeholder" style={{ background: component.styles.background || "#1a1a2e" }}>
+            <Image size={20} style={{ opacity: .3 }} />
+          </div>
+        </div>
+      );
+
+    case "process": {
+      const items = (p.items as Array<{ number: string; title: string }> | undefined) ?? [];
+      return (
+        <div className="bldr-preview bldr-preview--process">
+          {Boolean(p.eyebrow) && <div className="bldr-preview-tag">{p.eyebrow as string}</div>}
+          <div className="bldr-preview-h2">{(p.title as string) || "Jak to działa"}</div>
+          <div className="bldr-preview-process-row">
+            {(items.length ? items : Array.from({ length: 4 }, (_, i) => ({ number: `0${i + 1}`, title: `Krok ${i + 1}` }))).slice(0, 4).map((item, i) => (
+              <div key={i} className="bldr-preview-process-step">
+                <div className="bldr-preview-process-num">{item.number}</div>
+                <div className="bldr-preview-card-title">{item.title}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    case "awards": {
+      const items = (p.items as Array<{ name: string; year?: string }> | undefined) ?? [];
+      return (
+        <div className="bldr-preview bldr-preview--awards">
+          <div className="bldr-preview-h2">{(p.title as string) || "Certyfikaty"}</div>
+          <div className="bldr-preview-logos-row">
+            {(items.length ? items : Array.from({ length: 4 }, (_, i) => ({ name: `Nagroda ${i + 1}` }))).slice(0, 4).map((item, i) => (
+              <div key={i} className="bldr-preview-award-box">
+                <Award size={16} style={{ opacity: .4 }} />
+                <div className="bldr-preview-card-title" style={{ fontSize: ".6rem" }}>{item.name}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    case "comparison": {
+      const rows = (p.rows as Array<{ feature: string; values: string[] }> | undefined) ?? [];
+      const cols = (p.columns as string[] | undefined) ?? ["Opcja A", "Opcja B"];
+      return (
+        <div className="bldr-preview bldr-preview--comparison">
+          <div className="bldr-preview-h2">{(p.title as string) || "Porównanie"}</div>
+          <div className="bldr-preview-comparison-table">
+            <div className="bldr-preview-comparison-row bldr-preview-comparison-header">
+              <div className="bldr-preview-comparison-cell" />
+              {cols.map((c, i) => <div key={i} className="bldr-preview-comparison-cell">{c}</div>)}
+            </div>
+            {(rows.length ? rows : Array.from({ length: 3 }, (_, i) => ({ feature: `Cecha ${i + 1}`, values: ["—", "✓"] }))).slice(0, 4).map((row, i) => (
+              <div key={i} className="bldr-preview-comparison-row">
+                <div className="bldr-preview-comparison-cell bldr-preview-comparison-feature">{row.feature}</div>
+                {row.values.map((v, j) => <div key={j} className="bldr-preview-comparison-cell">{v}</div>)}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    case "countdown":
+      return (
+        <div className="bldr-preview bldr-preview--countdown" style={{ background: component.styles.background || "#1a1a2e" }}>
+          <div className="bldr-preview-h2" style={{ color: component.styles.color || "#fff" }}>{(p.title as string) || "Oferta kończy się za:"}</div>
+          <div className="bldr-preview-countdown-row">
+            {[["00", "Dni"], ["00", "Godz"], ["00", "Min"], ["00", "Sek"]].map(([n, l], i) => (
+              <div key={i} className="bldr-preview-countdown-unit">
+                <div className="bldr-preview-countdown-num">{n}</div>
+                <div className="bldr-preview-countdown-label">{l}</div>
+              </div>
+            ))}
+          </div>
+          {Boolean(p.ctaText) && <div className="bldr-preview-btn bldr-preview-btn--primary" style={{ marginTop: ".5rem" }}>{p.ctaText as string}</div>}
+        </div>
+      );
+
+    case "careers": {
+      const items = (p.items as Array<{ title: string; type?: string; location?: string }> | undefined) ?? [];
+      return (
+        <div className="bldr-preview bldr-preview--careers">
+          <div className="bldr-preview-h2">{(p.title as string) || "Kariera"}</div>
+          {(items.length ? items : Array.from({ length: 2 }, (_, i) => ({ title: `Stanowisko ${i + 1}`, type: "Pełny etat", location: "Warszawa" }))).slice(0, 3).map((item, i) => (
+            <div key={i} className="bldr-preview-career-row">
+              <div className="bldr-preview-card-title">{item.title}</div>
+              <div className="bldr-preview-career-meta">{[item.type, item.location].filter(Boolean).join(" · ")}</div>
+            </div>
+          ))}
+        </div>
+      );
+    }
 
     default:
       return <div className="bldr-preview-default">{component.label}</div>;

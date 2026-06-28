@@ -521,6 +521,188 @@ export const COMPONENT_DEFINITIONS: ComponentDefinition[] = [
     },
     defaultStyles: { paddingTop: "3rem", paddingBottom: "3rem", textAlign: "center" },
   },
+  // ── Warianty nawigacji ───────────────────────────────────
+  {
+    type: "navbar-minimal",
+    label: "Nawigacja minimalna",
+    category: "layout",
+    description: "Prosta nawigacja: logo + hamburger + opcjonalny przycisk CTA",
+    defaultProps: {
+      logoText: "Twoja Marka",
+      logoUrl: "",
+      ctaText: "Kontakt",
+      ctaUrl: "#kontakt",
+      backgroundColor: "transparent",
+    },
+    defaultStyles: { background: "transparent", paddingTop: "1rem", paddingBottom: "1rem" },
+  },
+  {
+    type: "navbar-centered",
+    label: "Nawigacja wyśrodkowana",
+    category: "layout",
+    description: "Logo pośrodku u góry, linki nawigacji poniżej",
+    defaultProps: {
+      logoText: "Twoja Marka",
+      logoUrl: "",
+      links: [
+        { label: "Strona główna", url: "#" },
+        { label: "O nas", url: "#o-nas" },
+        { label: "Oferta", url: "#oferta" },
+        { label: "Kontakt", url: "#kontakt" },
+      ],
+    },
+    defaultStyles: { background: "#ffffff", paddingTop: "1.5rem", paddingBottom: "0", textAlign: "center" },
+  },
+  // ── Warianty stopki ──────────────────────────────────────
+  {
+    type: "footer-minimal",
+    label: "Stopka minimalna",
+    category: "layout",
+    description: "Jeden wiersz: logo, linki i prawa autorskie",
+    defaultProps: {
+      logoText: "Twoja Marka",
+      copyright: `© ${new Date().getFullYear()} Twoja Marka. Wszelkie prawa zastrzeżone.`,
+      links: [
+        { label: "Polityka prywatności", url: "#" },
+        { label: "Regulamin", url: "#" },
+      ],
+    },
+    defaultStyles: { background: "#111111", color: "#ffffff", paddingTop: "1.5rem", paddingBottom: "1.5rem" },
+  },
+  {
+    type: "footer-extended",
+    label: "Stopka z newsletterem",
+    category: "layout",
+    description: "Stopka z kolumnami linków i formularzem zapisu do newslettera",
+    defaultProps: {
+      logoText: "Twoja Marka",
+      tagline: "Tworzymy strony, które sprzedają.",
+      newsletterTitle: "Bądź na bieżąco",
+      newsletterPlaceholder: "Twój adres email",
+      newsletterButton: "Zapisz się",
+      copyright: `© ${new Date().getFullYear()} Twoja Marka`,
+      columns: [
+        {
+          title: "Firma",
+          links: [{ label: "O nas", url: "#" }, { label: "Zespół", url: "#" }, { label: "Kariera", url: "#" }],
+        },
+        {
+          title: "Oferta",
+          links: [{ label: "Strony www", url: "#" }, { label: "Sklepy", url: "#" }, { label: "Aplikacje", url: "#" }],
+        },
+      ],
+    },
+    defaultStyles: { background: "#0f0f1a", color: "#ffffff", paddingTop: "4rem", paddingBottom: "2rem" },
+  },
+  // ── Dodatkowe sekcje ─────────────────────────────────────
+  {
+    type: "hero-split",
+    label: "Hero podzielony",
+    category: "content",
+    description: "Hero z tekstem po lewej i dużym zdjęciem po prawej (50/50)",
+    defaultProps: {
+      eyebrow: "Witaj w",
+      title: "Profesjonalna strona dla Twojej firmy",
+      subtitle: "Tworzymy nowoczesne strony internetowe, które przyciągają klientów i budują zaufanie do marki.",
+      ctaText: "Umów bezpłatną konsultację",
+      ctaUrl: "#kontakt",
+      ctaSecondText: "Zobacz realizacje",
+      ctaSecondUrl: "#portfolio",
+      imageUrl: "",
+      imageAlt: "Hero image",
+    },
+    defaultStyles: { paddingTop: "0", paddingBottom: "0", minHeight: "90vh" },
+  },
+  {
+    type: "process",
+    label: "Jak to działa",
+    category: "content",
+    description: "Numerowane kroki pokazujące proces współpracy lub działania produktu",
+    defaultProps: {
+      eyebrow: "Proces",
+      title: "Jak wygląda nasza współpraca",
+      subtitle: "Prosta ścieżka od pierwszego kontaktu do gotowej strony",
+      items: [
+        { number: "01", title: "Bezpłatna konsultacja", description: "Rozmawiamy o Twoich celach i potrzebach. Bez zobowiązań, bez technicznego żargonu." },
+        { number: "02", title: "Projekt i strategia", description: "Tworzymy projekt graficzny i plan treści dopasowany do Twojej branży." },
+        { number: "03", title: "Realizacja", description: "Kodujemy stronę, optymalizujemy pod SEO i testujemy na wszystkich urządzeniach." },
+        { number: "04", title: "Wdrożenie i wsparcie", description: "Publikujemy stronę i zostajemy z Tobą — serwis, aktualizacje, pomoc." },
+      ],
+    },
+    defaultStyles: { paddingTop: "5rem", paddingBottom: "5rem" },
+  },
+  {
+    type: "awards",
+    label: "Certyfikaty i nagrody",
+    category: "content",
+    description: "Odznaczenia, certyfikaty, nagrody branżowe i wyróżnienia",
+    defaultProps: {
+      title: "Nasze certyfikaty i wyróżnienia",
+      subtitle: "",
+      items: [
+        { name: "Google Partner", year: "2024", imageUrl: "", description: "Certyfikowany partner Google Ads" },
+        { name: "ISO 9001", year: "2023", imageUrl: "", description: "Certyfikat zarządzania jakością" },
+        { name: "Firma roku", year: "2024", imageUrl: "", description: "Wyróżnienie w kategorii Usługi IT" },
+        { name: "Clutch Top 100", year: "2024", imageUrl: "", description: "Top 100 agencji webowych w Polsce" },
+      ],
+    },
+    defaultStyles: { paddingTop: "4rem", paddingBottom: "4rem", textAlign: "center" },
+  },
+  {
+    type: "comparison",
+    label: "Porównanie",
+    category: "content",
+    description: "Tabela porównawcza opcji, pakietów lub metod",
+    defaultProps: {
+      title: "Dlaczego warto wybrać nas?",
+      subtitle: "Porównaj nasze podejście z tradycyjnymi rozwiązaniami",
+      columns: ["Tradycyjna agencja", "Nasza oferta"],
+      rows: [
+        { feature: "Czas realizacji", values: ["4–8 tygodni", "1–2 tygodnie"] },
+        { feature: "Cena", values: ["5 000–20 000 zł", "Od 1 500 zł"] },
+        { feature: "Wsparcie po wdrożeniu", values: ["Płatny serwis", "Wliczone w pakiet"] },
+        { feature: "Zmiany w treści", values: ["Przez agencję", "Samodzielnie"] },
+        { feature: "SEO", values: ["Opcja extra", "W standardzie"] },
+      ],
+    },
+    defaultStyles: { paddingTop: "5rem", paddingBottom: "5rem" },
+  },
+  {
+    type: "countdown",
+    label: "Odliczanie",
+    category: "content",
+    description: "Zegar odliczający do wydarzenia, zakończenia oferty lub premiery",
+    defaultProps: {
+      title: "Oferta kończy się za:",
+      subtitle: "Skorzystaj z promocji zanim wygaśnie",
+      targetDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      ctaText: "Skorzystaj z oferty",
+      ctaUrl: "#kontakt",
+    },
+    defaultStyles: {
+      background: "#1a1a2e",
+      color: "#ffffff",
+      paddingTop: "4rem",
+      paddingBottom: "4rem",
+      textAlign: "center",
+    },
+  },
+  {
+    type: "careers",
+    label: "Kariera / Oferty pracy",
+    category: "content",
+    description: "Lista otwartych stanowisk z opisami i przyciskami aplikowania",
+    defaultProps: {
+      title: "Dołącz do naszego zespołu",
+      subtitle: "Szukamy ludzi z pasją, którzy chcą tworzyć rzeczy, które mają znaczenie.",
+      items: [
+        { title: "Web Developer (React/Next.js)", type: "Pełny etat", location: "Warszawa / Zdalnie", description: "Szukamy doświadczonego dewelopera do tworzenia nowoczesnych aplikacji webowych.", applyUrl: "#" },
+        { title: "UX/UI Designer", type: "Pełny etat", location: "Warszawa / Zdalnie", description: "Projektujesz intuicyjne interfejsy i dbasz o doświadczenie użytkownika.", applyUrl: "#" },
+        { title: "Project Manager", type: "Pełny etat", location: "Warszawa", description: "Koordynujesz projekty webowe, kontaktujesz się z klientami i zarządzasz harmonogramem.", applyUrl: "#" },
+      ],
+    },
+    defaultStyles: { paddingTop: "5rem", paddingBottom: "5rem" },
+  },
   {
     type: "linkinbio",
     label: "Link in Bio",
@@ -871,6 +1053,136 @@ export const PROP_SCHEMAS: PropSchema[] = [
       { key: "count", label: "Liczba wpisów", type: "number" },
       { key: "category", label: "Kategoria", type: "text" },
       { key: "showDate", label: "Pokaż datę", type: "boolean" },
+    ],
+  },
+  // ── Warianty nawigacji i stopki ──────────────────────────
+  {
+    type: "navbar-minimal",
+    fields: [
+      { key: "logoText", label: "Tekst logo", type: "text" },
+      { key: "logoUrl", label: "Logo (URL)", type: "image" },
+      { key: "ctaText", label: "Przycisk CTA (tekst)", type: "text" },
+      { key: "ctaUrl", label: "Przycisk CTA (link)", type: "text" },
+    ],
+  },
+  {
+    type: "navbar-centered",
+    fields: [
+      { key: "logoText", label: "Tekst logo", type: "text" },
+      { key: "logoUrl", label: "Logo (URL)", type: "image" },
+      {
+        key: "links", label: "Linki nawigacji", type: "list",
+        itemFields: [
+          { key: "label", label: "Tekst", type: "text" },
+          { key: "url", label: "URL", type: "text" },
+        ],
+      },
+    ],
+  },
+  {
+    type: "footer-minimal",
+    fields: [
+      { key: "logoText", label: "Tekst logo", type: "text" },
+      { key: "copyright", label: "Prawa autorskie", type: "text" },
+      {
+        key: "links", label: "Linki", type: "list",
+        itemFields: [
+          { key: "label", label: "Tekst", type: "text" },
+          { key: "url", label: "URL", type: "text" },
+        ],
+      },
+    ],
+  },
+  {
+    type: "footer-extended",
+    fields: [
+      { key: "logoText", label: "Tekst logo", type: "text" },
+      { key: "tagline", label: "Tagline", type: "text" },
+      { key: "newsletterTitle", label: "Tytuł newslettera", type: "text" },
+      { key: "newsletterPlaceholder", label: "Placeholder email", type: "text" },
+      { key: "newsletterButton", label: "Przycisk newslettera", type: "text" },
+      { key: "copyright", label: "Prawa autorskie", type: "text" },
+    ],
+  },
+  // ── Dodatkowe sekcje ─────────────────────────────────────
+  {
+    type: "hero-split",
+    fields: [
+      { key: "eyebrow", label: "Napis nad tytułem", type: "text" },
+      { key: "title", label: "Tytuł", type: "text" },
+      { key: "subtitle", label: "Podtytuł", type: "textarea" },
+      { key: "ctaText", label: "Przycisk główny (tekst)", type: "text" },
+      { key: "ctaUrl", label: "Przycisk główny (link)", type: "text" },
+      { key: "ctaSecondText", label: "Przycisk drugi (tekst)", type: "text" },
+      { key: "ctaSecondUrl", label: "Przycisk drugi (link)", type: "text" },
+      { key: "imageUrl", label: "Zdjęcie (URL)", type: "image" },
+      { key: "imageAlt", label: "Tekst alternatywny zdjęcia", type: "text" },
+    ],
+  },
+  {
+    type: "process",
+    fields: [
+      { key: "eyebrow", label: "Napis nad tytułem", type: "text" },
+      { key: "title", label: "Tytuł", type: "text" },
+      { key: "subtitle", label: "Podtytuł", type: "text" },
+      {
+        key: "items", label: "Kroki procesu", type: "list",
+        itemFields: [
+          { key: "number", label: "Numer (np. 01)", type: "text" },
+          { key: "title", label: "Tytuł kroku", type: "text" },
+          { key: "description", label: "Opis", type: "textarea" },
+        ],
+      },
+    ],
+  },
+  {
+    type: "awards",
+    fields: [
+      { key: "title", label: "Tytuł", type: "text" },
+      { key: "subtitle", label: "Podtytuł", type: "text" },
+      {
+        key: "items", label: "Odznaczenia", type: "list",
+        itemFields: [
+          { key: "name", label: "Nazwa", type: "text" },
+          { key: "year", label: "Rok", type: "text" },
+          { key: "imageUrl", label: "Logo/ikona (URL)", type: "image" },
+          { key: "description", label: "Opis", type: "text" },
+        ],
+      },
+    ],
+  },
+  {
+    type: "comparison",
+    fields: [
+      { key: "title", label: "Tytuł", type: "text" },
+      { key: "subtitle", label: "Podtytuł", type: "text" },
+    ],
+  },
+  {
+    type: "countdown",
+    fields: [
+      { key: "title", label: "Tytuł", type: "text" },
+      { key: "subtitle", label: "Podtytuł", type: "text" },
+      { key: "targetDate", label: "Data docelowa (YYYY-MM-DD)", type: "text" },
+      { key: "ctaText", label: "Przycisk (tekst)", type: "text" },
+      { key: "ctaUrl", label: "Przycisk (link)", type: "text" },
+    ],
+  },
+  {
+    type: "careers",
+    fields: [
+      { key: "title", label: "Tytuł", type: "text" },
+      { key: "subtitle", label: "Podtytuł", type: "textarea" },
+      {
+        key: "items", label: "Oferty pracy", type: "list",
+        itemFields: [
+          { key: "title", label: "Stanowisko", type: "text" },
+          { key: "type", label: "Typ (np. Pełny etat)", type: "text" },
+          { key: "location", label: "Lokalizacja", type: "text" },
+          { key: "description", label: "Opis", type: "textarea" },
+          { key: "applyUrl", label: "Link do aplikowania", type: "text" },
+        ],
+      },
     ],
   },
   // ── Nowe sekcje ──────────────────────────────────────────
