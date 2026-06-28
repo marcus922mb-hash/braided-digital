@@ -14,8 +14,7 @@
   },
   "vars": {
     "ENVIRONMENT": "production",
-    "DEFAULT_MODEL": "@cf/meta/llama-3.1-8b-instruct",
-    "ALLOWED_MODELS": "@cf/meta/llama-3.3-70b-instruct-fp8-fast,@cf/meta/llama-3.1-70b-instruct,@cf/meta/llama-3.1-8b-instruct,@cf/mistral/mistral-7b-instruct-v0.2"
+    "DEFAULT_MODEL": "@cf/qwen/qwen3-30b-a3b-fp8",
+    "ALLOWED_MODELS": "@cf/qwen/qwen3-30b-a3b-fp8,@cf/meta/llama-3.2-3b-instruct,@cf/zai-org/glm-4.7-flash,@cf/google/gemma-4-26b-a4b-it,@cf/meta/llama-4-scout-17b-16e-instruct,@cf/meta/llama-3.3-70b-instruct-fp8-fast"
   }
 }
-

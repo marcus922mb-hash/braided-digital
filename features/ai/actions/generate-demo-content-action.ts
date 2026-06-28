@@ -4,13 +4,16 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { DemoGeneratedContentSchema } from "@/features/demos/schemas/demo-schema";
 import { DEMO_INDUSTRY_LABELS, DEMO_STYLE_LABELS, type DemoContent } from "@/features/demos/types";
+import { createProgressReporter } from "@/features/ai/progress/progress-reporter";
 import { createClient as createSupabaseClient } from "@/lib/supabase/server";
 import { generateDemoContent } from "@/lib/ai/generate-demo-content";
+import type { AIProgressReporter } from "@/lib/ai/progress";
 import type { AIProvider, GenerateDemoContentInput, GenerateDemoContentOutput } from "@/lib/ai/types";
 import type { Json } from "@/types/database";
 
 const aiGenerateInputSchema = z.object({
   demoId: z.string().uuid(),
+  runId: z.string().uuid(),
   provider: z.enum(["openrouter", "gemini", "groq", "cloudflare", "local"]).optional(),
   businessDescription: z.string().max(2000).optional(),
   services: z.string().max(2000).optional(),
@@ -67,6 +70,7 @@ function clientName(client: { first_name: string; last_name: string }) {
 
 export async function generateDemoContentAction(input: {
   demoId: string;
+  runId: string;
   provider?: AIProvider;
   businessDescription?: string;
   services?: string;
@@ -78,8 +82,24 @@ export async function generateDemoContentAction(input: {
     return { success: false, error: "Nieprawidłowe dane wejściowe do generowania AI." };
   }
 
+  let reportProgress: AIProgressReporter | undefined;
+
   try {
     const { supabase, user } = await requireUser();
+    reportProgress = createProgressReporter(
+      supabase,
+      parsed.data.demoId,
+      parsed.data.runId
+    );
+    await reportProgress({
+      stage: "request_received",
+      status: "completed",
+      progress: 3,
+      message: "Backend przyjął i uwierzytelnił żądanie generowania.",
+      details: {
+        requestedProvider: parsed.data.provider ?? "ustawienia użytkownika lub fallback",
+      },
+    });
     const userMeta = user.user_metadata ?? {};
     const userPreferredProvider = typeof userMeta.ai_preferred_provider === "string"
       ? userMeta.ai_preferred_provider as AIProvider
@@ -88,6 +108,13 @@ export async function generateDemoContentAction(input: {
       ? userMeta.ai_preferred_model
       : undefined;
 
+    await reportProgress({
+      stage: "loading_context",
+      status: "running",
+      progress: 8,
+      message: "Pobieranie danych demo, klienta i wyceny z CRM.",
+    });
+
     const { data: demo, error: demoError } = await supabase
       .from("demos")
       .select("*")
@@ -95,7 +122,7 @@ export async function generateDemoContentAction(input: {
       .single();
 
     if (demoError || !demo) {
-      return { success: false, error: "Nie znaleziono demo." };
+      throw new Error("Nie znaleziono demo.");
     }
 
     await supabase.from("activity_logs").insert({
@@ -106,13 +133,32 @@ export async function generateDemoContentAction(input: {
       metadata: { provider: parsed.data.provider ?? "fallback" },
     });
 
-    const { data: client } = demo.client_id
-      ? await supabase.from("clients").select("*").eq("id", demo.client_id).single()
-      : { data: null };
+    const [clientResult, estimateResult] = await Promise.all([
+      demo.client_id
+        ? supabase.from("clients").select("*").eq("id", demo.client_id).single()
+        : Promise.resolve({ data: null }),
+      demo.estimate_id
+        ? supabase.from("estimates").select("*").eq("id", demo.estimate_id).single()
+        : Promise.resolve({ data: null }),
+    ]);
+    const client = clientResult.data;
+    const estimate = estimateResult.data;
 
-    const { data: estimate } = demo.estimate_id
-      ? await supabase.from("estimates").select("*").eq("id", demo.estimate_id).single()
-      : { data: null };
+    await reportProgress({
+      stage: "context_loaded",
+      status: "completed",
+      progress: 15,
+      message: "Załadowano rzeczywiste dane biznesowe do generowania.",
+      details: {
+        demoTitle: demo.title,
+        company: client?.company_name ?? clientName(client ?? { first_name: "", last_name: "" }) ?? "brak",
+        industry: demo.industry ?? client?.industry ?? "brak",
+        city: client?.city ?? "brak",
+        websiteType: estimate?.website_type ?? "brak",
+        hasExistingContent: Boolean(demo.content),
+        hasEstimate: Boolean(estimate),
+      },
+    });
 
     const aiInput: GenerateDemoContentInput = {
       demoId: demo.id,
@@ -142,6 +188,7 @@ export async function generateDemoContentAction(input: {
     const result = await generateDemoContent(aiInput, {
       preferredProvider: parsed.data.provider ?? userPreferredProvider,
       preferredModel: userPreferredModel,
+      onProgress: reportProgress,
       onAttemptStart: async (provider, model, prompt) => {
         const { data: log } = await supabase
           .from("ai_generations")
@@ -169,6 +216,28 @@ export async function generateDemoContentAction(input: {
       },
     });
 
+    const allImages = [
+      result.content.hero.image,
+      result.content.about.image,
+      ...result.content.gallery.items,
+      result.content.seo.ogImage,
+    ];
+    await reportProgress({
+      stage: "generation_completed",
+      status: "completed",
+      progress: 100,
+      message: "Kompletne demo zostało wygenerowane i jest gotowe do sprawdzenia.",
+      details: {
+        provider: result.provider,
+        model: result.model,
+        sections: result.content.structure.filter((section) => section.visible).length,
+        services: result.content.services.length,
+        faqItems: result.content.faq.length,
+        realImages: allImages.filter((image) => Boolean(image.url)).length,
+        placeholders: allImages.filter((image) => !image.url).length,
+      },
+    });
+
     await supabase.from("activity_logs").insert({
       entity_type: "demo",
       entity_id: demo.id,
@@ -185,6 +254,13 @@ export async function generateDemoContentAction(input: {
     return { success: true, data: result };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Nie udało się wygenerować treści AI.";
+    await reportProgress?.({
+      stage: "generation_failed",
+      status: "error",
+      progress: 100,
+      message: "Generowanie zakończyło się błędem.",
+      details: { error: message.slice(0, 1000) },
+    });
 
     try {
       const supabase = await createSupabaseClient();

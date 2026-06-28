@@ -13,6 +13,9 @@ Architektura została wyodrębniona z projektu `woo-saas-cloudflare`:
 Pliki domenowe WooCommerce, D1, KV, R2, Queue oraz sekrety projektu źródłowego
 nie są wymagane i nie zostały skopiowane.
 
+Lista modeli została zaktualizowana względem projektu źródłowego. Modele Llama
+3.1 bez aktywnego wariantu zostały wycofane przez Cloudflare 30 maja 2026.
+
 ## Konfiguracja
 
 1. Skopiuj `.dev.vars.example` do `.dev.vars`.
@@ -41,4 +44,3 @@ npm run workers:ai:deploy
 
 Binding AI zawsze korzysta z infrastruktury zdalnej Cloudflare i może naliczać
 zużycie także podczas developmentu.
-

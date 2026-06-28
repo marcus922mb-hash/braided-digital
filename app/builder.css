@@ -289,6 +289,29 @@
 .bldr-preview-placeholder-badge { font-size: .6rem; color: rgba(232,232,232,.25); border: 1px dashed rgba(255,255,255,.08); border-radius: 3px; padding: .2rem .4rem; text-align: center; margin-top: .25rem; }
 .bldr-preview-default { padding: 1rem; text-align: center; font-size: .72rem; color: rgba(232,232,232,.4); }
 
+/* ── Nowe sekcje preview ─────────────────────────────────── */
+.bldr-preview--separator { display: flex; align-items: center; justify-content: center; min-height: 40px; }
+.bldr-preview-sep-line { width: 100%; border-top-width: 1px; position: relative; display: flex; justify-content: center; }
+.bldr-preview-sep-label { position: absolute; top: -10px; background: #1e1e2e; padding: 0 .5rem; font-size: .62rem; color: rgba(232,232,232,.5); }
+.bldr-preview--text { display: flex; flex-direction: column; gap: .3rem; }
+.bldr-preview-h3 { font-size: .72rem; font-weight: 600; color: rgba(232,232,232,.8); }
+.bldr-preview--logos { display: flex; flex-direction: column; gap: .5rem; }
+.bldr-preview-logos-row { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .25rem; }
+.bldr-preview-logo-box { padding: .2rem .5rem; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 3px; font-size: .6rem; color: rgba(232,232,232,.4); }
+.bldr-preview--portfolio { display: flex; flex-direction: column; gap: .4rem; }
+.bldr-preview-card-category { font-size: .58rem; text-transform: uppercase; letter-spacing: .06em; color: rgba(212,168,58,.6); margin-bottom: .1rem; }
+.bldr-preview--banner { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60px; padding: .75rem 1rem; gap: .2rem; }
+.bldr-preview-banner-text { font-size: .72rem; font-weight: 600; text-align: center; }
+.bldr-preview-banner-sub { font-size: .62rem; text-align: center; }
+.bldr-preview--columns { display: flex; flex-direction: column; gap: .4rem; }
+.bldr-preview-two-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-top: .25rem; }
+.bldr-preview--quote { display: flex; flex-direction: column; align-items: center; gap: .3rem; padding: .75rem 1rem; text-align: center; border-radius: 4px; }
+.bldr-preview-quote-mark { font-size: 2rem; font-weight: 800; color: rgba(212,168,58,.4); line-height: 1; }
+.bldr-preview-quote-text { font-size: .66rem; font-style: italic; color: rgba(232,232,232,.65); max-width: 90%; }
+.bldr-preview--image { display: flex; flex-direction: column; align-items: center; gap: .35rem; }
+.bldr-preview-image-real { width: 100%; height: 90px; background-size: cover; background-position: center; border-radius: 5px; }
+.bldr-preview-caption { font-size: .6rem; color: rgba(232,232,232,.35); text-align: center; }
+
 /* Builder list page */
 .builder-pages-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap: .75rem; }
 .builder-page-card { display: flex; align-items: center; gap: .75rem; padding: .9rem 1rem; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 10px; text-decoration: none; color: inherit; transition: border-color .15s, background .15s; }

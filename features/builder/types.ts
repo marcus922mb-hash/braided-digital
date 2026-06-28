@@ -4,7 +4,10 @@ export type ComponentType =
   | "statistics" | "team" | "timeline" | "steps" | "contact"
   | "footer" | "video" | "map" | "newsletter" | "instagram"
   | "tiktok" | "woo-products" | "blog"
-  | "linkinbio";
+  | "linkinbio"
+  // Nowe sekcje
+  | "separator" | "text" | "logos" | "portfolio"
+  | "banner" | "columns" | "quote" | "image";
 
 export type ComponentCategory =
   | "layout" | "content" | "media" | "commerce" | "social";

@@ -387,6 +387,140 @@ export const COMPONENT_DEFINITIONS: ComponentDefinition[] = [
     },
     defaultStyles: { paddingTop: "5rem", paddingBottom: "5rem" },
   },
+  // ── NOWE SEKCJE ──────────────────────────────────────────
+  {
+    type: "separator",
+    label: "Odstęp / Linia",
+    category: "layout",
+    description: "Pionowy odstęp lub pozioma linia między sekcjami",
+    defaultProps: {
+      height: 60,
+      style: "none",
+      color: "#e5e7eb",
+      label: "",
+    },
+    defaultStyles: { paddingTop: "0", paddingBottom: "0" },
+  },
+  {
+    type: "text",
+    label: "Blok tekstu",
+    category: "content",
+    description: "Nagłówek z treścią — prosty blok tekstowy",
+    defaultProps: {
+      eyebrow: "",
+      heading: "Nagłówek sekcji",
+      headingLevel: "h2",
+      content: "Wpisz treść swojej sekcji. Możesz tu umieścić dłuższy opis, informacje o firmie, regulamin lub dowolny tekst.",
+      align: "left",
+    },
+    defaultStyles: { paddingTop: "4rem", paddingBottom: "4rem" },
+  },
+  {
+    type: "logos",
+    label: "Logotypy / Partnerzy",
+    category: "content",
+    description: "Siatka logotypów klientów, partnerów lub certyfikatów",
+    defaultProps: {
+      title: "Zaufali nam",
+      subtitle: "",
+      items: [
+        { name: "Firma A", logoUrl: "", href: "#" },
+        { name: "Firma B", logoUrl: "", href: "#" },
+        { name: "Firma C", logoUrl: "", href: "#" },
+        { name: "Firma D", logoUrl: "", href: "#" },
+        { name: "Firma E", logoUrl: "", href: "#" },
+        { name: "Firma F", logoUrl: "", href: "#" },
+      ],
+    },
+    defaultStyles: { paddingTop: "4rem", paddingBottom: "4rem", textAlign: "center" },
+  },
+  {
+    type: "portfolio",
+    label: "Portfolio",
+    category: "content",
+    description: "Siatka projektów z kategoriami i opisami",
+    defaultProps: {
+      title: "Nasze realizacje",
+      subtitle: "Zobacz wybrane projekty z naszego portfolio",
+      columns: 3,
+      items: [
+        { title: "Projekt Alpha", category: "Strony www", imageUrl: "", description: "Nowoczesna strona firmowa dla klienta z branży IT.", href: "#" },
+        { title: "Projekt Beta", category: "Sklepy online", imageUrl: "", description: "Sklep e-commerce z integracją płatności.", href: "#" },
+        { title: "Projekt Gamma", category: "Aplikacje", imageUrl: "", description: "Mobilna aplikacja dla salonu beauty.", href: "#" },
+        { title: "Projekt Delta", category: "Strony www", imageUrl: "", description: "Landing page z wysoką konwersją.", href: "#" },
+        { title: "Projekt Epsilon", category: "Sklepy online", imageUrl: "", description: "Hurtownia online z panelem B2B.", href: "#" },
+        { title: "Projekt Zeta", category: "Aplikacje", imageUrl: "", description: "System rezerwacji online dla restauracji.", href: "#" },
+      ],
+    },
+    defaultStyles: { paddingTop: "5rem", paddingBottom: "5rem" },
+  },
+  {
+    type: "banner",
+    label: "Baner / Ogłoszenie",
+    category: "content",
+    description: "Pełnoszerokościowy pasek ogłoszenia lub promocji",
+    defaultProps: {
+      text: "Oferta specjalna — 20% zniżki na wszystkie pakiety!",
+      subtext: "Tylko do końca miesiąca",
+      ctaText: "Sprawdź ofertę",
+      ctaUrl: "#cennik",
+      closeable: false,
+    },
+    defaultStyles: {
+      background: "#d4a83a",
+      color: "#000000",
+      paddingTop: "1rem",
+      paddingBottom: "1rem",
+      textAlign: "center",
+    },
+  },
+  {
+    type: "columns",
+    label: "Dwie kolumny",
+    category: "layout",
+    description: "Dwie lub trzy kolumny z tytułem, tekstem i opcjonalnym CTA",
+    defaultProps: {
+      columns: [
+        { icon: "Zap", heading: "Szybka realizacja", content: "Twoje projekty dostarczamy w rekordowym czasie, bez kompromisów w jakości.", ctaText: "", ctaUrl: "" },
+        { icon: "Shield", heading: "Pełne bezpieczeństwo", content: "Stosujemy najwyższe standardy bezpieczeństwa i dbamy o Twoje dane.", ctaText: "", ctaUrl: "" },
+      ],
+    },
+    defaultStyles: { paddingTop: "5rem", paddingBottom: "5rem" },
+  },
+  {
+    type: "quote",
+    label: "Cytat",
+    category: "content",
+    description: "Wyróżniony cytat lub opinia z autorem",
+    defaultProps: {
+      quote: "To była najlepsza decyzja biznesowa — inwestycja w profesjonalną stronę www zwróciła się już w pierwszym miesiącu.",
+      author: "Anna Kowalska",
+      role: "Właścicielka",
+      company: "Kwiaciarnia Marta",
+      avatarUrl: "",
+      style: "large",
+    },
+    defaultStyles: {
+      paddingTop: "5rem",
+      paddingBottom: "5rem",
+      textAlign: "center",
+      background: "#f9f9f9",
+    },
+  },
+  {
+    type: "image",
+    label: "Zdjęcie",
+    category: "media",
+    description: "Pojedyncze zdjęcie z opcjonalnym podpisem i linkiem",
+    defaultProps: {
+      imageUrl: "",
+      alt: "Zdjęcie",
+      caption: "",
+      href: "",
+      style: "contained",
+    },
+    defaultStyles: { paddingTop: "3rem", paddingBottom: "3rem", textAlign: "center" },
+  },
   {
     type: "linkinbio",
     label: "Link in Bio",
@@ -737,6 +871,128 @@ export const PROP_SCHEMAS: PropSchema[] = [
       { key: "count", label: "Liczba wpisów", type: "number" },
       { key: "category", label: "Kategoria", type: "text" },
       { key: "showDate", label: "Pokaż datę", type: "boolean" },
+    ],
+  },
+  // ── Nowe sekcje ──────────────────────────────────────────
+  {
+    type: "separator",
+    fields: [
+      { key: "height", label: "Wysokość (px)", type: "number" },
+      {
+        key: "style", label: "Styl linii", type: "select",
+        options: [
+          { value: "none", label: "Tylko odstęp (brak linii)" },
+          { value: "solid", label: "Pełna linia" },
+          { value: "dashed", label: "Przerywana" },
+          { value: "dotted", label: "Kropkowana" },
+        ],
+      },
+      { key: "color", label: "Kolor linii", type: "color" },
+      { key: "label", label: "Tekst na linii (opcjonalny)", type: "text" },
+    ],
+  },
+  {
+    type: "text",
+    fields: [
+      { key: "eyebrow", label: "Napis nad nagłówkiem", type: "text", placeholder: "np. O nas" },
+      { key: "heading", label: "Nagłówek", type: "text" },
+      {
+        key: "headingLevel", label: "Poziom nagłówka", type: "select",
+        options: [{ value: "h1", label: "H1" }, { value: "h2", label: "H2" }, { value: "h3", label: "H3" }],
+      },
+      { key: "content", label: "Treść", type: "textarea" },
+      {
+        key: "align", label: "Wyrównanie", type: "select",
+        options: [{ value: "left", label: "Do lewej" }, { value: "center", label: "Wyśrodkowane" }, { value: "right", label: "Do prawej" }],
+      },
+    ],
+  },
+  {
+    type: "logos",
+    fields: [
+      { key: "title", label: "Tytuł", type: "text" },
+      { key: "subtitle", label: "Podtytuł", type: "text" },
+      {
+        key: "items", label: "Logotypy", type: "list",
+        itemFields: [
+          { key: "name", label: "Nazwa firmy", type: "text" },
+          { key: "logoUrl", label: "Logo (URL)", type: "image" },
+          { key: "href", label: "Link (opcjonalny)", type: "text" },
+        ],
+      },
+    ],
+  },
+  {
+    type: "portfolio",
+    fields: [
+      { key: "title", label: "Tytuł", type: "text" },
+      { key: "subtitle", label: "Podtytuł", type: "text" },
+      {
+        key: "columns", label: "Kolumny", type: "select",
+        options: [{ value: "2", label: "2" }, { value: "3", label: "3" }, { value: "4", label: "4" }],
+      },
+      {
+        key: "items", label: "Projekty", type: "list",
+        itemFields: [
+          { key: "title", label: "Tytuł projektu", type: "text" },
+          { key: "category", label: "Kategoria", type: "text" },
+          { key: "imageUrl", label: "Zdjęcie (URL)", type: "image" },
+          { key: "description", label: "Opis", type: "textarea" },
+          { key: "href", label: "Link do projektu", type: "text" },
+        ],
+      },
+    ],
+  },
+  {
+    type: "banner",
+    fields: [
+      { key: "text", label: "Tekst główny", type: "text" },
+      { key: "subtext", label: "Tekst dodatkowy", type: "text" },
+      { key: "ctaText", label: "Przycisk (tekst)", type: "text" },
+      { key: "ctaUrl", label: "Przycisk (link)", type: "text" },
+      { key: "closeable", label: "Możliwość zamknięcia", type: "boolean" },
+    ],
+  },
+  {
+    type: "columns",
+    fields: [
+      {
+        key: "columns", label: "Kolumny", type: "list",
+        itemFields: [
+          { key: "icon", label: "Ikona (Lucide)", type: "text" },
+          { key: "heading", label: "Nagłówek", type: "text" },
+          { key: "content", label: "Treść", type: "textarea" },
+          { key: "ctaText", label: "Przycisk (tekst)", type: "text" },
+          { key: "ctaUrl", label: "Przycisk (link)", type: "text" },
+        ],
+      },
+    ],
+  },
+  {
+    type: "quote",
+    fields: [
+      { key: "quote", label: "Treść cytatu", type: "textarea" },
+      { key: "author", label: "Autor", type: "text" },
+      { key: "role", label: "Stanowisko", type: "text" },
+      { key: "company", label: "Firma", type: "text" },
+      { key: "avatarUrl", label: "Zdjęcie autora (URL)", type: "image" },
+      {
+        key: "style", label: "Styl cytatu", type: "select",
+        options: [{ value: "simple", label: "Prosty" }, { value: "card", label: "Karta" }, { value: "large", label: "Duży" }],
+      },
+    ],
+  },
+  {
+    type: "image",
+    fields: [
+      { key: "imageUrl", label: "URL zdjęcia", type: "image" },
+      { key: "alt", label: "Tekst alternatywny (SEO)", type: "text" },
+      { key: "caption", label: "Podpis pod zdjęciem", type: "text" },
+      { key: "href", label: "Link po kliknięciu", type: "text" },
+      {
+        key: "style", label: "Szerokość", type: "select",
+        options: [{ value: "full", label: "Pełna szerokość" }, { value: "contained", label: "W kontenerze" }, { value: "rounded", label: "Zaokrąglone" }],
+      },
     ],
   },
 ];

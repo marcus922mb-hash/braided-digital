@@ -8,6 +8,8 @@ import {
   DollarSign, Megaphone, BarChart2, Users, Clock, List,
   Phone, Anchor, Video, MapPin, Mail,
   ShoppingBag, FileText, Newspaper, Play,
+  Minus, AlignLeft, Building2, Briefcase, LayoutTemplate,
+  Quote, ImageIcon,
 } from "lucide-react";
 import type { BuilderComponent } from "@/features/builder/types";
 import { useBuilderStore } from "@/features/builder/store/builder-store";
@@ -37,6 +39,14 @@ const TYPE_ICONS: Record<string, React.ElementType> = {
   "woo-products": ShoppingBag,
   blog: Newspaper,
   linkinbio: Users,
+  separator: Minus,
+  text: AlignLeft,
+  logos: Building2,
+  portfolio: Briefcase,
+  banner: Megaphone,
+  columns: LayoutTemplate,
+  quote: Quote,
+  image: ImageIcon,
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -57,6 +67,9 @@ const COMPONENT_CATEGORIES: Record<string, string> = {
   newsletter: "social", instagram: "social", tiktok: "social",
   "woo-products": "commerce", blog: "commerce",
   linkinbio: "social",
+  separator: "layout", text: "content", logos: "content",
+  portfolio: "content", banner: "content", columns: "layout",
+  quote: "content", image: "media",
 };
 
 function BlockPreview({ component }: { component: BuilderComponent }) {
@@ -385,6 +398,111 @@ function BlockPreview({ component }: { component: BuilderComponent }) {
         </div>
       );
     }
+
+    case "separator": {
+      const sepHeight = (p.height as number) || 60;
+      const sepStyle = (p.style as string) || "none";
+      const sepColor = (p.color as string) || "#e5e7eb";
+      const sepLabel = (p.label as string) || "";
+      return (
+        <div className="bldr-preview bldr-preview--separator" style={{ minHeight: `${Math.min(sepHeight, 80)}px` }}>
+          {sepStyle !== "none" ? (
+            <div className="bldr-preview-sep-line" style={{ borderTopStyle: sepStyle as "solid" | "dashed" | "dotted", borderTopColor: sepColor }}>
+              {sepLabel && <span className="bldr-preview-sep-label">{sepLabel}</span>}
+            </div>
+          ) : (
+            <div className="bldr-preview-sub" style={{ fontSize: "11px", opacity: .5 }}>Odstęp: {sepHeight}px</div>
+          )}
+        </div>
+      );
+    }
+
+    case "text":
+      return (
+        <div className="bldr-preview bldr-preview--text">
+          {Boolean(p.eyebrow) && <div className="bldr-preview-tag">{p.eyebrow as string}</div>}
+          <div className="bldr-preview-h2">{(p.heading as string) || "Nagłówek"}</div>
+          <div className="bldr-preview-body">{((p.content as string) || "").slice(0, 100)}</div>
+        </div>
+      );
+
+    case "logos":
+      return (
+        <div className="bldr-preview bldr-preview--logos">
+          {title && <div className="bldr-preview-h2">{title}</div>}
+          <div className="bldr-preview-logos-row">
+            {((p.items || []) as Array<{ name: string }>).slice(0, 6).map((item, i) => (
+              <div key={i} className="bldr-preview-logo-box">{item.name}</div>
+            ))}
+          </div>
+        </div>
+      );
+
+    case "portfolio":
+      return (
+        <div className="bldr-preview bldr-preview--portfolio">
+          <div className="bldr-preview-h2">{title || "Portfolio"}</div>
+          <div className="bldr-preview-cards">
+            {((p.items || []) as Array<{ title: string; category: string }>).slice(0, 3).map((item, i) => (
+              <div key={i} className="bldr-preview-card">
+                <div className="bldr-preview-card-image" />
+                <div className="bldr-preview-card-category">{item.category}</div>
+                <div className="bldr-preview-card-title">{item.title}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
+    case "banner":
+      return (
+        <div className="bldr-preview bldr-preview--banner" style={{ background: component.styles.background || "#d4a83a" }}>
+          <div className="bldr-preview-banner-text" style={{ color: component.styles.color || "#000" }}>{(p.text as string) || "Tekst bannera"}</div>
+          {Boolean(p.subtext) && <div className="bldr-preview-banner-sub" style={{ color: component.styles.color || "#000", opacity: .75 }}>{p.subtext as string}</div>}
+          {Boolean(p.ctaText) && <div className="bldr-preview-btn bldr-preview-btn--dark" style={{ marginTop: "6px" }}>{p.ctaText as string}</div>}
+        </div>
+      );
+
+    case "columns": {
+      const colItems = (p.columns as Array<{ icon: string; heading: string; content: string }> | undefined) ?? [];
+      return (
+        <div className="bldr-preview bldr-preview--columns">
+          <div className="bldr-preview-two-col-grid">
+            {(colItems.length ? colItems : [{ heading: "Kolumna 1", content: "" }, { heading: "Kolumna 2", content: "" }]).slice(0, 2).map((col, i) => (
+              <div key={i} className="bldr-preview-text-block">
+                <div className="bldr-preview-card-icon" />
+                <div className="bldr-preview-h3">{col.heading || `Kolumna ${i + 1}`}</div>
+                <div className="bldr-preview-body">{(col.content || "").slice(0, 60)}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    case "quote":
+      return (
+        <div className="bldr-preview bldr-preview--quote" style={{ background: component.styles.background || "#f9f9f9" }}>
+          <div className="bldr-preview-quote-mark">&ldquo;</div>
+          <div className="bldr-preview-quote-text">{((p.quote as string) || "Treść cytatu...").slice(0, 120)}</div>
+          <div className="bldr-preview-author">— {(p.author as string) || "Autor"}{Boolean(p.company) ? `, ${p.company as string}` : ""}</div>
+        </div>
+      );
+
+    case "image":
+      return (
+        <div className="bldr-preview bldr-preview--image">
+          {Boolean(p.imageUrl) ? (
+            <div className="bldr-preview-image-real" style={{ backgroundImage: `url(${p.imageUrl as string})` }} />
+          ) : (
+            <div className="bldr-preview-image-placeholder">
+              <ImageIcon size={24} style={{ opacity: .3 }} />
+              <div className="bldr-preview-sub" style={{ fontSize: "11px" }}>Zdjęcie nie ustawione</div>
+            </div>
+          )}
+          {Boolean(p.caption) && <div className="bldr-preview-caption">{p.caption as string}</div>}
+        </div>
+      );
 
     default:
       return <div className="bldr-preview-default">{component.label}</div>;

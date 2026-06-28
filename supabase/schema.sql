@@ -206,9 +206,26 @@ CREATE INDEX IF NOT EXISTS idx_demos_estimate     ON public.demos(estimate_id);
 CREATE INDEX IF NOT EXISTS idx_demo_sections_demo ON public.demo_sections(demo_id, section_order);
 CREATE INDEX IF NOT EXISTS idx_projects_client    ON public.projects(client_id);
 CREATE INDEX IF NOT EXISTS idx_activity_entity    ON public.activity_logs(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_ai_progress
+  ON public.activity_logs(entity_id, created_at ASC)
+  WHERE entity_type = 'demo' AND action = 'ai_generation_progress';
 CREATE INDEX IF NOT EXISTS idx_email_logs_client  ON public.email_logs(client_id);
 CREATE INDEX IF NOT EXISTS idx_leads_submitted_at ON public.leads(submitted_at DESC);
 CREATE INDEX IF NOT EXISTS idx_leads_status       ON public.leads(status);
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_publication_tables
+    WHERE pubname = 'supabase_realtime'
+      AND schemaname = 'public'
+      AND tablename = 'activity_logs'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.activity_logs;
+  END IF;
+END
+$$;
 
 -- ── Row Level Security ────────────────────────────────────────
 -- Reguła: dane klientów, projektów i wycen są prywatne.

@@ -1,89 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
-import { Loader2, Sparkles } from "lucide-react";
+import { useRef, useState, useTransition } from "react";
+import { Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   generateDemoContentAction,
   saveGeneratedDemoContentAction,
 } from "@/features/ai/actions/generate-demo-content-action";
 import { AIGenerationPreview } from "@/features/ai/components/ai-generation-preview";
+import { AIGenerationProgress } from "@/features/ai/components/ai-generation-progress";
 import { AIProviderSelect } from "@/features/ai/components/ai-provider-select";
 import type { AIProvider, GenerateDemoContentOutput } from "@/lib/ai/types";
 
 type Props = {
   demoId: string;
 };
-
-function GenerationStatus({
-  isGenerating,
-  businessDescription,
-  services,
-  targetAudience,
-  tone,
-}: {
-  isGenerating: boolean;
-  businessDescription: string;
-  services: string;
-  targetAudience: string;
-  tone: string;
-}) {
-  const [elapsed, setElapsed] = useState(0);
-  const startRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    if (!isGenerating) {
-      const t = setTimeout(() => setElapsed(0), 0);
-      startRef.current = null;
-      return () => clearTimeout(t);
-    }
-    startRef.current = Date.now();
-    const interval = setInterval(() => {
-      setElapsed(Math.floor((Date.now() - (startRef.current ?? Date.now())) / 1000));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [isGenerating]);
-
-  if (!isGenerating) return null;
-
-  const min = Math.floor(elapsed / 60);
-  const sec = elapsed % 60;
-  const timeStr = `${min}:${String(sec).padStart(2, "0")}`;
-
-  const rows = [
-    businessDescription.trim() && { label: "Opis", value: businessDescription.trim() },
-    services.trim() && { label: "Usługi", value: services.trim() },
-    targetAudience.trim() && { label: "Grupa docelowa", value: targetAudience.trim() },
-    tone.trim() && { label: "Ton", value: tone.trim() },
-  ].filter(Boolean) as { label: string; value: string }[];
-
-  return (
-    <div className="ai-progress">
-      {rows.length > 0 ? (
-        <div className="ai-progress-input">
-          <div className="ai-progress-input-label">Dane wysłane do AI:</div>
-          {rows.map((row) => (
-            <div key={row.label} className="ai-progress-input-row">
-              <span className="ai-progress-input-key">{row.label}:</span>
-              <span className="ai-progress-input-val">
-                {row.value.length > 100 ? `${row.value.slice(0, 100)}…` : row.value}
-              </span>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="ai-progress-input">
-          <div className="ai-progress-input-label">Generowanie na podstawie danych klienta z CRM</div>
-        </div>
-      )}
-      <div className="ai-progress-header">
-        <Loader2 size={14} className="bldr-spin" />
-        <span>AI generuje treści…</span>
-        <span className="ai-progress-timer">{timeStr}</span>
-      </div>
-    </div>
-  );
-}
 
 export function AIGenerateDemoButton({ demoId }: Props) {
   const router = useRouter();
@@ -94,6 +25,10 @@ export function AIGenerateDemoButton({ demoId }: Props) {
   const [tone, setTone] = useState("profesjonalny, ciepły, konkretny");
   const [result, setResult] = useState<GenerateDemoContentOutput | null>(null);
   const [durationSeconds, setDurationSeconds] = useState<number | null>(null);
+  const [activeRun, setActiveRun] = useState<{
+    id: string;
+    startedAt: string;
+  } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState<string | null>(null);
@@ -105,11 +40,15 @@ export function AIGenerateDemoButton({ demoId }: Props) {
     setError(null);
     setSaveError(null);
     setSaveSuccess(null);
-    generationStartRef.current = Date.now();
+    const runId = crypto.randomUUID();
+    const startedAt = new Date().toISOString();
+    setActiveRun({ id: runId, startedAt });
+    generationStartRef.current = new Date(startedAt).getTime();
 
     startGenerating(async () => {
       const response = await generateDemoContentAction({
         demoId,
+        runId,
         provider,
         businessDescription,
         services,
@@ -221,13 +160,15 @@ export function AIGenerateDemoButton({ demoId }: Props) {
 
         {error && <div className="crm-form-alert">{error}</div>}
 
-        <GenerationStatus
-          isGenerating={isGenerating}
-          businessDescription={businessDescription}
-          services={services}
-          targetAudience={targetAudience}
-          tone={tone}
-        />
+        {activeRun ? (
+          <AIGenerationProgress
+            key={activeRun.id}
+            demoId={demoId}
+            runId={activeRun.id}
+            startedAt={activeRun.startedAt}
+            isGenerating={isGenerating}
+          />
+        ) : null}
 
         <button type="button" className="crm-btn crm-btn--primary" onClick={generate} disabled={isGenerating || isSaving}>
           <Sparkles size={14} />
@@ -248,6 +189,7 @@ export function AIGenerateDemoButton({ demoId }: Props) {
             setSaveError(null);
             setSaveSuccess(null);
             setDurationSeconds(null);
+            setActiveRun(null);
           }}
           onRegenerate={generate}
           isRegenerating={isGenerating}

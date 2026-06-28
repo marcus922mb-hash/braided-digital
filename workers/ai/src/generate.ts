@@ -72,13 +72,29 @@ function normalizeRequest(body: GenerateRequest, env: WorkerEnv) {
 }
 
 function outputText(output: unknown) {
-  if (
-    output &&
-    typeof output === "object" &&
-    "response" in output &&
-    typeof output.response === "string"
-  ) {
+  if (!output || typeof output !== "object") return "";
+  if ("response" in output && typeof output.response === "string") {
     return output.response.trim();
+  }
+  if ("text" in output && typeof output.text === "string") {
+    return output.text.trim();
+  }
+  if ("output_text" in output && typeof output.output_text === "string") {
+    return output.output_text.trim();
+  }
+  if ("choices" in output && Array.isArray(output.choices)) {
+    const first = output.choices[0];
+    if (first && typeof first === "object" && "message" in first) {
+      const message = first.message;
+      if (
+        message &&
+        typeof message === "object" &&
+        "content" in message &&
+        typeof message.content === "string"
+      ) {
+        return message.content.trim();
+      }
+    }
   }
   return "";
 }
@@ -164,4 +180,3 @@ export async function generate(
     );
   }
 }
-

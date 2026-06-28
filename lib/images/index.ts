@@ -5,5 +5,6 @@ export type {
   ImageOrientation,
   ImageProvider,
   ImageProviderName,
+  ImageSearchProgressEvent,
   ImageSearchRequest,
 } from "@/lib/images/types";
