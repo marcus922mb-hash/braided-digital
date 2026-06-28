@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { demoContentSchema } from "@/features/demos/schemas/demo-schema";
 import {
   buildDemoContentPrompt,
@@ -293,18 +294,22 @@ export function parseGeneratedDemoContent(rawText: string) {
   try {
     const parsed = JSON.parse(extractJsonObject(rawText));
     const normalized = normalizeAiOutput(parsed as Record<string, unknown>);
-    return demoContentSchema.parse(normalized);
-  } catch (error) {
-    if (error instanceof AIJsonParseError) throw error;
-    if (error instanceof Error && "issues" in error) {
-      const zodError = error as { issues: { path: (string | number)[]; message: string }[] };
-      const allPaths = (zodError.issues ?? [])
-        .slice(0, 6)
+    const result = demoContentSchema.safeParse(normalized);
+    if (!result.success) {
+      const allPaths = result.error.issues
+        .slice(0, 8)
         .map((i) => `${i.path?.join(".") ?? "?"}: ${i.message}`)
         .join(" | ");
+      console.error("[parseGeneratedDemoContent] Zod validation failed:", allPaths);
+      console.error("[parseGeneratedDemoContent] Normalized keys:", Object.keys(normalized));
       throw new AIJsonParseError(`AI zwróciło niepoprawną strukturę JSON. Pola: ${allPaths}`);
     }
-    throw new AIJsonParseError("AI zwróciło JSON, ale struktura treści jest niepoprawna.");
+    return result.data;
+  } catch (error) {
+    if (error instanceof AIJsonParseError) throw error;
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("[parseGeneratedDemoContent] Unexpected error:", msg);
+    throw new AIJsonParseError(`AI zwróciło JSON, ale struktura treści jest niepoprawna. (${msg})`);
   }
 }
 
