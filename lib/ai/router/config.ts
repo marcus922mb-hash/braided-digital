@@ -6,7 +6,7 @@ import type {
 
 const DEFAULT_MODELS: Record<AIProvider, string[]> = {
   openrouter: ["meta-llama/llama-3.3-70b-instruct:free"],
-  cloudflare: ["@cf/meta/llama-3.1-8b-instruct"],
+  cloudflare: ["@cf/meta/llama-3.3-70b-instruct-fp8-fast", "@cf/meta/llama-3.1-8b-instruct", "@cf/meta/llama-3.1-70b-instruct", "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b", "@cf/deepseek-ai/deepseek-r1-distill-llama-8b", "@cf/qwen/qwen1.5-14b-chat-awq", "@cf/qwen/qwen1.5-7b-chat-awq", "@cf/google/gemma-7b-it", "@cf/mistral/mistral-7b-instruct-v0.2", "@cf/microsoft/phi-2"],
   gemini: ["gemini-1.5-flash"],
   groq: ["llama-3.1-8b-instant"],
   local: ["local-model"],

@@ -272,9 +272,16 @@ const OPENROUTER_FREE_MODELS: Array<{ value: string; label: string; note: string
 ];
 
 const CLOUDFLARE_MODELS: Array<{ value: string; label: string }> = [
-  { value: "@cf/meta/llama-3.1-8b-instruct", label: "Llama 3.1 8B (Workers AI)" },
-  { value: "@cf/meta/llama-3.3-70b-instruct-fp8-fast", label: "Llama 3.3 70B FP8 (Workers AI)" },
-  { value: "@cf/meta/llama-3.1-70b-instruct", label: "Llama 3.1 70B (Workers AI)" },
+  { value: "@cf/meta/llama-3.3-70b-instruct-fp8-fast", label: "Llama 3.3 70B FP8 — Meta · szybki" },
+  { value: "@cf/meta/llama-3.1-8b-instruct", label: "Llama 3.1 8B — Meta · najszybszy" },
+  { value: "@cf/meta/llama-3.1-70b-instruct", label: "Llama 3.1 70B — Meta · duży" },
+  { value: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b", label: "DeepSeek R1 Qwen 32B — reasoning" },
+  { value: "@cf/deepseek-ai/deepseek-r1-distill-llama-8b", label: "DeepSeek R1 Llama 8B — reasoning szybki" },
+  { value: "@cf/qwen/qwen1.5-14b-chat-awq", label: "Qwen 1.5 14B — Alibaba" },
+  { value: "@cf/qwen/qwen1.5-7b-chat-awq", label: "Qwen 1.5 7B — Alibaba · szybki" },
+  { value: "@cf/google/gemma-7b-it", label: "Gemma 7B — Google" },
+  { value: "@cf/mistral/mistral-7b-instruct-v0.2", label: "Mistral 7B — Mistral" },
+  { value: "@cf/microsoft/phi-2", label: "Phi-2 — Microsoft · kompaktowy" },
 ];
 
 function AISettingsForm({ aiSettings, status }: { aiSettings: AISettings; status: PlatformStatus }) {
