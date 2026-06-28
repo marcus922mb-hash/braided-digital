@@ -750,8 +750,152 @@ button, input, textarea, select { font: inherit; }
 .tpl-use-button { border: 1px solid #c9a96e; background: #c9a96e; color: #16130e; }
 .tpl-use-button:hover { background: #dbc28f; }
 .tpl-use-button:disabled { cursor: wait; opacity: .7; }
-.tpl-ai-button { border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.025); color: rgba(232,232,232,.4); cursor: not-allowed; }
-.tpl-ai-button span { margin-left: auto; padding: .15rem .3rem; border-radius: 2px; background: rgba(201,169,110,.1); color: rgba(201,169,110,.55); font-size: .45rem; text-transform: uppercase; }
+.tpl-ai-button { border: 1px solid rgba(201,169,110,.4); background: rgba(201,169,110,.07); color: rgba(201,169,110,.9); }
+.tpl-ai-button:hover:not(:disabled) { background: rgba(201,169,110,.14); border-color: rgba(201,169,110,.65); }
+.tpl-ai-button:disabled { opacity: .5; cursor: wait; }
+
+/* ── Generate-from-Template modal ──────────────────────────── */
+.tpl-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.72);
+  backdrop-filter: blur(6px);
+  padding: 1.5rem;
+}
+.tpl-modal {
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #1a1710;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  box-shadow: 0 32px 80px rgba(0,0,0,.6);
+}
+.tpl-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.75rem 1.75rem 1.25rem;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.tpl-modal-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  color: #c9a96e;
+  font-size: .52rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: .5rem;
+}
+.tpl-modal-title { margin: 0; font-size: 1.35rem; font-weight: 600; color: #ede8e0; }
+.tpl-modal-sub { margin: .4rem 0 0; font-size: .62rem; color: rgba(180,175,165,.6); }
+.tpl-modal-close {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: transparent;
+  color: rgba(200,196,188,.5);
+  cursor: pointer;
+}
+.tpl-modal-close:hover { background: rgba(255,255,255,.05); color: #ede8e0; }
+.tpl-modal-form { padding: 1.5rem 1.75rem 1.75rem; display: flex; flex-direction: column; gap: 1rem; }
+.tpl-modal-field { display: flex; flex-direction: column; gap: .35rem; }
+.tpl-modal-field label { font-size: .6rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: rgba(200,196,188,.55); }
+.tpl-modal-field input,
+.tpl-modal-field textarea,
+.tpl-modal-field select {
+  padding: .65rem .85rem;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 5px;
+  color: #ede8e0;
+  font-size: .68rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .15s;
+}
+.tpl-modal-field input:focus,
+.tpl-modal-field textarea:focus,
+.tpl-modal-field select:focus { border-color: rgba(201,169,110,.5); }
+.tpl-modal-field input:disabled,
+.tpl-modal-field textarea:disabled,
+.tpl-modal-field select:disabled { opacity: .5; }
+.tpl-modal-field select option { background: #1a1710; }
+.tpl-modal-field textarea { resize: vertical; min-height: 5rem; }
+.tpl-modal-hint { font-size: .57rem; color: rgba(180,175,165,.4); }
+.tpl-modal-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.tpl-modal-progress { display: flex; flex-direction: column; gap: .6rem; }
+.tpl-modal-progress span { font-size: .6rem; color: rgba(201,169,110,.75); text-align: center; }
+.tpl-modal-progress-bar {
+  height: 3px;
+  background: rgba(201,169,110,.1);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.tpl-modal-progress-fill {
+  height: 100%;
+  width: 40%;
+  background: #c9a96e;
+  border-radius: 99px;
+  animation: tpl-progress-indeterminate 1.4s ease-in-out infinite;
+}
+@keyframes tpl-progress-indeterminate {
+  0% { transform: translateX(-100%); width: 50%; }
+  50% { width: 70%; }
+  100% { transform: translateX(250%); width: 50%; }
+}
+.tpl-modal-footer {
+  display: flex;
+  gap: .6rem;
+  padding-top: .5rem;
+  border-top: 1px solid rgba(255,255,255,.06);
+  margin-top: .25rem;
+}
+.tpl-modal-cancel {
+  flex: 1;
+  padding: .75rem;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 5px;
+  background: transparent;
+  color: rgba(200,196,188,.5);
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  cursor: pointer;
+}
+.tpl-modal-cancel:hover:not(:disabled) { background: rgba(255,255,255,.04); color: #ede8e0; }
+.tpl-modal-cancel:disabled { opacity: .4; }
+.tpl-modal-submit {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .75rem;
+  border: 1px solid #c9a96e;
+  border-radius: 5px;
+  background: #c9a96e;
+  color: #16130e;
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  cursor: pointer;
+}
+.tpl-modal-submit:hover:not(:disabled) { background: #dbc28f; }
+.tpl-modal-submit:disabled { opacity: .6; cursor: wait; }
 .tpl-action-error { margin: .25rem 0 0; color: #e88989; font-size: .61rem; line-height: 1.5; }
 .tpl-detail-preview { overflow: hidden; border: 1px solid rgba(255,255,255,.09); border-radius: 8px; box-shadow: 0 30px 80px rgba(0,0,0,.38); }
 .tpl-detail-specs {
@@ -2855,6 +2999,46 @@ body:has(.login-shell) {
 .ai-generator-form {
   display: grid;
   gap: .85rem;
+}
+
+/* ── Generation progress steps ─────────────────────────────── */
+.ai-progress {
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  padding: .9rem 1rem;
+  background: rgba(201,169,110,.04);
+  border: 1px solid rgba(201,169,110,.12);
+  border-radius: 6px;
+}
+.ai-progress-header {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  color: #c9a96e;
+  font-size: .6rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.ai-progress-steps {
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+}
+.ai-progress-step {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  font-size: .63rem;
+  color: rgba(200,196,188,.25);
+  transition: color .3s, opacity .3s;
+}
+.ai-progress-step.is-active {
+  color: rgba(201,169,110,.85);
+}
+.ai-progress-step.is-done {
+  color: rgba(120,200,130,.7);
 }
 .ai-preview {
   display: grid;

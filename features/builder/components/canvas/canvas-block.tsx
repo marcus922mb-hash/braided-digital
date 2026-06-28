@@ -36,6 +36,7 @@ const TYPE_ICONS: Record<string, React.ElementType> = {
   tiktok: Video,
   "woo-products": ShoppingBag,
   blog: Newspaper,
+  linkinbio: Users,
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -55,6 +56,7 @@ const COMPONENT_CATEGORIES: Record<string, string> = {
   footer: "layout", video: "media", map: "media",
   newsletter: "social", instagram: "social", tiktok: "social",
   "woo-products": "commerce", blog: "commerce",
+  linkinbio: "social",
 };
 
 function BlockPreview({ component }: { component: BuilderComponent }) {
@@ -367,6 +369,22 @@ function BlockPreview({ component }: { component: BuilderComponent }) {
           <div className="bldr-preview-placeholder-badge">Placeholder — wymaga WordPress</div>
         </div>
       );
+
+    case "linkinbio": {
+      const links = (p.links as Array<{ label: string; url: string }> | undefined) ?? [];
+      return (
+        <div className="bldr-preview bldr-preview--linkinbio">
+          <div className="bldr-preview-lib-avatar" />
+          <div className="bldr-preview-lib-name">{(p.name as string) || "Imię / Marka"}</div>
+          <div className="bldr-preview-lib-bio">{(p.bio as string) || "Krótki opis..."}</div>
+          <div className="bldr-preview-lib-links">
+            {(links.length ? links : [{ label: "Link 1" }, { label: "Link 2" }, { label: "Link 3" }]).slice(0, 4).map((l, i) => (
+              <div key={i} className="bldr-preview-lib-link">{l.label}</div>
+            ))}
+          </div>
+        </div>
+      );
+    }
 
     default:
       return <div className="bldr-preview-default">{component.label}</div>;

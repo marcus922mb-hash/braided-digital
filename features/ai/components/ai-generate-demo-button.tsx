@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { Sparkles } from "lucide-react";
+import { useEffect, useState, useTransition } from "react";
+import { CheckCircle2, Circle, Loader2, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   generateDemoContentAction,
@@ -14,6 +14,53 @@ import type { AIProvider, GenerateDemoContentOutput } from "@/lib/ai/types";
 type Props = {
   demoId: string;
 };
+
+const STEPS = [
+  { id: "analyze", label: "Analizuję opis działalności i branżę...", delay: 0 },
+  { id: "brief", label: "Tworzę brief copywriterski...", delay: 3000 },
+  { id: "hero", label: "Piszę treści hero i CTA...", delay: 7000 },
+  { id: "sections", label: "Generuję sekcje: oferta, opinie, FAQ...", delay: 13000 },
+  { id: "seo", label: "Optymalizuję pod SEO i finalizuję...", delay: 19000 },
+];
+
+function GenerationProgress({ isGenerating }: { isGenerating: boolean }) {
+  const [activeStep, setActiveStep] = useState(-1);
+
+  useEffect(() => {
+    if (!isGenerating) {
+      setActiveStep(-1);
+      return;
+    }
+    setActiveStep(0);
+    const timers = STEPS.slice(1).map((step, i) =>
+      setTimeout(() => setActiveStep(i + 1), step.delay)
+    );
+    return () => timers.forEach(clearTimeout);
+  }, [isGenerating]);
+
+  if (!isGenerating) return null;
+
+  return (
+    <div className="ai-progress">
+      <div className="ai-progress-header">
+        <Loader2 size={14} className="bldr-spin" />
+        <span>AI pracuje nad treściami</span>
+      </div>
+      <div className="ai-progress-steps">
+        {STEPS.map((step, i) => {
+          const isDone = i < activeStep;
+          const isActive = i === activeStep;
+          return (
+            <div key={step.id} className={`ai-progress-step${isDone ? " is-done" : isActive ? " is-active" : ""}`}>
+              {isDone ? <CheckCircle2 size={13} /> : isActive ? <Loader2 size={13} className="bldr-spin" /> : <Circle size={13} />}
+              <span>{step.label}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 export function AIGenerateDemoButton({ demoId }: Props) {
   const router = useRouter();
@@ -100,6 +147,7 @@ export function AIGenerateDemoButton({ demoId }: Props) {
             value={businessDescription}
             onChange={(event) => setBusinessDescription(event.target.value)}
             placeholder="Co robi klient, czym się wyróżnia, jakie produkty/usługi oferuje?"
+            disabled={isGenerating}
           />
         </div>
 
@@ -113,6 +161,7 @@ export function AIGenerateDemoButton({ demoId }: Props) {
               value={services}
               onChange={(event) => setServices(event.target.value)}
               placeholder="np. kolekcje autorskie, zamówienia indywidualne, pakowanie prezentowe"
+              disabled={isGenerating}
             />
           </div>
           <div className="crm-field">
@@ -124,6 +173,7 @@ export function AIGenerateDemoButton({ demoId }: Props) {
               value={targetAudience}
               onChange={(event) => setTargetAudience(event.target.value)}
               placeholder="np. kobiety szukające subtelnej biżuterii handmade"
+              disabled={isGenerating}
             />
           </div>
         </div>
@@ -135,10 +185,13 @@ export function AIGenerateDemoButton({ demoId }: Props) {
             className="crm-input"
             value={tone}
             onChange={(event) => setTone(event.target.value)}
+            disabled={isGenerating}
           />
         </div>
 
         {error && <div className="crm-form-alert">{error}</div>}
+
+        <GenerationProgress isGenerating={isGenerating} />
 
         <button type="button" className="crm-btn crm-btn--primary" onClick={generate} disabled={isGenerating || isSaving}>
           <Sparkles size={14} />

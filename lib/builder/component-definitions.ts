@@ -387,6 +387,40 @@ export const COMPONENT_DEFINITIONS: ComponentDefinition[] = [
     },
     defaultStyles: { paddingTop: "5rem", paddingBottom: "5rem" },
   },
+  {
+    type: "linkinbio",
+    label: "Link in Bio",
+    category: "social",
+    description: "Strona profilu z listą linków (Linktree style)",
+    defaultProps: {
+      name: "Twoje Imię / Marka",
+      bio: "Krótki opis — kim jesteś i czym się zajmujesz.",
+      avatarUrl: "",
+      avatarPlaceholder: true,
+      backgroundStyle: "gradient",
+      backgroundColor: "#1a1a2e",
+      accentColor: "#b08d57",
+      links: [
+        { label: "Moja strona", url: "https://example.com", icon: "Globe" },
+        { label: "Instagram", url: "https://instagram.com", icon: "Instagram" },
+        { label: "Sklep online", url: "https://example.com/sklep", icon: "ShoppingBag" },
+        { label: "Napisz do mnie", url: "mailto:hello@example.com", icon: "Mail" },
+      ],
+      socials: [
+        { platform: "instagram", url: "" },
+        { platform: "tiktok", url: "" },
+        { platform: "facebook", url: "" },
+      ],
+    },
+    defaultStyles: {
+      background: "#1a1a2e",
+      color: "#ffffff",
+      paddingTop: "3rem",
+      paddingBottom: "3rem",
+      minHeight: "100vh",
+      textAlign: "center",
+    },
+  },
 ];
 
 export const COMPONENT_CATEGORIES = [

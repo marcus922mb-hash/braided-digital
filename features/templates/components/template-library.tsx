@@ -19,9 +19,22 @@ import { TemplateVisual } from "./template-visual";
 
 const ALL = "Wszystkie";
 
+const GROUP_LABELS: Record<string, string> = {
+  "handmade": "Rękodzieło",
+  "beauty": "Uroda",
+  "restaurant": "Restauracja",
+  "services": "Usługi",
+  "medical": "Medycyna",
+  "creative": "Creative",
+  "ecommerce": "E-commerce",
+  "one-page": "One Page",
+  "link-in-bio": "Link in Bio",
+};
+
 export function TemplateLibrary({ templates }: { templates: TemplateDefinition[] }) {
   const [query, setQuery] = useState("");
   const [industry, setIndustry] = useState(ALL);
+  const [group, setGroup] = useState(ALL);
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -39,6 +52,11 @@ export function TemplateLibrary({ templates }: { templates: TemplateDefinition[]
     [templates]
   );
 
+  const groups = useMemo(
+    () => [ALL, ...Array.from(new Set(templates.map((template) => template.group)))],
+    [templates]
+  );
+
   const visibleTemplates = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase("pl");
     return templates.filter((template) => {
@@ -52,10 +70,11 @@ export function TemplateLibrary({ templates }: { templates: TemplateDefinition[]
       return (
         (!normalizedQuery || searchable.includes(normalizedQuery)) &&
         (industry === ALL || template.industry === industry) &&
+        (group === ALL || template.group === group) &&
         (!favoritesOnly || favorites.includes(template.id))
       );
     });
-  }, [favorites, favoritesOnly, industry, query, templates]);
+  }, [favorites, favoritesOnly, group, industry, query, templates]);
 
   function toggleFavorite(id: string) {
     setFavorites((current) => {
@@ -70,10 +89,11 @@ export function TemplateLibrary({ templates }: { templates: TemplateDefinition[]
   function resetFilters() {
     setQuery("");
     setIndustry(ALL);
+    setGroup(ALL);
     setFavoritesOnly(false);
   }
 
-  const hasFilters = query || industry !== ALL || favoritesOnly;
+  const hasFilters = query || industry !== ALL || group !== ALL || favoritesOnly;
 
   return (
     <div className="tpl-library">
@@ -134,6 +154,20 @@ export function TemplateLibrary({ templates }: { templates: TemplateDefinition[]
             exit={{ opacity: 0, height: 0 }}
           >
             <div className="tpl-filter-panel-inner">
+              <span>Typ strony</span>
+              <div className="tpl-industry-list">
+                {groups.map((item) => (
+                  <button
+                    type="button"
+                    key={item}
+                    className={group === item ? "is-active" : ""}
+                    onClick={() => setGroup(item)}
+                  >
+                    {group === item && <Check size={10} />}
+                    {item === ALL ? "Wszystkie typy" : (GROUP_LABELS[item] ?? item)}
+                  </button>
+                ))}
+              </div>
               <span>Branża</span>
               <div className="tpl-industry-list">
                 {industries.map((item) => (

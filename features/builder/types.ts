@@ -3,7 +3,8 @@ export type ComponentType =
   | "gallery" | "testimonials" | "faq" | "pricing" | "cta"
   | "statistics" | "team" | "timeline" | "steps" | "contact"
   | "footer" | "video" | "map" | "newsletter" | "instagram"
-  | "tiktok" | "woo-products" | "blog";
+  | "tiktok" | "woo-products" | "blog"
+  | "linkinbio";
 
 export type ComponentCategory =
   | "layout" | "content" | "media" | "commerce" | "social";

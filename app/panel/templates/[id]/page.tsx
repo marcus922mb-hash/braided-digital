@@ -40,7 +40,7 @@ export default async function TemplateDetailsPage({ params }: Props) {
             <span><Star size={10} fill="currentColor" /> {template.rating.toFixed(1)}</span>
           </div>
         </div>
-        <UseTemplateButton templateId={template.id} />
+        <UseTemplateButton templateId={template.id} templateName={template.name} />
       </div>
 
       <div className="tpl-detail-preview">

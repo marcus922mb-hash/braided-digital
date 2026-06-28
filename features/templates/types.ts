@@ -8,6 +8,8 @@ export const TEMPLATE_GROUPS = [
   "medical",
   "creative",
   "ecommerce",
+  "one-page",
+  "link-in-bio",
 ] as const;
 
 export type TemplateGroup = (typeof TEMPLATE_GROUPS)[number];
