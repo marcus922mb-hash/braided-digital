@@ -1,16 +1,34 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import { defaultConfigs } from "@/lib/demo-configs";
 import { DemoContinuation, DemoTopbar, PackageDemo } from "@/components/package-demos";
 import { pricing } from "@/lib/data";
 import { canonical } from "@/lib/seo";
+import {
+  getPublicDemoBySlug,
+  isPastIsoDate,
+  trackPublicDemoView,
+} from "@/features/demos/queries/demo-queries";
+import { parseDemoContent } from "@/features/demos/types";
+import { HandmadeJewelryTemplate } from "@/features/demos/templates/handmade-jewelry-template";
 
 export function generateStaticParams() {
   return pricing.map((plan) => ({ slug: plan.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  await connection();
   const { slug } = await params;
+  const { data: demo } = await getPublicDemoBySlug(slug);
+  if (demo) {
+    const content = parseDemoContent(demo.content);
+    return {
+      title: content.seo.title || demo.title,
+      description: content.seo.description,
+      robots: { index: false, follow: false },
+    };
+  }
   const plan = pricing.find((item) => item.slug === slug);
   if (!plan) return {};
   return {
@@ -21,8 +39,34 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+function PublicDemoMessage({ message }: { message: string }) {
+  return (
+    <main className="demo-public-state">
+      <div>
+        <h1>{message}</h1>
+        <p>Skontaktuj się z MA Atelier Studio, jeśli link powinien być aktywny.</p>
+      </div>
+    </main>
+  );
+}
+
 export default async function DemoPage({ params }: { params: Promise<{ slug: string }> }) {
+  await connection();
   const { slug } = await params;
+  const { data: demo } = await getPublicDemoBySlug(slug);
+
+  if (demo) {
+    if (!demo.is_active || demo.status === "inactive") {
+      return <PublicDemoMessage message="To demo jest obecnie niedostępne." />;
+    }
+    if (demo.expires_at && isPastIsoDate(demo.expires_at)) {
+      return <PublicDemoMessage message="To demo wygasło." />;
+    }
+
+    await trackPublicDemoView(demo);
+    return <HandmadeJewelryTemplate demo={demo} />;
+  }
+
   const plan = pricing.find((item) => item.slug === slug);
   if (!plan) notFound();
   const config = defaultConfigs[slug] ?? defaultConfigs["cyfrowa-wizytowka"];

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toaster } from "sonner";
 import { canonical } from "@/lib/seo";
 import "./globals.css";
 
@@ -42,6 +43,17 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="pl" data-scroll-behavior="smooth">
       <body>
         {children}
+        <Toaster
+          position="top-right"
+          richColors
+          toastOptions={{
+            style: {
+              background: "#0c0c0c",
+              border: "1px solid rgba(255,255,255,.08)",
+              color: "rgba(232,232,232,.92)",
+            },
+          }}
+        />
       </body>
     </html>
   );

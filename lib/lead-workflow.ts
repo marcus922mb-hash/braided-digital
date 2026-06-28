@@ -12,6 +12,7 @@
 
 import type { LeadSubmission } from "./types";
 import { sendLeadNotification } from "./email";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function processLead(submission: LeadSubmission): Promise<void> {
   await Promise.allSettled([
@@ -39,24 +40,40 @@ async function confirmClient(submission: LeadSubmission): Promise<void> {
 }
 
 async function saveLead(submission: LeadSubmission): Promise<void> {
-  /**
-   * TODO: Replace with a real database write.
-   *
-   * Examples:
-   *   Neon (Postgres):  await db.insert(leads).values(submission)
-   *   Supabase:         await supabase.from("leads").insert(submission)
-   *   Vercel KV:        await kv.set(`lead:${submission.id}`, submission)
-   *
-   * Schema hint:
-   *   id TEXT PK, submitted_at TIMESTAMPTZ, project_type TEXT,
-   *   email TEXT, name TEXT, phone TEXT, min_price INT, max_price INT,
-   *   timeline TEXT, features TEXT[], description TEXT, raw_json JSONB
-   */
-  console.log("[Workflow] Lead saved (mock):", {
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("leads").insert({
     id: submission.id,
-    project: submission.estimate.projectTypeLabel,
-    price: `${submission.estimate.minPrice}–${submission.estimate.maxPrice} zł`,
-    contact: submission.formData.email || "—",
+    submitted_at: submission.submittedAt,
+    project_type: submission.formData.projectType,
+    project_type_label: submission.estimate.projectTypeLabel,
+    name: submission.formData.name || null,
+    email: submission.formData.email || null,
+    phone: submission.formData.phone || null,
+    min_price: submission.estimate.minPrice,
+    max_price: submission.estimate.maxPrice,
+    timeline: submission.formData.timeline,
+    budget: submission.formData.budget,
+    description: submission.formData.description || null,
+    form_data: submission.formData,
+    estimate: submission.estimate,
+  });
+
+  if (error) {
+    console.error("[Workflow] saveLead failed:", error);
+    return;
+  }
+
+  await supabase.from("activity_logs").insert({
+    entity_type: "client",
+    entity_id: null,
+    action: "lead_created",
+    description: `Nowy lead: ${submission.formData.name || submission.formData.email || submission.estimate.projectTypeLabel}`,
+    metadata: {
+      lead_id: submission.id,
+      project_type: submission.formData.projectType,
+      min_price: submission.estimate.minPrice,
+      max_price: submission.estimate.maxPrice,
+    },
   });
 }
 
