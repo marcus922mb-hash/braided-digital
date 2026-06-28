@@ -1,3 +1,7 @@
+import {
+  isModelUnavailableError,
+  markModelUnavailable,
+} from "@/lib/ai/cloudflare/model-health";
 import { AIProviderError } from "@/lib/ai/router/errors";
 import { readJsonResponse } from "@/lib/ai/router/http";
 import type {
@@ -16,7 +20,7 @@ type CloudflareResponse = {
     response?: string;
     usage?: { prompt_tokens?: number; completion_tokens?: number };
   };
-  errors?: Array<{ message?: string }>;
+  errors?: Array<{ message?: string; code?: number }>;
 };
 
 export const cloudflareProvider: AIProviderAdapter = {
@@ -40,54 +44,75 @@ export const cloudflareProvider: AIProviderAdapter = {
     const workerSecret = process.env.CLOUDFLARE_WORKERS_AI_SECRET;
     const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
     const apiToken = process.env.CLOUDFLARE_API_TOKEN;
+
     if ((!workerUrl || !workerSecret) && (!accountId || !apiToken)) {
       throw new Error("Brakuje konfiguracji Cloudflare Workers AI.");
     }
 
     const model = request.model.replace(/^\/+/, "");
-    const payload = {
-      model: request.model,
-      messages: cloudflareMessages(request),
-      temperature: request.temperature,
-      maxTokens: request.maxTokens,
-      responseFormat: request.responseFormat,
-    };
-    const endpoint = workerUrl && workerSecret
+    const useWorker = Boolean(workerUrl && workerSecret);
+
+    const endpoint = useWorker
       ? `${workerUrl}/v1/generate`
       : `https://api.cloudflare.com/client/v4/accounts/${encodeURIComponent(accountId!)}/ai/run/${model}`;
-    const response = await fetch(
-      endpoint,
-      {
-        method: "POST",
-        headers: requestHeaders(workerUrl && workerSecret ? workerSecret : apiToken!),
-        body: JSON.stringify(
-          workerUrl && workerSecret
-            ? payload
-            : {
-                messages: payload.messages,
-                temperature: payload.temperature,
-                max_tokens: payload.maxTokens,
-                ...(payload.responseFormat === "json"
-                  ? { response_format: { type: "json_object" } }
-                  : {}),
-              }
-        ),
-        signal: request.signal,
-      }
-    );
+
+    const payload = useWorker
+      ? {
+          model: request.model,
+          messages: cloudflareMessages(request),
+          temperature: request.temperature,
+          maxTokens: request.maxTokens,
+        }
+      : {
+          messages: cloudflareMessages(request),
+          temperature: request.temperature,
+          max_tokens: request.maxTokens,
+        };
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: requestHeaders(useWorker ? workerSecret! : apiToken!),
+      body: JSON.stringify(payload),
+      signal: request.signal,
+    });
+
     const result = await readJsonResponse<CloudflareResponse>(response);
-    const text = result.result?.response?.trim();
+
+    // Jeśli model jest wycofany lub niedostępny — oznacz i nie rób retry
+    if (!result.success || !result.result?.response) {
+      const errorMsg =
+        result.errors?.[0]?.message ??
+        `HTTP ${response.status}: Cloudflare Workers AI nie zwrócił treści.`;
+      const errorCode = result.errors?.[0]?.code;
+
+      if (
+        response.status === 410 ||
+        isModelUnavailableError(errorMsg, response.status) ||
+        (errorCode && [5007, 5028, 404].includes(errorCode))
+      ) {
+        markModelUnavailable(request.model, errorMsg);
+        throw new AIProviderError(
+          `Model ${request.model} jest wycofany lub niedostępny: ${errorMsg}`,
+          { retryable: false }
+        );
+      }
+
+      throw new AIProviderError(errorMsg, { retryable: false });
+    }
+
+    const text = result.result.response.trim();
     if (!text) {
       throw new AIProviderError(
-        result.errors?.[0]?.message || "Cloudflare Workers AI nie zwrócił treści."
+        "Cloudflare Workers AI zwrócił pustą odpowiedź.",
+        { retryable: false }
       );
     }
 
     return {
       text,
       usage: {
-        inputTokens: result.result?.usage?.prompt_tokens,
-        outputTokens: result.result?.usage?.completion_tokens,
+        inputTokens: result.result.usage?.prompt_tokens,
+        outputTokens: result.result.usage?.completion_tokens,
       },
     };
   },

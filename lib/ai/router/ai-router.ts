@@ -7,6 +7,7 @@ import {
   getAIErrorMessage,
   isRetryableError,
 } from "@/lib/ai/router/errors";
+import { isModelAvailable } from "@/lib/ai/cloudflare/model-health";
 import type {
   AIProvider,
   AIProviderAdapter,
@@ -59,9 +60,15 @@ export class AIRouter {
       seen.add(key);
       return true;
     });
-    const configured = dedupedCandidates.filter((candidate) =>
-      this.providers.get(candidate.provider)?.isConfigured()
-    );
+    const configured = dedupedCandidates.filter((candidate) => {
+      if (!this.providers.get(candidate.provider)?.isConfigured()) return false;
+      // Pomiń modele Cloudflare oznaczone jako niedostępne w health cache
+      if (candidate.provider === "cloudflare" && !isModelAvailable(candidate.model)) {
+        console.info(`[ai-router] Pomijam niedostępny model CF: ${candidate.model}`);
+        return false;
+      }
+      return true;
+    });
 
     if (!configured.length) {
       throw new AIRouterError(

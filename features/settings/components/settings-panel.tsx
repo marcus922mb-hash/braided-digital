@@ -271,12 +271,20 @@ const OPENROUTER_FREE_MODELS: Array<{ value: string; label: string; note: string
   { value: "liquid/lfm-2.5-1.2b-instruct:free", label: "LFM 1.2B", note: "Liquid · ultralekki" },
 ];
 
-// Modele przetestowane i działające na free planie Cloudflare (06-2026)
+// Aktywne modele Cloudflare Workers AI — rejestr 2026-06-28
 const CLOUDFLARE_MODELS: Array<{ value: string; label: string }> = [
-  { value: "@cf/meta/llama-3.2-3b-instruct", label: "Llama 3.2 3B — Meta · najszybszy" },
-  { value: "@cf/meta/llama-4-scout-17b-16e-instruct", label: "Llama 4 Scout 17B — Meta · szybki" },
-  { value: "@cf/qwen/qwen2.5-coder-32b-instruct", label: "Qwen 2.5 Coder 32B — Alibaba · precyzyjny" },
-  { value: "@cf/meta/llama-3.3-70b-instruct-fp8-fast", label: "Llama 3.3 70B FP8 — Meta · najlepsza jakość" },
+  { value: "@cf/qwen/qwen3-30b-a3b-fp8",                    label: "Qwen3 30B-A3B — jakość 30B w cenie 3B ★" },
+  { value: "@cf/meta/llama-3.2-3b-instruct",                label: "Llama 3.2 3B — Meta · szybki i tani" },
+  { value: "@cf/zai-org/glm-4.7-flash",                     label: "GLM 4.7 Flash — 131k kontekst" },
+  { value: "@cf/google/gemma-4-26b-a4b-it",                 label: "Gemma 4 26B — Google · vision" },
+  { value: "@cf/meta/llama-4-scout-17b-16e-instruct",       label: "Llama 4 Scout 17B — Meta · multimodalny" },
+  { value: "@cf/meta/llama-3.3-70b-instruct-fp8-fast",     label: "Llama 3.3 70B FP8 — Meta · najwyższa jakość" },
+  { value: "@cf/meta/llama-3.1-8b-instruct-fp8",           label: "Llama 3.1 8B FP8 — Meta · kod" },
+  { value: "@cf/qwen/qwen2.5-coder-32b-instruct",          label: "Qwen 2.5 Coder 32B — kod · precyzyjny" },
+  { value: "@cf/openai/gpt-oss-20b",                        label: "GPT OSS 20B — OpenAI · rozumowanie" },
+  { value: "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b", label: "DeepSeek R1 Qwen 32B — rozumowanie" },
+  { value: "@cf/ibm-granite/granite-4.0-h-micro",          label: "Granite 4.0 Micro — IBM · najtańszy" },
+  { value: "@cf/meta/llama-3.2-1b-instruct",               label: "Llama 3.2 1B — Meta · ultramały" },
 ];
 
 function AISettingsForm({ aiSettings, status }: { aiSettings: AISettings; status: PlatformStatus }) {
