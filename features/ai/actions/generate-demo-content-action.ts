@@ -306,6 +306,7 @@ export async function saveGeneratedDemoContentAction(input: {
       .update({
         content: parsed.data.content as unknown as Json,
         status: statusChanged ? "generated" : demo.status,
+        is_active: true,
       })
       .eq("id", parsed.data.demoId);
 
