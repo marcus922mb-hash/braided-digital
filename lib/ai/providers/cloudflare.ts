@@ -17,7 +17,8 @@ import {
 type CloudflareResponse = {
   success?: boolean;
   result?: {
-    response?: string;
+    // Cloudflare AI zwraca response jako string ALBO obiekt gdy model wygeneruje poprawny JSON
+    response?: string | Record<string, unknown>;
     usage?: { prompt_tokens?: number; completion_tokens?: number };
   };
   errors?: Array<{ message?: string; code?: number }>;
@@ -100,7 +101,9 @@ export const cloudflareProvider: AIProviderAdapter = {
       throw new AIProviderError(errorMsg, { retryable: false });
     }
 
-    const text = result.result.response.trim();
+    // CF API zwraca response jako string lub jako już sparsowany obiekt JSON
+    const raw = result.result.response;
+    const text = (typeof raw === "string" ? raw : JSON.stringify(raw)).trim();
     if (!text) {
       throw new AIProviderError(
         "Cloudflare Workers AI zwrócił pustą odpowiedź.",
