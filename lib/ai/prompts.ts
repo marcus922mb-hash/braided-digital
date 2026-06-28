@@ -1,25 +1,17 @@
 import { DEMO_INDUSTRY_LABELS, DEMO_STYLE_LABELS, parseDemoContent } from "@/features/demos/types";
 import type { GenerateDemoContentInput } from "@/lib/ai/types";
 
-export const DEMO_CONTENT_SYSTEM_PROMPT = `Jesteś strategiem marki, copywriterem UX i architektem informacji tworzącym kompletne, profesjonalne strony internetowe dla małych firm.
+export const DEMO_CONTENT_SYSTEM_PROMPT = `Jesteś doświadczonym copywriterem i architektem treści dla małych firm polskich.
 
-Tworzysz jeden spójny dokument strony: strukturę, nagłówki, treści, CTA, briefy zdjęć i SEO.
-
-Pisz po polsku.
-
-Styl ma być profesjonalny, konkretny i sprzedażowy, ale nienachalny.
-
-Nie wymyślaj nieprawdziwych danych kontaktowych.
-
-Nie obiecuj efektów, których nie da się zagwarantować.
-
-Nie pisz ogólników typu „najlepsza jakość na rynku”.
-
-Dopasuj język do branży klienta.
-
-Demo ma wyglądać jak prawdziwa strona klienta.
-
-Zwróć wyłącznie poprawny JSON zgodny dokładnie ze wskazanym kontraktem.`;
+ZASADY ABSOLUTNE:
+1. Odpowiedz TYLKO surowym JSON — bez markdown, bez \`\`\`json, bez żadnego tekstu przed ani po.
+2. Pisz WYŁĄCZNIE po polsku.
+3. Nie wymyślaj adresów email, telefonów ani adresów fizycznych — zostaw pola null.
+4. Nie używaj ogólników: „najwyższa jakość”, „najlepsi na rynku”, „kompleksowe usługi”.
+5. Treści mają brzmieć jak gotowa strona prawdziwej firmy — konkretnie, sprzedażowo, ciepło.
+6. Dopasuj język i ton do branży klienta.
+7. Uzupełnij KAŻDE pole w strukturze JSON — nie pomijaj żadnego.
+8. Pole image.url zostaw puste “”, description napisz jako zwięzłe angielskie zapytanie fotograficzne (np. “florist arranging colorful bouquet in bright studio”).`;
 
 function labelFromMap<T extends string>(value: string | null, map: Record<T, string>) {
   if (!value) return null;
@@ -143,13 +135,16 @@ Wymagana struktura odpowiedzi (nie pomijaj żadnego pola):
   ]
 }
 
-Zasady:
-- Zwróć tylko JSON, bez markdown i bez komentarzy.
-- Nie twórz adresu e-mail, numeru telefonu ani fizycznego adresu.
-- Opinie mają brzmieć jak neutralne przykłady demo, bez nazwisk.
-- Pola image.url pozostaw puste, provider ustaw na "placeholder", a description napisz jako precyzyjne zapytanie fotograficzne dopasowane do branży.
-- Używaj wyłącznie kotwic do sekcji obecnych w structure.
-- Wygeneruj 3-6 usług, 3-4 wyróżniki, 3-4 kroki procesu, 3-6 zdjęć galerii, 2-3 opinie i 4-6 pytań FAQ.
-- Tytuł SEO powinien mieć około 50-60 znaków, a opis około 140-160 znaków.
-- Teksty mają pasować do małej firmy i wyglądać jak gotowe do pokazania klientowi.`;
+INSTRUKCJE KOŃCOWE:
+- Zwróć TYLKO JSON, bez żadnego tekstu, bez \`\`\`, bez komentarzy.
+- Nie twórz adresu e-mail, numeru telefonu ani fizycznego adresu — ustaw na null.
+- Opinie: 2-3 przykłady, bez prawdziwych nazwisk, brzmią wiarygodnie.
+- Pola image.url: zostaw "", provider: "placeholder", description: angielskie zapytanie fotograficzne.
+- Używaj href="#id" tylko do sekcji z listy structure.
+- Liczebność: 3-5 usług, 3-4 wyróżniki, 3 kroki procesu, 4-6 zdjęć galerii, 2-3 opinie, 4-6 FAQ.
+- SEO title: 50-60 znaków. SEO description: 140-160 znaków.
+- Każde pole JSON MUSI być uzupełnione — żadnych pustych stringów w kluczowych sekcjach.
+- Treść dopasowana do konkretnej firmy, nie generyczna.
+
+Odpowiedź musi być poprawnym JSON zaczynającym się od { i kończącym na }.`;
 }

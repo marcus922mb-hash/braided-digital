@@ -29,8 +29,9 @@ export function normalizeWooCommerceCategory(raw: Record<string, unknown>): WooC
 }
 
 export function normalizeWooCommerceOrder(raw: Record<string, unknown>): WooCommerceOrder {
-  const firstName = typeof raw?.billing?.first_name === "string" ? raw.billing.first_name : "";
-  const lastName = typeof raw?.billing?.last_name === "string" ? raw.billing.last_name : "";
+  const billing = raw.billing as Record<string, unknown> | undefined;
+  const firstName = typeof billing?.first_name === "string" ? billing.first_name : "";
+  const lastName = typeof billing?.last_name === "string" ? billing.last_name : "";
   const customerName = [firstName, lastName].filter(Boolean).join(" ") || "Klient";
 
   return {
