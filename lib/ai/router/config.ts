@@ -5,7 +5,7 @@ import type {
 } from "@/lib/ai/router/types";
 
 const DEFAULT_MODELS: Record<AIProvider, string[]> = {
-  openrouter: ["google/gemini-2.0-flash-exp:free"],
+  openrouter: ["meta-llama/llama-3.3-70b-instruct:free"],
   cloudflare: ["@cf/meta/llama-3.1-8b-instruct"],
   gemini: ["gemini-1.5-flash"],
   groq: ["llama-3.1-8b-instant"],

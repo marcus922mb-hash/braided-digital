@@ -257,11 +257,18 @@ function SecurityForm({ profile }: { profile: PanelUserProfile }) {
 }
 
 const OPENROUTER_FREE_MODELS: Array<{ value: string; label: string; note: string }> = [
-  { value: "google/gemini-2.0-flash-exp:free", label: "Gemini 2.0 Flash Exp", note: "Google · szybki · bardzo dobry" },
-  { value: "deepseek/deepseek-chat-v3-0324:free", label: "DeepSeek Chat V3", note: "DeepSeek · najlepsza jakość" },
-  { value: "meta-llama/llama-3.3-70b-instruct:free", label: "Llama 3.3 70B", note: "Meta · duży model" },
-  { value: "microsoft/phi-4:free", label: "Phi-4", note: "Microsoft · kompaktowy" },
-  { value: "meta-llama/llama-3.1-8b-instruct:free", label: "Llama 3.1 8B", note: "Meta · bardzo szybki" },
+  { value: "meta-llama/llama-3.3-70b-instruct:free", label: "Llama 3.3 70B", note: "Meta · duży · domyślny" },
+  { value: "google/gemma-4-31b-it:free", label: "Gemma 4 31B", note: "Google · długi kontekst" },
+  { value: "qwen/qwen3-next-80b-a3b-instruct:free", label: "Qwen3 80B", note: "Alibaba · mocny model" },
+  { value: "openai/gpt-oss-120b:free", label: "GPT OSS 120B", note: "OpenAI · open source" },
+  { value: "openai/gpt-oss-20b:free", label: "GPT OSS 20B", note: "OpenAI · szybszy" },
+  { value: "nousresearch/hermes-3-llama-3.1-405b:free", label: "Hermes 3 405B", note: "Nous · największy" },
+  { value: "nvidia/nemotron-3-super-120b-a12b:free", label: "Nemotron Super 120B", note: "NVIDIA" },
+  { value: "nvidia/nemotron-3-ultra-550b-a55b:free", label: "Nemotron Ultra 550B", note: "NVIDIA · ogromny" },
+  { value: "google/gemma-4-26b-a4b-it:free", label: "Gemma 4 26B", note: "Google · kompaktowy" },
+  { value: "nvidia/nemotron-3-nano-30b-a3b:free", label: "Nemotron Nano 30B", note: "NVIDIA · szybki" },
+  { value: "meta-llama/llama-3.2-3b-instruct:free", label: "Llama 3.2 3B", note: "Meta · najszybszy" },
+  { value: "liquid/lfm-2.5-1.2b-instruct:free", label: "LFM 1.2B", note: "Liquid · ultralekki" },
 ];
 
 const CLOUDFLARE_MODELS: Array<{ value: string; label: string }> = [
