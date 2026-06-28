@@ -65,7 +65,6 @@ export async function generateDemoContent(
         { role: "user", content: buildDemoContentPrompt(input) },
       ],
       temperature: 0.55,
-      responseFormat: "json",
       validateResponse: (text) => {
         parseGeneratedDemoContent(text);
       },

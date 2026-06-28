@@ -151,7 +151,6 @@ export async function generateFromTemplateAction(
         { role: "user", content: buildPrompt(template, input) },
       ],
       temperature: 0.7,
-      responseFormat: "json",
     });
 
     try {

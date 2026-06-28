@@ -13,7 +13,7 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { TemplateDefinition } from "@/features/templates/types";
 import { TemplateVisual } from "./template-visual";
 
@@ -36,16 +36,11 @@ export function TemplateLibrary({ templates }: { templates: TemplateDefinition[]
   const [industry, setIndustry] = useState(ALL);
   const [group, setGroup] = useState(ALL);
   const [favoritesOnly, setFavoritesOnly] = useState(false);
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    try { return JSON.parse(localStorage.getItem("ma-template-favorites") ?? "[]") as string[]; }
+    catch { return []; }
+  });
   const [filtersOpen, setFiltersOpen] = useState(false);
-
-  useEffect(() => {
-    try {
-      setFavorites(JSON.parse(localStorage.getItem("ma-template-favorites") ?? "[]"));
-    } catch {
-      setFavorites([]);
-    }
-  }, []);
 
   const industries = useMemo(
     () => [ALL, ...Array.from(new Set(templates.map((template) => template.industry)))],

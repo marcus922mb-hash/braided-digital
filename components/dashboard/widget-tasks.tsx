@@ -20,14 +20,10 @@ function loadTasks(): Task[] {
 }
 
 export function WidgetTasks() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(loadTasks);
   const [newLabel, setNewLabel] = useState("");
   const [adding, setAdding] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    setTasks(loadTasks());
-  }, []);
 
   function save(next: Task[]) {
     setTasks(next);

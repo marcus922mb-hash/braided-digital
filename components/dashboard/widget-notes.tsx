@@ -1,19 +1,15 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { FileText } from "lucide-react";
 
 const STORAGE_KEY = "panel_notes";
 
 export function WidgetNotes() {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(() => {
+    try { return localStorage.getItem(STORAGE_KEY) ?? ""; } catch { return ""; }
+  });
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    try {
-      setValue(localStorage.getItem(STORAGE_KEY) ?? "");
-    } catch {}
-  }, []);
 
   function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     const next = e.target.value;

@@ -28,12 +28,11 @@ function GenerationProgress({ isGenerating }: { isGenerating: boolean }) {
 
   useEffect(() => {
     if (!isGenerating) {
-      setActiveStep(-1);
-      return;
+      const reset = setTimeout(() => setActiveStep(-1), 0);
+      return () => clearTimeout(reset);
     }
-    setActiveStep(0);
-    const timers = STEPS.slice(1).map((step, i) =>
-      setTimeout(() => setActiveStep(i + 1), step.delay)
+    const timers = STEPS.map((step, i) =>
+      setTimeout(() => setActiveStep(i), step.delay)
     );
     return () => timers.forEach(clearTimeout);
   }, [isGenerating]);
