@@ -1,7 +1,8 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useEffect, useState, useTransition } from "react";
-import { CheckCircle2, Circle, Loader2, Sparkles } from "lucide-react";
+import { CheckCircle2, Circle, Image, Loader2, Mail, MessageSquareQuote, Sparkles, Star, Text, Type, Users, Zap } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   generateDemoContentAction,
@@ -15,12 +16,15 @@ type Props = {
   demoId: string;
 };
 
-const STEPS = [
-  { id: "analyze", label: "Analizuję opis działalności i branżę...", delay: 0 },
-  { id: "brief", label: "Tworzę brief copywriterski...", delay: 3000 },
-  { id: "hero", label: "Piszę treści hero i CTA...", delay: 7000 },
-  { id: "sections", label: "Generuję sekcje: oferta, opinie, FAQ...", delay: 13000 },
-  { id: "seo", label: "Optymalizuję pod SEO i finalizuję...", delay: 19000 },
+const STEPS: { id: string; label: string; delay: number; icon: ReactNode }[] = [
+  { id: "analyze",      icon: <Zap size={12} />,              label: "Analizuję branżę, firmę i usługi...",        delay: 0 },
+  { id: "hero",         icon: <Type size={12} />,             label: "Generuję sekcję Hero i nagłówki strony...",  delay: 6000 },
+  { id: "about",        icon: <Users size={12} />,            label: "Piszę sekcję O nas...",                      delay: 16000 },
+  { id: "services",     icon: <Text size={12} />,             label: "Tworzę opisy usług i ofertę...",             delay: 27000 },
+  { id: "testimonials", icon: <MessageSquareQuote size={12}/>, label: "Generuję opinie klientów i FAQ...",          delay: 40000 },
+  { id: "contact",      icon: <Mail size={12} />,             label: "Przygotowuję kontakt i meta SEO...",         delay: 54000 },
+  { id: "images",       icon: <Image size={12} />,            label: "Dobieram zdjęcia z Pexels...",               delay: 68000 },
+  { id: "finalize",     icon: <Star size={12} />,             label: "Finalizuję i sprawdzam jakość treści...",    delay: 76000 },
 ];
 
 function GenerationProgress({ isGenerating }: { isGenerating: boolean }) {
@@ -51,7 +55,10 @@ function GenerationProgress({ isGenerating }: { isGenerating: boolean }) {
           const isActive = i === activeStep;
           return (
             <div key={step.id} className={`ai-progress-step${isDone ? " is-done" : isActive ? " is-active" : ""}`}>
-              {isDone ? <CheckCircle2 size={13} /> : isActive ? <Loader2 size={13} className="bldr-spin" /> : <Circle size={13} />}
+              <span className="ai-progress-step-icon">
+                {isDone ? <CheckCircle2 size={12} /> : isActive ? <Loader2 size={12} className="bldr-spin" /> : <Circle size={12} />}
+              </span>
+              <span className="ai-progress-step-section">{step.icon}</span>
               <span>{step.label}</span>
             </div>
           );

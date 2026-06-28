@@ -5,7 +5,7 @@ import type {
   WooCommerceStoreInfo,
 } from "@/lib/woocommerce/types";
 
-export function normalizeWooCommerceProduct(raw: any): WooCommerceProduct {
+export function normalizeWooCommerceProduct(raw: Record<string, unknown>): WooCommerceProduct {
   return {
     id: Number(raw?.id ?? 0),
     name: typeof raw?.name === "string" ? raw.name : "Produkt",
@@ -19,7 +19,7 @@ export function normalizeWooCommerceProduct(raw: any): WooCommerceProduct {
   };
 }
 
-export function normalizeWooCommerceCategory(raw: any): WooCommerceCategory {
+export function normalizeWooCommerceCategory(raw: Record<string, unknown>): WooCommerceCategory {
   return {
     id: Number(raw?.id ?? 0),
     name: typeof raw?.name === "string" ? raw.name : "Kategoria",
@@ -28,7 +28,7 @@ export function normalizeWooCommerceCategory(raw: any): WooCommerceCategory {
   };
 }
 
-export function normalizeWooCommerceOrder(raw: any): WooCommerceOrder {
+export function normalizeWooCommerceOrder(raw: Record<string, unknown>): WooCommerceOrder {
   const firstName = typeof raw?.billing?.first_name === "string" ? raw.billing.first_name : "";
   const lastName = typeof raw?.billing?.last_name === "string" ? raw.billing.last_name : "";
   const customerName = [firstName, lastName].filter(Boolean).join(" ") || "Klient";
@@ -44,7 +44,7 @@ export function normalizeWooCommerceOrder(raw: any): WooCommerceOrder {
   };
 }
 
-export function normalizeWooCommerceStoreInfo(raw: any, fallbackUrl: string): WooCommerceStoreInfo {
+export function normalizeWooCommerceStoreInfo(raw: Record<string, unknown>, fallbackUrl: string): WooCommerceStoreInfo {
   return {
     name: typeof raw?.name === "string" && raw.name.trim() ? raw.name.trim() : "Sklep WooCommerce",
     description: typeof raw?.description === "string" && raw.description.trim() ? raw.description.trim() : null,

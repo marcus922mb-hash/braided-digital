@@ -61,7 +61,8 @@ export async function getWooCommerceConnectionById(id: string) {
   let wordpressConnection: WooCommerceConnection["wordpress_connection"] = null;
 
   if (connection.wordpress_connection_id) {
-    // TODO: switch to typed query once the WordPress module schema is fully shared in app code.
+    // wordpress_connections is not in generated Supabase types yet
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const wpResult = await (supabase as any)
       .from("wordpress_connections")
       .select("*")
@@ -129,7 +130,8 @@ export async function getWordPressConnectionOptions() {
   const supabase = await createSupabaseClient();
 
   try {
-    // TODO: remove any cast when the WordPress Headless module is fully typed in shared app code.
+    // wordpress_connections is not in generated Supabase types yet
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data, error } = await (supabase as any)
       .from("wordpress_connections")
       .select("*")
@@ -138,6 +140,7 @@ export async function getWordPressConnectionOptions() {
     if (error) return { data: [] as WordPressConnectionOption[], error: error.message };
 
     return {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: (data ?? []).map((item: any) => ({
         id: item.id,
         client_id: item.client_id ?? null,

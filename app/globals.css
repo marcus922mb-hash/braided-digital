@@ -3029,17 +3029,21 @@ body:has(.login-shell) {
 .ai-progress-step {
   display: flex;
   align-items: center;
-  gap: .55rem;
+  gap: .45rem;
   font-size: .63rem;
-  color: rgba(200,196,188,.25);
-  transition: color .3s, opacity .3s;
+  color: rgba(200,196,188,.22);
+  transition: color .4s;
 }
-.ai-progress-step.is-active {
-  color: rgba(201,169,110,.85);
+.ai-progress-step.is-active { color: rgba(201,169,110,.9); }
+.ai-progress-step.is-done { color: rgba(130,210,140,.75); }
+.ai-progress-step-icon { flex-shrink: 0; display: flex; }
+.ai-progress-step-section {
+  flex-shrink: 0;
+  display: flex;
+  opacity: .5;
 }
-.ai-progress-step.is-done {
-  color: rgba(120,200,130,.7);
-}
+.ai-progress-step.is-active .ai-progress-step-section { opacity: 1; }
+.ai-progress-step.is-done .ai-progress-step-section { opacity: .7; }
 .ai-preview {
   display: grid;
   gap: .85rem;
