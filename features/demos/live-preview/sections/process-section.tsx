@@ -14,8 +14,8 @@ export function ProcessSection({
       <SectionHeading {...content.headings.process} />
       <div className={styles.processGrid}>
         {content.process.map((step, index) => (
-          <article key={`${step.title}-${index}`}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
+          <article className={styles.processStep} key={`${step.title}-${index}`}>
+            <p className={styles.processStepNum}>{String(index + 1).padStart(2, "0")}</p>
             <h3>{step.title}</h3>
             <p>{step.description}</p>
           </article>
@@ -24,4 +24,3 @@ export function ProcessSection({
     </section>
   );
 }
-

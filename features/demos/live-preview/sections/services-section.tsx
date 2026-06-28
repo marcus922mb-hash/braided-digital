@@ -15,7 +15,7 @@ export function ServicesSection({
       <div className={styles.serviceGrid}>
         {content.services.map((service, index) => (
           <article className={styles.serviceCard} key={`${service.title}-${index}`}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
+            <span className={styles.serviceNum}>{String(index + 1).padStart(2, "0")}</span>
             <h3>{service.title}</h3>
             <p>{service.description}</p>
           </article>
@@ -24,4 +24,3 @@ export function ServicesSection({
     </section>
   );
 }
-
