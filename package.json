@@ -53,7 +53,6 @@
     "react-icons": "^5.6.0",
     "react-intersection-observer": "^10.0.3",
     "react-parallax-tilt": "^1.7.333",
-    "react-tsparticles": "^2.12.2",
     "react-wrap-balancer": "^1.1.1",
     "resend": "^6.16.0",
     "shadcn-ui": "^0.9.5",
@@ -63,7 +62,6 @@
     "swiper": "^12.2.0",
     "tailwind-merge": "^3.6.0",
     "three": "^0.185.0",
-    "tsparticles": "^4.2.1",
     "typed.js": "^3.0.0",
     "vaul": "^1.1.2",
     "zod": "^4.4.3"
