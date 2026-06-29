@@ -267,44 +267,106 @@ export function ToolWorkspace({ tool }: { tool: SerializableTool }) {
   );
 }
 
+function SvgPreview({ svgCode, label, fileName }: { svgCode: string; label?: string; fileName?: string }) {
+  const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgCode)}`;
+  return (
+    <div className="aihub-svg-preview">
+      {label && <p className="aihub-svg-label">{label}</p>}
+      <div className="aihub-svg-frame">
+        <img src={url} alt={label ?? "Wygenerowana grafika SVG"} />
+      </div>
+      <a href={url} download={fileName ?? "export.svg"} className="btn-ghost btn-sm aihub-svg-download">
+        ↓ Pobierz {fileName ?? "SVG"}
+      </a>
+    </div>
+  );
+}
+
+function extractSvgBlocks(text: string): { tag: string; code: string }[] {
+  const blocks: { tag: string; code: string }[] = [];
+  const re = /<svg[\s\S]*?<\/svg>/gi;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    blocks.push({ tag: `__SVG_${blocks.length}__`, code: m[0] });
+  }
+  return blocks;
+}
+
+function renderLineWithColors(line: string, key: number) {
+  const hexRe = /(#[0-9A-Fa-f]{6})/g;
+  if (!hexRe.test(line)) return <p key={key}>{line}</p>;
+  const parts = line.split(/(#[0-9A-Fa-f]{6})/g);
+  return (
+    <p key={key}>
+      {parts.map((part, j) =>
+        /^#[0-9A-Fa-f]{6}$/i.test(part) ? (
+          <span key={j} className="aihub-color-chip">
+            <span className="aihub-color-dot" style={{ background: part }} />
+            <strong>{part}</strong>
+          </span>
+        ) : (
+          part
+        )
+      )}
+    </p>
+  );
+}
+
+function renderLine(line: string, i: number): React.ReactNode {
+  if (line.startsWith("## ")) return <h2 key={i}>{line.slice(3)}</h2>;
+  if (line.startsWith("### ")) return <h3 key={i}>{line.slice(4)}</h3>;
+  if (line.startsWith("**") && line.endsWith("**")) return <p key={i} className="bold-line"><strong>{line.slice(2, -2)}</strong></p>;
+  if (line.startsWith("• ") || line.startsWith("- ") || line.startsWith("✓ ")) return <p key={i} className="list-item">{line}</p>;
+  if (line.trim() === "---" || line.trim() === "***") return <hr key={i} />;
+  if (line.trim() === "") return <br key={i} />;
+  if (line.includes("**")) {
+    const parts = line.split(/(\*\*[^*]+\*\*)/g);
+    return (
+      <p key={i}>
+        {parts.map((part, j) =>
+          part.startsWith("**") && part.endsWith("**")
+            ? <strong key={j}>{part.slice(2, -2)}</strong>
+            : part
+        )}
+      </p>
+    );
+  }
+  return renderLineWithColors(line, i);
+}
+
 function ResultRenderer({ text }: { text: string }) {
+  const svgBlocks = extractSvgBlocks(text);
+
+  // For svg-icons format: FAVICON: <svg...> APP ICON: <svg...>
+  if (svgBlocks.length >= 2 && text.includes("FAVICON:")) {
+    return (
+      <div className="aihub-prose">
+        <div className="aihub-svg-icons-grid">
+          <SvgPreview svgCode={svgBlocks[0].code} label="Favicon (100×100)" fileName="favicon.svg" />
+          <SvgPreview svgCode={svgBlocks[1].code} label="App Icon (512×512)" fileName="app-icon.svg" />
+        </div>
+      </div>
+    );
+  }
+
+  // Single SVG (logo)
+  if (svgBlocks.length === 1) {
+    const textBefore = text.slice(0, text.indexOf(svgBlocks[0].code)).trim();
+    const textAfter = text.slice(text.indexOf(svgBlocks[0].code) + svgBlocks[0].code.length).trim();
+    return (
+      <div className="aihub-prose">
+        {textBefore && textBefore.split("\n").map((l, i) => renderLine(l, i))}
+        <SvgPreview svgCode={svgBlocks[0].code} label="Wygenerowane logo" fileName="logo.svg" />
+        {textAfter && textAfter.split("\n").map((l, i) => renderLine(l, i + 9000))}
+      </div>
+    );
+  }
+
+  // Default: text with color swatches
   const lines = text.split("\n");
   return (
     <div className="aihub-prose">
-      {lines.map((line, i) => {
-        if (line.startsWith("## ")) {
-          return <h2 key={i}>{line.slice(3)}</h2>;
-        }
-        if (line.startsWith("### ")) {
-          return <h3 key={i}>{line.slice(4)}</h3>;
-        }
-        if (line.startsWith("**") && line.endsWith("**")) {
-          return <p key={i} className="bold-line"><strong>{line.slice(2, -2)}</strong></p>;
-        }
-        if (line.startsWith("• ") || line.startsWith("- ") || line.startsWith("✓ ")) {
-          return <p key={i} className="list-item">{line}</p>;
-        }
-        if (line.trim() === "---" || line.trim() === "***") {
-          return <hr key={i} />;
-        }
-        if (line.trim() === "") {
-          return <br key={i} />;
-        }
-        // Handle inline **bold**
-        if (line.includes("**")) {
-          const parts = line.split(/(\*\*[^*]+\*\*)/g);
-          return (
-            <p key={i}>
-              {parts.map((part, j) =>
-                part.startsWith("**") && part.endsWith("**")
-                  ? <strong key={j}>{part.slice(2, -2)}</strong>
-                  : part
-              )}
-            </p>
-          );
-        }
-        return <p key={i}>{line}</p>;
-      })}
+      {lines.map((line, i) => renderLine(line, i))}
     </div>
   );
 }

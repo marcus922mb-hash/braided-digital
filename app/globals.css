@@ -4444,6 +4444,19 @@ body:has(.login-shell) {
 .aihub-done h3 { font-size: 1.4rem; font-weight: 700; margin: 0 0 .75rem; }
 .aihub-done p { font-size: .85rem; line-height: 1.65; color: rgba(25,24,21,.6); max-width: 28rem; margin: 0 auto; }
 
+/* SVG preview */
+.aihub-svg-preview { display: flex; flex-direction: column; align-items: center; gap: .75rem; margin: 1.25rem 0; }
+.aihub-svg-label { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: rgba(25,24,21,.45); margin: 0; }
+.aihub-svg-frame { width: 100%; max-width: 28rem; border: 1px solid rgba(25,24,21,.1); border-radius: 8px; background: #fff; padding: 1.5rem; display: flex; align-items: center; justify-content: center; min-height: 9rem; }
+.aihub-svg-frame img { max-width: 100%; max-height: 12rem; object-fit: contain; }
+.aihub-svg-download { font-size: .75rem !important; }
+.aihub-svg-icons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+@media (max-width: 640px) { .aihub-svg-icons-grid { grid-template-columns: 1fr; } }
+
+/* Color chips */
+.aihub-color-chip { display: inline-flex; align-items: center; gap: 5px; vertical-align: middle; }
+.aihub-color-dot { display: inline-block; width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,.12); flex-shrink: 0; }
+
 /* Responsive */
 @media (max-width: 1024px) {
   .aihub-tool-layout { grid-template-columns: 1fr; }

@@ -761,49 +761,54 @@ Dla każdej: ikona, nagłówek, opis (2 zdania)
     available: true,
   },
 
-  // 17 — available: false (wymaga generowania grafiki)
+  // 17 — SVG logo generator
   {
     id: "generator-logo",
     name: "Generator logo",
     tagline: "Pierwsze wrażenie robi się raz",
-    description: "Opisz markę — zaprojektujemy logo dostosowane do Twojej branży i wartości. Otrzymasz kilka koncepcji do wyboru.",
+    description: "Opisz markę — AI wygeneruje gotowe logo w formacie SVG, które możesz pobrać i użyć od razu.",
     iconName: "Pen",
     category: "design",
     fields: [
       { key: "firma", label: "Nazwa firmy", type: "text", placeholder: "np. Zielona Herbata Studio", required: true },
       { key: "branza", label: "Branża", type: "text", placeholder: "np. herbaciarnia, wellness, kawiarnia" },
-      { key: "styl", label: "Preferowany styl", type: "select", options: [
-        { value: "minimalistyczny", label: "Minimalistyczne i czyste" },
-        { value: "ilustracyjny", label: "Ilustracyjne i ciepłe" },
-        { value: "typograficzne", label: "Typograficzne (litery)" },
-        { value: "emblematyczne", label: "Emblemat / pieczęć" },
+      { key: "styl", label: "Styl logo", type: "select", options: [
+        { value: "minimalistyczny", label: "Minimalistyczne — litera + geometria" },
+        { value: "typograficzne", label: "Typograficzne — sama nazwa, elegancki krój" },
+        { value: "emblematyczne", label: "Emblemat — nazwa w kształcie pieczęci / koła" },
+        { value: "symboliczne", label: "Symbol + nazwa — ikona branżowa obok tekstu" },
       ]},
-      { key: "kolory", label: "Preferowane kolory", type: "text", placeholder: "np. zielony, beżowy, brązowy" },
+      { key: "kolor1", label: "Kolor główny (HEX lub nazwa)", type: "text", placeholder: "np. #2d6a4f lub ciemna zieleń" },
+      { key: "kolor2", label: "Kolor tła / akcentu", type: "text", placeholder: "np. #f8f4ec lub kremowy (zostaw puste = białe)" },
     ],
-    systemPrompt: "Jesteś projektantem logo i brand identity.",
-    buildPrompt: (v_) => `Firma: ${v(v_, "firma")} | Styl: ${v(v_, "styl")} | Kolory: ${v(v_, "kolory")}
+    systemPrompt: "Jesteś generatorem SVG logo. Twoim jedynym zadaniem jest zwrócenie poprawnego kodu SVG logo. Nie piszesz żadnych wyjaśnień, opisów ani markdown. Zwracasz TYLKO kod SVG — zaczynający się od <svg i kończący na </svg>. SVG musi być self-contained, bez zewnętrznych zasobów, z wbudowanymi fontami jako path lub z bezpiecznymi systemowymi fontami (Arial, Georgia, Helvetica). Logo ma być profesjonalne, czytelne i skalowalne.",
+    buildPrompt: (v_) => {
+      const firma = v(v_, "firma", "Firma");
+      const branza = v(v_, "branza", "usługi");
+      const styl = v(v_, "styl", "minimalistyczny");
+      const kolor1 = v(v_, "kolor1", "#1a1a1a");
+      const kolor2 = v(v_, "kolor2", "#ffffff");
+      return `Wygeneruj SVG logo dla firmy "${firma}" (branża: ${branza}).
 
-Przygotuj brief kreatywny dla projektu logo:
+Styl: ${styl}
+Kolor główny: ${kolor1}
+Kolor tła/akcentu: ${kolor2}
 
-## KONCEPCJA WIZUALNA
-[Opis 3 kierunków kreatywnych — co by symbolizowało logo, jakie formy, typografia]
+Wymagania techniczne:
+- viewBox="0 0 400 150"
+- width="400" height="150"
+- xmlns="http://www.w3.org/2000/svg"
+- Brak zewnętrznych fontów — użyj font-family="Arial, Helvetica, sans-serif" lub "Georgia, serif"
+- Nazwa firmy "${firma}" musi być widoczna jako tekst lub path
+- Dopasuj elementy graficzne do stylu: ${styl}
+- Kolory: główny ${kolor1}, akcent/tło ${kolor2}
+- Kod musi być kompletny i samodzielny
 
-## PALETA KOLORÓW
-[Propozycja kolorów z uzasadnieniem]
-
-## PRZYKŁADY INSPIRACJI
-[Brandy z podobnym stylem logo — co z nich wziąć]
-
-## TYPOGRAFIA
-[Propozycja krojów pisma pasujących do marki]
-
-## ZASTOSOWANIA
-[Gdzie logo będzie używane — co ważne przy projekcie]
-
-Pełny projekt logo przygotuje nasz zespół na podstawie tego briefu.`,
-    outputFormat: "sections",
-    exampleSnippet: "## KONCEPCJA 1: Minimalizm\nSymbol liścia herbaty jako monogram...",
-    ctaLabel: "Zamów projekt logo od naszego designera",
+Odpowiedz TYLKO kodem SVG. Zacznij od <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 150"`;
+    },
+    outputFormat: "svg",
+    exampleSnippet: '<svg viewBox="0 0 400 150"><rect fill="#2d6a4f" .../><text>Zielona Herbata</text></svg>',
+    ctaLabel: "Zamów profesjonalne logo od naszego designera",
     available: true,
   },
 
@@ -923,42 +928,60 @@ CTA główne: [tekst] | CTA drugorzędne: [tekst]
     id: "generator-ikon",
     name: "Generator ikon i favicon",
     tagline: "Ikona warta tysiąca słów",
-    description: "Opisz markę — zaprojektujemy favicon, zestaw ikon dla strony i Social Media Kit. Pełna identyfikacja wizualna.",
+    description: "Podaj inicjały lub symbol marki — AI wygeneruje favicon i ikonę w formacie SVG gotową do użycia na stronie.",
     iconName: "Star",
     category: "design",
     fields: [
-      { key: "firma", label: "Nazwa firmy (lub inicjały)", type: "text", placeholder: "np. ZK (Zielony Kąt), MP (Marek Piotrowski)", required: true },
-      { key: "branza", label: "Branża", type: "text", placeholder: "np. doradca finansowy, restauracja, sklep online" },
-      { key: "styl", label: "Styl", type: "select", options: [
-        { value: "litera", label: "Monogram / inicjały" },
-        { value: "symbol", label: "Symbol branżowy" },
-        { value: "geometria", label: "Geometryczne kształty" },
-        { value: "ilustracja", label: "Mini ilustracja" },
+      { key: "inicjaly", label: "Inicjały lub skrót (1-3 znaki)", type: "text", placeholder: "np. ZK, MA, BD", required: true, maxLength: 3 },
+      { key: "firma", label: "Nazwa firmy", type: "text", placeholder: "np. Zielony Kąt" },
+      { key: "styl", label: "Styl ikony", type: "select", options: [
+        { value: "kolo", label: "Koło z inicjałami (klasyczny)" },
+        { value: "kwadrat", label: "Kwadrat zaokrąglony z inicjałami" },
+        { value: "tarcza", label: "Tarcza / emblemat" },
+        { value: "diament", label: "Diament / romb" },
       ]},
+      { key: "kolor", label: "Kolor główny (HEX lub nazwa)", type: "text", placeholder: "np. #2d6a4f lub granatowy" },
     ],
-    systemPrompt: "Jesteś projektantem ikon i faviconów. Tworzysz zwięzłe briefy projektowe.",
-    buildPrompt: (v_) => `Firma/inicjały: ${v(v_, "firma")}
-Branża: ${v(v_, "branza", "usługi")}
-Styl: ${v(v_, "styl", "symbol")}
+    systemPrompt: "Jesteś generatorem SVG ikon i faviconów. Twoim jedynym zadaniem jest zwrócenie DWÓCH bloków SVG: favicon (100x100) i ikona app (512x512). Nie piszesz żadnych wyjaśnień. Format odpowiedzi to dokładnie:\nFAVICON:\n<svg...></svg>\n\nAPP ICON:\n<svg...></svg>",
+    buildPrompt: (v_) => {
+      const inicjaly = v(v_, "inicjaly", "AB").toUpperCase();
+      const firma = v(v_, "firma", "");
+      const styl = v(v_, "styl", "kolo");
+      const kolor = v(v_, "kolor", "#1a3a5c");
+      const shapes: Record<string, string> = {
+        kolo: "koło (circle) jako tło",
+        kwadrat: "prostokąt zaokrąglony (rect z rx) jako tło",
+        tarcza: "wielokąt w kształcie tarczy (polygon) jako tło",
+        diament: "romb (polygon 50,5 95,50 50,95 5,50) jako tło",
+      };
+      return `Wygeneruj dwie ikony SVG dla marki ${firma || inicjaly}.
 
-Przygotuj brief do projektu ikon:
+Inicjały: ${inicjaly}
+Styl: ${shapes[styl] || styl}
+Kolor główny: ${kolor}
+Kolor tekstu: biały (#ffffff)
 
-## KONCEPCJA FAVICON (16x16, 32x32, 180x180)
-[Opis jak powinna wyglądać ikona — co symbolizuje, jakie formy, kolor]
+Wymagania:
+- Brak zewnętrznych zasobów
+- font-family="Arial, Helvetica, sans-serif" font-weight="bold"
+- Inicjały "${inicjaly}" wyśrodkowane w ikonie
+- Profesjonalny, czytelny wygląd
 
-## ZESTAW IKON DLA STRONY (8 ikon)
-[Propozycja kategorii ikon potrzebnych na stronie + opis stylu]
+Odpowiedz DOKŁADNIE w tym formacie (nic więcej):
 
-## SOCIAL MEDIA KIT
-[Opis formatu dla Facebook, Instagram, LinkedIn — rozmiary, warianty]
+FAVICON:
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+[elementy SVG]
+</svg>
 
-## SPECYFIKACJA TECHNICZNA
-[Formaty plików: SVG, PNG, ICO — wymagania]
-
-Pełen projekt ikon przygotuje nasz team graficzny.`,
-    outputFormat: "sections",
-    exampleSnippet: "## FAVICON\nMonogram 'ZK' w złotym kole na białym tle...",
-    ctaLabel: "Zamów projekt ikon i favicon",
+APP ICON:
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+[elementy SVG — proporcjonalnie skalowane]
+</svg>`;
+    },
+    outputFormat: "svg-icons",
+    exampleSnippet: 'FAVICON:\n<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#2d6a4f"/><text x="50" y="65" text-anchor="middle" fill="white" font-size="42" font-weight="bold" font-family="Arial">ZK</text></svg>',
+    ctaLabel: "Zamów pełny zestaw ikon od naszego designera",
     available: true,
   },
 ];
