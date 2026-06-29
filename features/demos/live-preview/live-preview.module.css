@@ -32,15 +32,63 @@
 
 /* ── Demo banner ─────────────────────────────────────────────────────────── */
 .demoBanner {
-  background: var(--preview-text);
+  align-items: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--preview-text) 96%, transparent);
   color: var(--preview-background);
-  font-size: .68rem;
-  font-weight: 600;
-  letter-spacing: .14em;
-  padding: .7rem 1.5rem;
-  text-align: center;
-  text-transform: uppercase;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.25rem;
+  justify-content: space-between;
+  padding: .6rem clamp(1rem, 4vw, 2.5rem);
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
+
+.demoBannerLeft {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  flex-wrap: wrap;
+}
+
+.demoBannerTag {
+  background: var(--preview-primary);
+  border-radius: 3px;
+  color: #fff;
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  padding: .18rem .5rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.demoBannerText {
+  font-size: .73rem;
+  opacity: .55;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+}
+
+.demoBannerCta {
+  background: var(--preview-primary);
+  border-radius: 4px;
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+  padding: .42rem 1rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity .15s;
+}
+
+.demoBannerCta:hover { opacity: .82; }
 
 /* ── Navigation ─────────────────────────────────────────────────────────── */
 .navigation {
@@ -54,7 +102,7 @@
   grid-template-columns: 1fr auto 1fr;
   padding: 1.15rem clamp(1.5rem, 5vw, 5rem);
   position: sticky;
-  top: 0;
+  top: 48px;
   z-index: 10;
 }
 

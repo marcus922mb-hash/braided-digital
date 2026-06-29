@@ -47,7 +47,15 @@ export function WebsiteLivePreview({
 
   return (
     <main className={styles.preview} style={style}>
-      {demoLabel ? <aside className={styles.demoBanner}>{demoLabel}</aside> : null}
+      <aside className={styles.demoBanner}>
+        <div className={styles.demoBannerLeft}>
+          <span className={styles.demoBannerTag}>Podgląd demonstracyjny</span>
+          {demoLabel && <span className={styles.demoBannerText}>{demoLabel}</span>}
+        </div>
+        <a href="/kontakt" className={styles.demoBannerCta}>
+          Podoba Ci się? Skontaktuj się →
+        </a>
+      </aside>
       {content.structure
         .filter((section) => section.visible)
         .map((section) => {

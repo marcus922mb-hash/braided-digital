@@ -50,11 +50,12 @@ export async function runToolAction(
     return { success: false, error: `Nie udało się wygenerować. ${msg}` };
   }
 
-  // Save anonymous lead via admin client (bypasses RLS)
+  // Save every public generation with the admin client so it is visible in
+  // /panel/ai/wyniki. The service-role key stays on the server.
   const leadId = `aitool_${Date.now()}_${crypto.randomUUID().slice(0, 6)}`;
   try {
     const supabase = createAdminClient();
-    await supabase.from("leads").insert({
+    const { error: leadError } = await supabase.from("leads").insert({
       id: leadId,
       submitted_at: new Date().toISOString(),
       project_type: `ai_tool_${toolId}`,
@@ -64,8 +65,37 @@ export async function runToolAction(
       estimate: { output: result.text.slice(0, 5000) },
       status: "new",
     });
-  } catch {
-    // Non-blocking — lead save failure shouldn't break generation
+
+    if (leadError) {
+      console.error("[ai-tools] Nie udało się zapisać leada publicznego", {
+        toolId,
+        error: leadError.message,
+      });
+    }
+
+    const { error: outputError } = await supabase.from("ai_tool_outputs").insert({
+      tool_id: toolId,
+      tool_name: tool.name,
+      tool_category: tool.category,
+      input_values: values,
+      output_text: result.text,
+      provider: result.provider,
+      model: result.model,
+      status: "new",
+      lead_id: leadError ? null : leadId,
+      notes: "Wygenerowano publicznie na web.ma-atelier.pl",
+    });
+
+    if (outputError) throw outputError;
+  } catch (error) {
+    console.error("[ai-tools] Nie udało się zapisać publicznego wyniku", {
+      toolId,
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return {
+      success: false,
+      error: "Wynik został wygenerowany, ale nie udało się zapisać go w panelu. Spróbuj ponownie.",
+    };
   }
 
   return {

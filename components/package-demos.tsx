@@ -704,13 +704,13 @@ export function DemoContinuation({ slug, config: c }: { slug: string; config: De
 export function DemoTopbar({ title }: { title: string }) {
   return (
     <div className="sticky top-[76px] z-40 flex flex-col items-center justify-between gap-3 border-b border-black/10 bg-paper/95 px-4 py-3 backdrop-blur md:flex-row md:px-8">
-      <div>
-        <span className="text-[.55rem] font-bold uppercase tracking-[.18em] text-gold">Przykładowa koncepcja</span>
-        <span className="ml-3 text-xs text-muted">Demo pakietu: {title}</span>
+      <div className="flex items-center gap-3">
+        <span className="rounded-sm bg-gold px-2 py-0.5 text-[.58rem] font-bold uppercase tracking-[.12em] text-white">Podgląd demonstracyjny</span>
+        <span className="text-xs text-muted">{title}</span>
       </div>
       <div className="flex gap-2">
-        <Link href="/cennik" className="btn-secondary min-h-9! px-4!">Wróć do cennika</Link>
-        <Link href={`/kontakt?pakiet=${encodeURIComponent(title)}`} className="btn-primary min-h-9! px-4!">Chcę podobną <Arrow /></Link>
+        <Link href="/cennik" className="btn-secondary min-h-9! px-4!">Cennik</Link>
+        <Link href={`/kontakt?pakiet=${encodeURIComponent(title)}`} className="btn-primary min-h-9! px-4!">Podoba Ci się? Skontaktuj się <Arrow /></Link>
       </div>
     </div>
   );

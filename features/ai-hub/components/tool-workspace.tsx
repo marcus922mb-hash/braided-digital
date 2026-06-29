@@ -1,10 +1,7 @@
 "use client";
 
 import { useState, useTransition, useEffect, useRef } from "react";
-import {
-  runToolAction,
-  saveLeadContactAction,
-} from "@/features/ai-hub/actions/run-tool-action";
+import { runToolAction } from "@/features/ai-hub/actions/run-tool-action";
 import type { ToolField, ToolResult } from "@/features/ai-hub/types";
 
 type SerializableTool = {
@@ -13,16 +10,13 @@ type SerializableTool = {
   ctaLabel: string;
 };
 
-type Step = "form" | "loading" | "result" | "lead" | "done";
+type Step = "form" | "loading" | "result";
 
 export function ToolWorkspace({ tool }: { tool: SerializableTool }) {
   const [step, setStep] = useState<Step>("form");
   const [values, setValues] = useState<Record<string, string>>({});
   const [result, setResult] = useState<ToolResult | null>(null);
-  const [leadId, setLeadId] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const [contact, setContact] = useState({ name: "", email: "", phone: "" });
-  const [leadSent, setLeadSent] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [copied, setCopied] = useState(false);
 
@@ -42,7 +36,6 @@ export function ToolWorkspace({ tool }: { tool: SerializableTool }) {
         return;
       }
       setResult(state.result);
-      setLeadId(state.leadId);
       setStep("result");
     });
   }
@@ -52,21 +45,6 @@ export function ToolWorkspace({ tool }: { tool: SerializableTool }) {
     await navigator.clipboard.writeText(result.text);
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
-  }
-
-  async function handleLeadSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!contact.email.includes("@")) {
-      setError("Podaj prawidłowy adres e-mail.");
-      return;
-    }
-    const res = await saveLeadContactAction(leadId, contact);
-    if (res.success) {
-      setLeadSent(true);
-      setStep("done");
-    } else {
-      setError(res.error || "Błąd zapisu.");
-    }
   }
 
   return (
@@ -161,106 +139,26 @@ export function ToolWorkspace({ tool }: { tool: SerializableTool }) {
 
           <div className="aihub-result-actions">
             <button
-              onClick={() => setStep("form")}
+              onClick={() => {
+                setStep("form");
+                setResult(null);
+                setError("");
+              }}
               className="btn-ghost btn-sm"
             >
               ← Generuj ponownie
             </button>
-            <button
-              onClick={() => setStep("lead")}
-              className="btn-primary"
-            >
-              {tool.ctaLabel} →
-            </button>
           </div>
-        </div>
-      )}
 
-      {/* Lead capture */}
-      {step === "lead" && (
-        <div className="aihub-lead">
-          <h3>Chcesz pełną wersję?</h3>
-          <p>
-            Zostaw kontakt — odezwiemy się w ciągu 24h z dokładną wyceną
-            i planem działania dla Twojej firmy.
-          </p>
-          <form onSubmit={handleLeadSubmit} className="aihub-form">
-            <div className="aihub-field">
-              <label htmlFor="lead-name">Imię i nazwisko</label>
-              <input
-                id="lead-name"
-                type="text"
-                placeholder="np. Anna Kowalska"
-                value={contact.name}
-                onChange={(e) =>
-                  setContact((c) => ({ ...c, name: e.target.value }))
-                }
-              />
+          <div className="aihub-contact-cta">
+            <div className="aihub-contact-cta-text">
+              <strong>Podoba Ci się wynik?</strong>
+              <span>Skontaktuj się — zbuduję to dla Twojej firmy profesjonalnie.</span>
             </div>
-            <div className="aihub-field">
-              <label htmlFor="lead-email">
-                Adres e-mail <span className="required">*</span>
-              </label>
-              <input
-                id="lead-email"
-                type="email"
-                placeholder="np. anna@firma.pl"
-                value={contact.email}
-                required
-                onChange={(e) =>
-                  setContact((c) => ({ ...c, email: e.target.value }))
-                }
-              />
-            </div>
-            <div className="aihub-field">
-              <label htmlFor="lead-phone">Telefon (opcjonalnie)</label>
-              <input
-                id="lead-phone"
-                type="tel"
-                placeholder="np. 600 123 456"
-                value={contact.phone}
-                onChange={(e) =>
-                  setContact((c) => ({ ...c, phone: e.target.value }))
-                }
-              />
-            </div>
-            {error && <p className="aihub-error">{error}</p>}
-            <button type="submit" className="btn-primary aihub-submit">
-              Wyślij i otrzymaj ofertę →
-            </button>
-            <button
-              type="button"
-              onClick={() => setStep("result")}
-              className="btn-ghost btn-sm mt-2"
-            >
-              Wróć do wyniku
-            </button>
-          </form>
-        </div>
-      )}
-
-      {/* Thank you */}
-      {step === "done" && (
-        <div className="aihub-done">
-          <div className="aihub-done-icon">✓</div>
-          <h3>Dziękujemy!</h3>
-          <p>
-            Otrzymamy Twoją wiadomość i odezwiemy się w ciągu 24 godzin
-            roboczych z konkretnymi propozycjami.
-          </p>
-          <button
-            onClick={() => {
-              setStep("form");
-              setValues({});
-              setResult(null);
-              setError("");
-              setLeadSent(false);
-              setContact({ name: "", email: "", phone: "" });
-            }}
-            className="btn-primary mt-6"
-          >
-            Wróć i generuj kolejne
-          </button>
+            <a href="/kontakt" className="btn-primary aihub-contact-cta-btn">
+              Skontaktuj się ze mną →
+            </a>
+          </div>
         </div>
       )}
     </div>
