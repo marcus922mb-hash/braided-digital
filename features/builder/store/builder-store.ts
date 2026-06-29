@@ -80,6 +80,7 @@ type BuilderActions = {
   markSaved: () => void;
   setSaving: (v: boolean) => void;
   getSelectedComponent: () => BuilderComponent | null;
+  loadTemplate: (components: BuilderComponent[]) => void;
 };
 
 function snapshot(state: BuilderState, components: BuilderComponent[]): Partial<BuilderState> {
@@ -224,6 +225,11 @@ export const useBuilderStore = create<BuilderState & BuilderActions>((set, get) 
 
   markSaved() { set({ isDirty: false }); },
   setSaving(v) { set({ isSaving: v }); },
+
+  loadTemplate(components) {
+    const state = get();
+    set({ components, selectedId: null, ...snapshot(state, components) });
+  },
 
   getSelectedComponent() {
     const { components, selectedId } = get();

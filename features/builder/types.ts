@@ -13,7 +13,8 @@ export type ComponentType =
   // Warianty stopki
   | "footer-minimal" | "footer-extended"
   // Dodatkowe sekcje
-  | "hero-split" | "process" | "awards" | "comparison" | "countdown" | "careers";
+  | "hero-split" | "process" | "awards" | "comparison" | "countdown" | "careers"
+  | "menu-section" | "reservation" | "accordion" | "tabs" | "slider" | "hero-video" | "hero-fullscreen" | "reviews-grid" | "media-row" | "icon-grid" | "pricing-toggle" | "sticky-cta" | "before-after" | "links-list" | "event";
 
 export type ComponentCategory =
   | "layout" | "content" | "media" | "commerce" | "social";
@@ -28,7 +29,15 @@ export type AnimationType =
   | "slideRight"
   | "zoomIn"
   | "reveal"
-  | "parallax";
+  | "parallax"
+  | "bounce"
+  | "flip"
+  | "stagger"
+  | "float"
+  | "pulse"
+  | "blur"
+  | "elastic"
+  | "typewriter";
 
 export type ResponsiveStyles = {
   paddingTop?: string;
@@ -137,5 +146,5 @@ export type PropSchema = {
 
 export type BuilderHistoryEntry = BuilderComponent[];
 
-export type SidebarTab = "components" | "layers";
+export type SidebarTab = "components" | "layers" | "templates";
 export type PropsTab = "content" | "style" | "animations" | "visibility";

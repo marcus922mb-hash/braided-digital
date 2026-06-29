@@ -320,6 +320,14 @@ function AnimationsTab({ id }: { id: string }) {
           <option value="zoomIn">Zoom In</option>
           <option value="reveal">Reveal</option>
           <option value="parallax">Parallax</option>
+          <option value="bounce">Bounce</option>
+          <option value="flip">Flip</option>
+          <option value="stagger">Stagger</option>
+          <option value="float">Float</option>
+          <option value="pulse">Pulse</option>
+          <option value="blur">Blur</option>
+          <option value="elastic">Elastic</option>
+          <option value="typewriter">Typewriter</option>
         </select>
       </div>
       <div className="bldr-prop-group">

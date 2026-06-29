@@ -10,6 +10,7 @@ import {
   ShoppingBag, FileText, Newspaper, Play,
   Minus, AlignLeft, Building2, Briefcase, LayoutTemplate,
   Quote, ImageIcon, Menu, Award, Table2, Timer, Clipboard,
+  Star, Columns, Calendar,
 } from "lucide-react";
 import type { BuilderComponent } from "@/features/builder/types";
 import { useBuilderStore } from "@/features/builder/store/builder-store";
@@ -57,6 +58,21 @@ const TYPE_ICONS: Record<string, React.ElementType> = {
   comparison: Table2,
   countdown: Timer,
   careers: Clipboard,
+  "menu-section": FileText,
+  "reservation": Phone,
+  "accordion": List,
+  "tabs": Layout,
+  "slider": Image,
+  "hero-video": Play,
+  "hero-fullscreen": Image,
+  "reviews-grid": Star,
+  "media-row": Columns,
+  "icon-grid": Grid,
+  "pricing-toggle": DollarSign,
+  "sticky-cta": Megaphone,
+  "before-after": Image,
+  "links-list": FileText,
+  "event": Calendar,
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -84,6 +100,11 @@ const COMPONENT_CATEGORIES: Record<string, string> = {
   "footer-minimal": "layout", "footer-extended": "layout",
   "hero-split": "content", process: "content", awards: "content",
   comparison: "content", countdown: "content", careers: "content",
+  "menu-section": "content", "reservation": "content", "accordion": "content",
+  "tabs": "content", "slider": "media", "hero-video": "content",
+  "hero-fullscreen": "content", "reviews-grid": "content", "media-row": "content",
+  "icon-grid": "content", "pricing-toggle": "content", "sticky-cta": "layout",
+  "before-after": "media", "links-list": "content", "event": "content",
 };
 
 function BlockPreview({ component }: { component: BuilderComponent }) {
@@ -682,6 +703,191 @@ function BlockPreview({ component }: { component: BuilderComponent }) {
         </div>
       );
     }
+
+    case "hero-video":
+    case "hero-fullscreen":
+      return (
+        <div className="bldr-preview bldr-preview--hero">
+          <div className="bldr-preview-hero-bg" style={{ background: component.styles.background || "#0f0f1a" }} />
+          <div className="bldr-preview-hero-content">
+            <div className="bldr-preview-tag">{component.type === "hero-video" ? "Hero + Video" : "Hero Fullscreen"}</div>
+            <div className="bldr-preview-h1">{title || "Tytuł hero"}</div>
+            <div className="bldr-preview-sub">{subtitle}</div>
+            <div className="bldr-preview-buttons">
+              <div className="bldr-preview-btn bldr-preview-btn--primary">{(p.ctaText as string) || "CTA"}</div>
+            </div>
+          </div>
+        </div>
+      );
+
+    case "menu-section":
+      return (
+        <div className="bldr-preview bldr-preview--grid-section">
+          <div className="bldr-preview-section-header">
+            <div className="bldr-preview-h2">{title || "Menu"}</div>
+          </div>
+          <div className="bldr-preview-cards">
+            {((p.categories || []) as Array<{ name: string }>).slice(0, 3).map((cat, i) => (
+              <div key={i} className="bldr-preview-card">
+                <div className="bldr-preview-card-title">{cat.name}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
+    case "reservation":
+      return (
+        <div className="bldr-preview bldr-preview--contact">
+          <div className="bldr-preview-h2">{title || "Rezerwacja"}</div>
+          <div className="bldr-preview-form-placeholder">
+            {[1, 2, 3].map((i) => <div key={i} className="bldr-preview-form-row" />)}
+            <div className="bldr-preview-btn bldr-preview-btn--primary">Zarezerwuj</div>
+          </div>
+        </div>
+      );
+
+    case "accordion":
+      return (
+        <div className="bldr-preview bldr-preview--faq">
+          <div className="bldr-preview-h2">{title || "Akordeon"}</div>
+          {((p.items || []) as Array<{ heading: string }>).slice(0, 3).map((item, i) => (
+            <div key={i} className="bldr-preview-faq-row">
+              <span>{item.heading}</span>
+              <ChevronDown size={12} />
+            </div>
+          ))}
+        </div>
+      );
+
+    case "tabs":
+      return (
+        <div className="bldr-preview bldr-preview--tabs-preview">
+          <div className="bldr-preview-tabs-row">
+            {((p.tabs || []) as Array<{ label: string }>).slice(0, 4).map((tab, i) => (
+              <div key={i} className={`bldr-preview-tab-btn${i === 0 ? " bldr-preview-tab-btn--active" : ""}`}>{tab.label}</div>
+            ))}
+          </div>
+          <div className="bldr-preview-body" style={{ marginTop: ".5rem" }}>Treść zakładki...</div>
+        </div>
+      );
+
+    case "slider":
+      return (
+        <div className="bldr-preview bldr-preview--gallery">
+          <div className="bldr-preview-h2">Slider</div>
+          <div className="bldr-preview-gallery-grid" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="bldr-preview-gallery-item" />
+            ))}
+          </div>
+        </div>
+      );
+
+    case "reviews-grid":
+      return (
+        <div className="bldr-preview bldr-preview--testimonials">
+          <div className="bldr-preview-h2">{title || "Opinie"}</div>
+          <div className="bldr-preview-testimonial-cards">
+            {((p.items || []) as Array<{ name: string; text: string }>).slice(0, 3).map((item, i) => (
+              <div key={i} className="bldr-preview-testimonial-card">
+                <div className="bldr-preview-quote">★★★★★</div>
+                <div className="bldr-preview-author">{item.name}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
+    case "media-row":
+      return (
+        <div className="bldr-preview bldr-preview--faq">
+          <div className="bldr-preview-h2">Tekst + Media</div>
+          {((p.rows || []) as Array<{ heading: string }>).slice(0, 2).map((row, i) => (
+            <div key={i} className="bldr-preview-faq-row">
+              <span>{row.heading}</span>
+            </div>
+          ))}
+        </div>
+      );
+
+    case "icon-grid":
+      return (
+        <div className="bldr-preview bldr-preview--grid-section">
+          <div className="bldr-preview-section-header">
+            <div className="bldr-preview-h2">{title || "Siatka ikon"}</div>
+          </div>
+          <div className="bldr-preview-cards">
+            {((p.items || []) as Array<{ label: string }>).slice(0, 4).map((item, i) => (
+              <div key={i} className="bldr-preview-card">
+                <div className="bldr-preview-card-icon" />
+                <div className="bldr-preview-card-title">{item.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
+    case "pricing-toggle":
+      return (
+        <div className="bldr-preview bldr-preview--pricing">
+          <div className="bldr-preview-h2">{title || "Cennik"}</div>
+          <div className="bldr-preview-pricing-cards">
+            {((p.items || []) as Array<{ name: string; monthlyPrice: string; highlighted?: boolean }>).map((item, i) => (
+              <div key={i} className={`bldr-preview-pricing-card${item.highlighted ? " bldr-preview-pricing-card--hl" : ""}`}>
+                <div className="bldr-preview-pricing-name">{item.name}</div>
+                <div className="bldr-preview-pricing-price">{item.monthlyPrice}/mies.</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
+    case "sticky-cta":
+      return (
+        <div className="bldr-preview bldr-preview--cta" style={{ background: component.styles.background || "#1a1a2e", padding: ".75rem" }}>
+          <div className="bldr-preview-h2" style={{ color: "#fff", fontSize: ".75rem" }}>{(p.text as string) || "Pasek CTA"}</div>
+          <div className="bldr-preview-btn bldr-preview-btn--dark" style={{ fontSize: ".65rem" }}>{(p.ctaText as string) || "Akcja"}</div>
+        </div>
+      );
+
+    case "event":
+      return (
+        <div className="bldr-preview bldr-preview--faq">
+          <div className="bldr-preview-h2">{title || "Wydarzenia"}</div>
+          {((p.items || []) as Array<{ date: string; title: string }>).slice(0, 3).map((item, i) => (
+            <div key={i} className="bldr-preview-faq-row">
+              <span style={{ fontWeight: 700, marginRight: ".5rem" }}>{item.date}</span>
+              <span>{item.title}</span>
+            </div>
+          ))}
+        </div>
+      );
+
+    case "links-list":
+      return (
+        <div className="bldr-preview bldr-preview--faq">
+          <div className="bldr-preview-h2">{title || "Lista linków"}</div>
+          {((p.items || []) as Array<{ label: string }>).slice(0, 3).map((item, i) => (
+            <div key={i} className="bldr-preview-faq-row"><span>→ {item.label}</span></div>
+          ))}
+        </div>
+      );
+
+    case "before-after":
+      return (
+        <div className="bldr-preview bldr-preview--gallery">
+          <div className="bldr-preview-h2">{title || "Przed / Po"}</div>
+          <div className="bldr-preview-gallery-grid" style={{ gridTemplateColumns: "1fr 1fr" }}>
+            <div className="bldr-preview-gallery-item" style={{ position: "relative" }}>
+              <span style={{ position: "absolute", bottom: "4px", left: "4px", fontSize: ".55rem", background: "rgba(0,0,0,.5)", color: "#fff", padding: "1px 4px", borderRadius: "2px" }}>Przed</span>
+            </div>
+            <div className="bldr-preview-gallery-item" style={{ position: "relative" }}>
+              <span style={{ position: "absolute", bottom: "4px", right: "4px", fontSize: ".55rem", background: "rgba(0,0,0,.5)", color: "#fff", padding: "1px 4px", borderRadius: "2px" }}>Po</span>
+            </div>
+          </div>
+        </div>
+      );
 
     default:
       return <div className="bldr-preview-default">{component.label}</div>;
