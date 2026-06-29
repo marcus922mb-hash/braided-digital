@@ -24,6 +24,7 @@ import { DemoPublicLink } from "./demo-public-link";
 import { DemoStatusBadge } from "./demo-status-badge";
 import { DemoStyleBadge } from "./demo-style-badge";
 import { AIGenerateDemoButton } from "@/features/ai/components/ai-generate-demo-button";
+import { SectionRegeneratePanel } from "@/features/ai/components/section-regenerate-panel";
 import { SendDemoModal } from "@/features/emails/components/send-demo-modal";
 
 type Props = {
@@ -126,6 +127,9 @@ export function DemoDetailsCard({ demo, activity, emailLogs }: Props) {
         <div className="panel-card" style={{ marginBottom: "1.25rem" }}>
           <div className="panel-card-body">
             <AIGenerateDemoButton demoId={demo.id} />
+            <div style={{ marginTop: "1rem" }}>
+              <SectionRegeneratePanel demoId={demo.id} />
+            </div>
           </div>
         </div>
 

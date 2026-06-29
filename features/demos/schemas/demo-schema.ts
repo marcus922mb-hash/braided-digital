@@ -3,6 +3,7 @@ import {
   DEMO_INDUSTRIES,
   DEMO_STATUSES,
   DEMO_STYLES,
+  DEMO_GENERATION_MODES,
   defaultDemoContent,
 } from "@/features/demos/types";
 
@@ -163,6 +164,7 @@ export const demoFormSchema = z.object({
   secondary_color: hexColor,
   logo_url: z.string().trim().url("Podaj poprawny adres URL.").or(z.literal("")).optional(),
   images_text: z.string().optional(),
+  generation_mode: z.enum(DEMO_GENERATION_MODES).optional(),
   status: z.enum(DEMO_STATUSES, { message: "Wybierz poprawny status." }),
   is_active: z.string().optional(),
   expires_at: z.string().optional(),

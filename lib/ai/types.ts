@@ -25,6 +25,7 @@ export type GenerateDemoContentInput = {
   services: string | null;
   targetAudience: string | null;
   tone: string | null;
+  generationMode?: "quick" | "full" | "premium" | "publish";
   estimate: {
     websiteType: string | null;
     pagesCount: number | null;

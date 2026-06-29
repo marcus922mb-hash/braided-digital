@@ -18,10 +18,20 @@ function labelFromMap<T extends string>(value: string | null, map: Record<T, str
   return (map as Record<string, string>)[value] ?? value;
 }
 
+const GENERATION_MODE_INSTRUCTIONS: Record<string, string> = {
+  quick: `TRYB SZYBKI: Wygeneruj skróconą wersję strony. Hero + 3 usługi + 2 opinie + kontakt. Resztę sekcji wypełnij minimalnie.`,
+  full: `TRYB PEŁNY: Wygeneruj kompletną stronę z wszystkimi sekcjami. Każda sekcja ma mieć naturalne, sprzedażowe treści.`,
+  premium: `TRYB PREMIUM: Wygeneruj rozbudowaną, dopracowaną stronę. Więcej treści w każdej sekcji, bogate FAQ (8 pytań), szczegółowe opisy usług (4-5 zdań), 4+ opinie, SEO ze słowami kluczowymi long-tail, sekcja korzyści z 6 punktami, pełna sekcja procesu (5 kroków).`,
+  publish: `TRYB PUBLIKACYJNY: Wygeneruj stronę gotową do wdrożenia. Pełna treść, dopracowane SEO z meta description pod kliknięcia, naturalne CTA, opisy zdjęć w j. angielskim optymalne pod stock photo, dane strukturalne w komentarzach.`,
+};
+
 export function buildDemoContentPrompt(input: GenerateDemoContentInput) {
   const currentContent = parseDemoContent(input.currentContent);
+  const modeInstruction = GENERATION_MODE_INSTRUCTIONS[input.generationMode ?? "full"];
 
-  return `Wygeneruj kompletną stronę demo klienta jako jeden spójny JSON zgodny dokładnie z podanym kontraktem.
+  return `${modeInstruction}
+
+Wygeneruj kompletną stronę demo klienta jako jeden spójny JSON zgodny dokładnie z podanym kontraktem.
 
 Dane klienta:
 - Nazwa firmy: ${input.companyName || "brak"}

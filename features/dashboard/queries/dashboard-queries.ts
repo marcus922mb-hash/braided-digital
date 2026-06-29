@@ -51,10 +51,13 @@ export type DashboardData = {
     demos: number;
     pendingEstimates: number;
     activeDemos: number;
+    aiOutputs: number;
+    aiErrors: number;
   };
   activity: DashboardActivityItem[];
   recentClients: RecentItem[];
   recentEstimates: RecentItem[];
+  recentAIOutputs: { id: string; tool_name: string; created_at: string; provider: string }[];
 };
 
 function formatRelativeTime(value: string) {
@@ -93,9 +96,12 @@ export async function getDashboardData(): Promise<{ data: DashboardData; error: 
     demosCount,
     pendingEstimatesCount,
     activeDemosCount,
+    aiOutputsCount,
+    aiErrorsCount,
     activityResult,
     clientsResult,
     estimatesResult,
+    recentAIResult,
   ] = await Promise.all([
     supabase.from("clients").select("id", { count: "exact", head: true }),
     supabase.from("projects").select("id", { count: "exact", head: true }),
@@ -109,6 +115,11 @@ export async function getDashboardData(): Promise<{ data: DashboardData; error: 
       .from("demos")
       .select("id", { count: "exact", head: true })
       .eq("is_active", true),
+    supabase.from("ai_tool_outputs").select("id", { count: "exact", head: true }),
+    supabase
+      .from("ai_generations")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "error"),
     supabase
       .from("activity_logs")
       .select("id, created_at, entity_type, action, description")
@@ -124,6 +135,11 @@ export async function getDashboardData(): Promise<{ data: DashboardData; error: 
       .select("id, created_at, website_type, final_price, status, clients(first_name, last_name, company_name)")
       .order("created_at", { ascending: false })
       .limit(5),
+    supabase
+      .from("ai_tool_outputs")
+      .select("id, tool_name, created_at, provider")
+      .order("created_at", { ascending: false })
+      .limit(4),
   ]);
 
   const error =
@@ -145,10 +161,13 @@ export async function getDashboardData(): Promise<{ data: DashboardData; error: 
       demos: 0,
       pendingEstimates: 0,
       activeDemos: 0,
+      aiOutputs: 0,
+      aiErrors: 0,
     },
     activity: [],
     recentClients: [],
     recentEstimates: [],
+    recentAIOutputs: [],
   };
 
   if (error) {
@@ -193,10 +212,13 @@ export async function getDashboardData(): Promise<{ data: DashboardData; error: 
         demos: demosCount.count ?? 0,
         pendingEstimates: pendingEstimatesCount.count ?? 0,
         activeDemos: activeDemosCount.count ?? 0,
+        aiOutputs: aiOutputsCount.count ?? 0,
+        aiErrors: aiErrorsCount.count ?? 0,
       },
       activity,
       recentClients,
       recentEstimates,
+      recentAIOutputs: (recentAIResult.data ?? []) as { id: string; tool_name: string; created_at: string; provider: string }[],
     },
     error: null,
   };

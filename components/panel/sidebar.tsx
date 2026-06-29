@@ -15,6 +15,9 @@ import {
   ChevronLeft,
   PanelsTopLeft,
   Layers,
+  Bot,
+  History,
+  FileText,
 } from "lucide-react";
 import type { PanelShellUser } from "./shell";
 
@@ -29,12 +32,20 @@ const sections = [
     ],
   },
   {
+    label: "AI Hub",
+    items: [
+      { href: "/panel/ai/narzedzia", label: "Narzędzia AI", Icon: Bot },
+      { href: "/panel/ai/wyniki", label: "Wyniki AI", Icon: History },
+      { href: "/panel/ai/szablony", label: "Szablony branżowe", Icon: FileText },
+      { href: "/panel/ai", label: "AI Monitor", Icon: Sparkles },
+    ],
+  },
+  {
     label: "Narzędzia",
     items: [
       { href: "/panel/demo", label: "Demo", Icon: Globe },
       { href: "/panel/templates", label: "Szablony", Icon: PanelsTopLeft },
       { href: "/panel/builder", label: "Builder", Icon: Layers },
-      { href: "/panel/ai", label: "AI", Icon: Sparkles },
       { href: "/panel/wordpress", label: "WordPress", Icon: Layout },
       { href: "/panel/woocommerce", label: "WooCommerce", Icon: ShoppingBag },
     ],

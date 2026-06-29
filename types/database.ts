@@ -145,6 +145,10 @@ export interface Database {
           sent_at: string | null;
           first_viewed_at: string | null;
           expires_at: string | null;
+          generation_mode: string | null;
+          template_id: string | null;
+          last_ai_error: string | null;
+          section_overrides: Json | null;
         };
         Insert: {
           id?: string;
@@ -167,6 +171,10 @@ export interface Database {
           sent_at?: string | null;
           first_viewed_at?: string | null;
           expires_at?: string | null;
+          generation_mode?: string | null;
+          template_id?: string | null;
+          last_ai_error?: string | null;
+          section_overrides?: Json | null;
         };
         Update: Partial<Database["public"]["Tables"]["demos"]["Insert"]>;
         Relationships: [];
@@ -327,6 +335,76 @@ export interface Database {
           error?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["ai_generations"]["Insert"]>;
+        Relationships: [];
+      };
+      ai_tool_outputs: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string;
+          tool_id: string;
+          tool_name: string;
+          tool_category: string;
+          input_values: Json;
+          output_text: string;
+          provider: string;
+          model: string;
+          label: string | null;
+          notes: string | null;
+          status: string;
+          client_id: string | null;
+          lead_id: string | null;
+        };
+        Insert: {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+          tool_id: string;
+          tool_name: string;
+          tool_category?: string;
+          input_values?: Json;
+          output_text: string;
+          provider: string;
+          model: string;
+          label?: string | null;
+          notes?: string | null;
+          status?: string;
+          client_id?: string | null;
+          lead_id?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["ai_tool_outputs"]["Insert"]>;
+        Relationships: [];
+      };
+      ai_templates: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string;
+          name: string;
+          industry: string;
+          generation_mode: string;
+          description: string | null;
+          preview_url: string | null;
+          thumbnail_url: string | null;
+          demo_defaults: Json;
+          system_additions: string | null;
+          is_active: boolean;
+        };
+        Insert: {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+          name: string;
+          industry: string;
+          generation_mode?: string;
+          description?: string | null;
+          preview_url?: string | null;
+          thumbnail_url?: string | null;
+          demo_defaults?: Json;
+          system_additions?: string | null;
+          is_active?: boolean;
+        };
+        Update: Partial<Database["public"]["Tables"]["ai_templates"]["Insert"]>;
         Relationships: [];
       };
       leads: {

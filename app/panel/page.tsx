@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Users, FolderOpen, Calculator, Globe } from "lucide-react";
+import { Users, FolderOpen, Calculator, Globe, Bot, AlertTriangle } from "lucide-react";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { QuickActions } from "@/components/dashboard/quick-actions";
 import { ActivityFeed } from "@/components/dashboard/activity-feed";
@@ -34,6 +34,8 @@ export default async function PanelDashboard() {
     { label: "Aktywne projekty", value: data.stats.projects, sub: "w trakcie realizacji", icon: <FolderOpen size={14} /> },
     { label: "Wyceny", value: data.stats.estimates, sub: `${data.stats.pendingEstimates} oczekuje`, icon: <Calculator size={14} /> },
     { label: "Aktywne demo", value: data.stats.activeDemos, sub: `${data.stats.demos} łącznie`, icon: <Globe size={14} /> },
+    { label: "Wyniki AI", value: data.stats.aiOutputs, sub: "wygenerowane treści", icon: <Bot size={14} /> },
+    ...(data.stats.aiErrors > 0 ? [{ label: "Błędy AI", value: data.stats.aiErrors, sub: "wymagają uwagi", icon: <AlertTriangle size={14} /> }] : []),
   ];
 
   return (
@@ -101,6 +103,48 @@ export default async function PanelDashboard() {
         <div className="panel-card-body">
           <RecentTable items={data.recentEstimates as RecentItem[]} />
         </div>
+      </div>
+
+      {/* AI Hub quick block */}
+      <div className="panel-dash-ai panel-enter panel-enter-4">
+        <div className="panel-card panel-dash-ai-tools">
+          <div className="panel-card-header">
+            <span className="panel-card-title">Narzędzia AI</span>
+            <Link href="/panel/ai/narzedzia" className="panel-card-action">Wszystkie →</Link>
+          </div>
+          <div className="panel-card-body">
+            <div className="crm-quick-actions" style={{ gap: ".5rem" }}>
+              <Link href="/panel/ai/narzedzia/generator-nazwy-firmy" className="crm-action-link">Generator nazwy firmy</Link>
+              <Link href="/panel/ai/narzedzia/generator-tekstow-na-strone" className="crm-action-link">Generator tekstów na stronę</Link>
+              <Link href="/panel/ai/narzedzia/generator-seo" className="crm-action-link">Generator SEO</Link>
+              <Link href="/panel/ai/narzedzia/generator-postow-social" className="crm-action-link">Generator postów social</Link>
+              <Link href="/panel/ai/narzedzia/generator-regulaminu" className="crm-action-link">Generator regulaminu</Link>
+              <Link href="/panel/ai/narzedzia/audyt-strony" className="crm-action-link">Audyt strony</Link>
+            </div>
+          </div>
+        </div>
+
+        {data.recentAIOutputs.length > 0 && (
+          <div className="panel-card">
+            <div className="panel-card-header">
+              <span className="panel-card-title">Ostatnie wyniki AI</span>
+              <Link href="/panel/ai/wyniki" className="panel-card-action">Historia →</Link>
+            </div>
+            <div className="panel-card-body" style={{ padding: 0 }}>
+              {data.recentAIOutputs.map((o) => (
+                <div key={o.id} className="pa-recent-item">
+                  <div>
+                    <p style={{ fontSize: ".75rem", fontWeight: 600 }}>{o.tool_name}</p>
+                    <p className="crm-td-muted" style={{ fontSize: ".65rem" }}>
+                      {new Date(o.created_at).toLocaleString("pl-PL", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })} · {o.provider}
+                    </p>
+                  </div>
+                  <span className="crm-badge crm-badge--sm ai-badge--completed">✓</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Widgets */}

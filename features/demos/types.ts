@@ -54,6 +54,21 @@ export const DEMO_INDUSTRY_LABELS: Record<DemoIndustry, string> = {
   fitness: "Fitness",
 };
 
+export const DEMO_GENERATION_MODES = ["quick", "full", "premium", "publish"] as const;
+export type DemoGenerationMode = (typeof DEMO_GENERATION_MODES)[number];
+export const DEMO_GENERATION_MODE_LABELS: Record<DemoGenerationMode, string> = {
+  quick: "Szybkie demo",
+  full: "Pełne demo",
+  premium: "Wersja premium",
+  publish: "Gotowe do publikacji",
+};
+export const DEMO_GENERATION_MODE_DESC: Record<DemoGenerationMode, string> = {
+  quick: "Krótszy prompt, mniej sekcji, szybsza generacja",
+  full: "Kompletna strona — hero, usługi, opinie, FAQ, kontakt",
+  premium: "Więcej sekcji, bogatsze treści, lepsze SEO",
+  publish: "Zoptymalizowana pod wdrożenie — Vercel / eksport HTML",
+};
+
 export const DEMO_STYLES = [
   "premium",
   "minimal",
@@ -209,6 +224,9 @@ export type Demo = {
   sent_at: string | null;
   first_viewed_at: string | null;
   expires_at: string | null;
+  generation_mode: DemoGenerationMode | null;
+  last_ai_error: string | null;
+  section_overrides: Json | null;
   clients?: DemoClient | null;
   estimates?: DemoEstimate | null;
 };

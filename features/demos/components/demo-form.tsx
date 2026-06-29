@@ -11,6 +11,9 @@ import {
   DEMO_STATUS_LABELS,
   DEMO_STYLES,
   DEMO_STYLE_LABELS,
+  DEMO_GENERATION_MODES,
+  DEMO_GENERATION_MODE_LABELS,
+  DEMO_GENERATION_MODE_DESC,
   parseDemoImages,
   type ClientOption,
   type Demo,
@@ -156,6 +159,19 @@ export function DemoForm({
               </select>
               <FieldError errors={fieldErrors.style} />
             </div>
+          </div>
+
+          <div className="crm-field">
+            <label className="crm-label" htmlFor="generation_mode">Tryb generowania</label>
+            <select id="generation_mode" name="generation_mode" className="crm-select" defaultValue={defaultValues?.generation_mode ?? "full"}>
+              {DEMO_GENERATION_MODES.map((mode) => (
+                <option key={mode} value={mode}>{DEMO_GENERATION_MODE_LABELS[mode]}</option>
+              ))}
+            </select>
+            <span className="est-field-hint">
+              {DEMO_GENERATION_MODE_DESC[defaultValues?.generation_mode ?? "full"]}
+            </span>
+            <FieldError errors={fieldErrors.generation_mode} />
           </div>
         </section>
 

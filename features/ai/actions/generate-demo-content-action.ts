@@ -174,6 +174,7 @@ export async function generateDemoContentAction(input: {
       services: textOrNull(parsed.data.services),
       targetAudience: textOrNull(parsed.data.targetAudience),
       tone: textOrNull(parsed.data.tone),
+      generationMode: (demo.generation_mode as GenerateDemoContentInput["generationMode"]) ?? "full",
       estimate: estimate
         ? {
             websiteType: estimate.website_type,
