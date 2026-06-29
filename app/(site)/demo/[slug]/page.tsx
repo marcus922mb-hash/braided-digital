@@ -12,6 +12,7 @@ import {
 } from "@/features/demos/queries/demo-queries";
 import { parseDemoContent } from "@/features/demos/types";
 import { HandmadeJewelryTemplate } from "@/features/demos/templates/handmade-jewelry-template";
+import { DemoPrintTrigger } from "./demo-print-trigger";
 
 export function generateStaticParams() {
   return pricing.map((plan) => ({ slug: plan.slug }));
@@ -50,9 +51,16 @@ function PublicDemoMessage({ message }: { message: string }) {
   );
 }
 
-export default async function DemoPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function DemoPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ print?: string }>;
+}) {
   await connection();
   const { slug } = await params;
+  const { print } = await searchParams;
   const { data: demo } = await getPublicDemoBySlug(slug);
 
   if (demo) {
@@ -64,7 +72,12 @@ export default async function DemoPage({ params }: { params: Promise<{ slug: str
     }
 
     await trackPublicDemoView(demo);
-    return <HandmadeJewelryTemplate demo={demo} />;
+    return (
+      <>
+        {print === "1" && <DemoPrintTrigger />}
+        <HandmadeJewelryTemplate demo={demo} />
+      </>
+    );
   }
 
   const plan = pricing.find((item) => item.slug === slug);

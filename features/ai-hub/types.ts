@@ -32,7 +32,7 @@ export type AIToolDef = {
   fields: ToolField[];
   systemPrompt: string;
   buildPrompt: (values: Record<string, string>) => string;
-  outputFormat: "text" | "list" | "sections" | "colors" | "svg" | "svg-icons";
+  outputFormat: "text" | "list" | "sections" | "colors" | "svg" | "svg-icons" | "html";
   exampleSnippet: string;
   ctaLabel: string;
   available: boolean;

@@ -19,6 +19,7 @@ const breadcrumbLabels: Record<string, string> = {
   narzedzia: "Narzędzia AI",
   wyniki: "Wyniki",
   szablony: "Szablony branżowe",
+  prototypy: "Prototypy HTML",
   wordpress: "WordPress",
   woocommerce: "WooCommerce",
   ustawienia: "Ustawienia",

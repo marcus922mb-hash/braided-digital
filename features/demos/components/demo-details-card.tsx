@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect } from "react";
 import Link from "next/link";
-import { ExternalLink, Pencil, Send, UserRound, XCircle } from "lucide-react";
+import { ExternalLink, FileDown, Pencil, Printer, Send, UserRound, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { Demo, DemoActivity } from "@/features/demos/types";
 import type { DemoEmailLog } from "@/features/emails/types";
@@ -199,6 +199,8 @@ export function DemoDetailsCard({ demo, activity, emailLogs }: Props) {
             <a href={`/demo/${demo.slug}`} target="_blank" rel="noreferrer" className="crm-action-link"><ExternalLink size={13} />Otwórz demo</a>
             <DemoPublicLink slug={demo.slug} demoId={demo.id} compact label="Kopiuj link" />
             <SendDemoModal demo={demo} compact />
+            <a href={`/demo/${demo.slug}?print=1`} target="_blank" rel="noreferrer" className="crm-action-link"><Printer size={13} />Drukuj / PDF</a>
+            <a href={`/api/demo/${demo.slug}/export-html`} download={`demo-${demo.slug}.html`} className="crm-action-link"><FileDown size={13} />Eksport HTML</a>
             <QuickActionButton action={markDemoSentAction.bind(null, demo.id)} icon={<Send size={13} />} label="Oznacz jako wysłane" />
             <QuickActionButton action={deactivateDemoAction.bind(null, demo.id)} icon={<XCircle size={13} />} label="Dezaktywuj demo" />
             {demo.client_id && <Link href={`/panel/klienci/${demo.client_id}`} className="crm-action-link"><UserRound size={13} />Wróć do klienta</Link>}

@@ -984,6 +984,119 @@ APP ICON:
     ctaLabel: "Zamów pełny zestaw ikon od naszego designera",
     available: true,
   },
+
+  // 21 — HTML prototype generator
+  {
+    id: "generator-html-prototypu",
+    name: "Generator HTML prototypu",
+    tagline: "Gotowa strona w jednym pliku",
+    description: "Opisz stronę — AI wygeneruje kompletny plik HTML+CSS, który możesz podejrzeć w przeglądarce i pobrać od razu.",
+    iconName: "Code",
+    category: "content",
+    badge: "Nowe",
+    fields: [
+      { key: "typ", label: "Typ strony", type: "select", options: [
+        { value: "landing", label: "Landing page — sprzedażowa" },
+        { value: "wizytowka", label: "Wizytówka firmy" },
+        { value: "portfolio", label: "Portfolio / galeria prac" },
+        { value: "restauracja", label: "Restauracja / kawiarnia" },
+        { value: "link-bio", label: "Link w bio (mobile)" },
+      ], required: true },
+      { key: "firma", label: "Nazwa firmy", type: "text", placeholder: "np. Studio Kwiat", required: true },
+      { key: "branza", label: "Branża i główne usługi", type: "text", placeholder: "np. florystyka, dekoracje ślubne, warsztaty", required: true },
+      { key: "kolor", label: "Kolor przewodni", type: "text", placeholder: "np. #e8b4a0 lub pudrowy róż" },
+      { key: "styl", label: "Styl wizualny", type: "select", options: [
+        { value: "minimalistyczny", label: "Minimalistyczny — dużo przestrzeni, subtelny" },
+        { value: "elegancki", label: "Elegancki — ciemne tło, jasne akcenty" },
+        { value: "ciepły", label: "Ciepły — kremowe tony, krój szeryfowy" },
+        { value: "nowoczesny", label: "Nowoczesny — gradienty, bezszeryfowy" },
+        { value: "odwazny", label: "Odważny — mocne kolory, duża typografia" },
+      ]},
+    ],
+    systemPrompt: "Jesteś generatorem stron HTML. Zwracasz TYLKO kompletny kod HTML — bez opisu, bez markdown, bez backtick bloków kodu. Zaczynasz od <!DOCTYPE html> i kończysz na </html>. CSS jest w <style> w <head>. Strona musi być responsywna (mobile-first), profesjonalna, samodzielna (zero zewnętrznych JS, można użyć Google Fonts przez <link>). Treść po polsku.",
+    buildPrompt: (v_) => {
+      const typ = v(v_, "typ", "wizytowka");
+      const firma = v(v_, "firma", "Firma");
+      const branza = v(v_, "branza", "usługi");
+      const kolor = v(v_, "kolor", "#1a1a1a");
+      const styl = v(v_, "styl", "minimalistyczny");
+      const typy: Record<string, string> = {
+        landing: "landing page sprzedażowa z hero, korzyściami, CTA i sekcją kontaktu",
+        wizytowka: "wizytówka z nawigacją, hero, o firmie, usługami, danymi kontaktowymi i stopką",
+        portfolio: "portfolio z nagłówkiem, siatką projektów (6 placeholderów), bio i kontaktem",
+        restauracja: "strona restauracji z menu, galerią, godzinami otwarcia i rezerwacją",
+        "link-bio": "strona link-in-bio zoptymalizowana pod mobile: awatar, bio, 6-8 linków/przycisków",
+      };
+      return `Wygeneruj kompletną stronę HTML dla: ${firma}
+Typ: ${typy[typ] || typ}
+Branża: ${branza}
+Kolor główny: ${kolor}
+Styl: ${styl}
+
+WYMAGANIA TECHNICZNE:
+- Kompletny plik HTML (<!DOCTYPE html> do </html>)
+- CSS wbudowany w <style> w <head>
+- Responsywny: mobile-first, breakpoint 768px
+- Użyj Google Fonts przez <link> jeśli pasuje do stylu (Playfair Display, Inter, DM Sans, Lora)
+- Sekcje odpowiednie do typu: ${typy[typ] || typ}
+- Placeholder tekst po polsku, pasujący do branży: ${branza}
+- Przyciski HTML (bez JS)
+- Meta charset="UTF-8", viewport, description
+- Żadnych zewnętrznych CSS frameworków (tylko własny CSS)
+
+Odpowiedz WYŁĄCZNIE kodem HTML. Pierwsza linia: <!DOCTYPE html>`;
+    },
+    outputFormat: "html",
+    exampleSnippet: '<!DOCTYPE html>\n<html lang="pl">\n<head>\n  <meta charset="UTF-8">\n  <title>Studio Kwiat</title>\n  <style>/* ... */</style>\n</head>',
+    ctaLabel: "Zamów profesjonalną stronę od naszego zespołu",
+    available: true,
+  },
+
+  // 22 — PDF / print export helper
+  {
+    id: "generator-umowy",
+    name: "Generator umowy o dzieło",
+    tagline: "Prosta umowa gotowa do podpisania",
+    description: "Wypełnij dane — AI wygeneruje umowę o dzieło lub umowę zlecenia zgodną z polskim prawem, gotową do wydruku.",
+    iconName: "FileSignature",
+    category: "legal",
+    fields: [
+      { key: "typ_umowy", label: "Typ umowy", type: "select", options: [
+        { value: "dzielo", label: "Umowa o dzieło" },
+        { value: "zlecenie", label: "Umowa zlecenia" },
+        { value: "b2b", label: "Umowa B2B / współpraca" },
+      ], required: true },
+      { key: "zamawiajacy", label: "Zamawiający (imię, firma, adres)", type: "textarea", placeholder: "np. Jan Kowalski, ul. Kwiatowa 1, 00-001 Warszawa", rows: 2, required: true },
+      { key: "wykonawca", label: "Wykonawca (imię, firma, adres)", type: "textarea", placeholder: "np. Anna Nowak, Freelancer, NIP: 123-456-78-90", rows: 2, required: true },
+      { key: "przedmiot", label: "Przedmiot umowy / zakres prac", type: "textarea", placeholder: "np. Zaprojektowanie i wykonanie strony internetowej dla sklepu odzieżowego", rows: 3, required: true },
+      { key: "wynagrodzenie", label: "Wynagrodzenie brutto", type: "text", placeholder: "np. 3 000 zł brutto, płatne przelewem w ciągu 14 dni" },
+      { key: "termin", label: "Termin wykonania", type: "text", placeholder: "np. do 30 lipca 2026" },
+    ],
+    systemPrompt: "Jesteś prawnikiem specjalizującym się w umowach cywilnoprawnych w Polsce. Generujesz profesjonalne, zgodne z Kodeksem Cywilnym umowy gotowe do podpisania. Stosujesz standardowy format: §1, §2 itd. Piszesz po polsku.",
+    buildPrompt: (v_) => `Typ: ${v(v_, "typ_umowy", "dzielo")}
+Zamawiający: ${v(v_, "zamawiajacy")}
+Wykonawca: ${v(v_, "wykonawca")}
+Przedmiot: ${v(v_, "przedmiot")}
+Wynagrodzenie: ${v(v_, "wynagrodzenie", "do uzgodnienia")}
+Termin: ${v(v_, "termin", "do uzgodnienia")}
+
+Przygotuj kompletną umowę ${v(v_, "typ_umowy") === "dzielo" ? "o dzieło" : v(v_, "typ_umowy") === "zlecenie" ? "zlecenia" : "o współpracy B2B"} z następującymi paragrafami:
+
+§1. STRONY UMOWY
+§2. PRZEDMIOT UMOWY
+§3. TERMIN WYKONANIA
+§4. WYNAGRODZENIE I WARUNKI PŁATNOŚCI
+§5. PRAWA AUTORSKIE / PRAWA DO EFEKTÓW PRACY
+§6. ODPOWIEDZIALNOŚĆ STRON
+§7. ROZWIĄZANIE UMOWY
+§8. POSTANOWIENIA KOŃCOWE
+
+Na końcu: miejsca na datę i podpisy obu stron.`,
+    outputFormat: "sections",
+    exampleSnippet: "UMOWA O DZIEŁO\nnr __/2026\n\n§1. STRONY UMOWY\nZamawiający: Jan Kowalski...",
+    ctaLabel: "Skonsultuj umowę z prawnikiem",
+    available: true,
+  },
 ];
 
 export function getToolById(id: string): AIToolDef | undefined {

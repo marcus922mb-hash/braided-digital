@@ -18,6 +18,7 @@ import {
   Bot,
   History,
   FileText,
+  Code,
 } from "lucide-react";
 import type { PanelShellUser } from "./shell";
 
@@ -37,6 +38,7 @@ const sections = [
       { href: "/panel/ai/narzedzia", label: "Narzędzia AI", Icon: Bot },
       { href: "/panel/ai/wyniki", label: "Wyniki AI", Icon: History },
       { href: "/panel/ai/szablony", label: "Szablony branżowe", Icon: FileText },
+      { href: "/panel/ai/prototypy", label: "Prototypy HTML", Icon: Code },
       { href: "/panel/ai", label: "AI Monitor", Icon: Sparkles },
     ],
   },

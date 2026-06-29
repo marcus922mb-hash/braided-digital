@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect, useRef } from "react";
 import {
   runToolAction,
   saveLeadContactAction,
@@ -267,6 +267,60 @@ export function ToolWorkspace({ tool }: { tool: SerializableTool }) {
   );
 }
 
+function HtmlPreview({ html }: { html: string }) {
+  const [fullscreen, setFullscreen] = useState(false);
+  const [mobile, setMobile] = useState(false);
+  const downloadRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    const a = downloadRef.current;
+    if (!a) return;
+    const blob = new Blob([html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    a.href = url;
+    return () => URL.revokeObjectURL(url);
+  }, [html]);
+
+  return (
+    <div className={`aihub-html-wrap${fullscreen ? " is-fullscreen" : ""}`}>
+      <div className="aihub-html-toolbar">
+        <span className="aihub-html-label">Podgląd strony</span>
+        <div className="aihub-html-toolbar-actions">
+          <button
+            type="button"
+            onClick={() => setMobile((m) => !m)}
+            className={`btn-ghost btn-sm${mobile ? " is-active" : ""}`}
+          >
+            {mobile ? "Desktop" : "Mobile"}
+          </button>
+          <button
+            type="button"
+            onClick={() => setFullscreen((f) => !f)}
+            className="btn-ghost btn-sm"
+          >
+            {fullscreen ? "Zmniejsz" : "Pełny ekran"}
+          </button>
+          <a
+            ref={downloadRef}
+            download="prototype.html"
+            className="btn-ghost btn-sm"
+          >
+            ↓ Pobierz HTML
+          </a>
+        </div>
+      </div>
+      <div className={`aihub-html-frame${mobile ? " is-mobile" : ""}`}>
+        <iframe
+          srcDoc={html}
+          sandbox="allow-scripts"
+          title="Podgląd wygenerowanej strony"
+          className="aihub-html-iframe"
+        />
+      </div>
+    </div>
+  );
+}
+
 function SvgPreview({ svgCode, label, fileName }: { svgCode: string; label?: string; fileName?: string }) {
   const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgCode)}`;
   return (
@@ -335,6 +389,12 @@ function renderLine(line: string, i: number): React.ReactNode {
 }
 
 function ResultRenderer({ text }: { text: string }) {
+  // Detect full HTML document
+  const htmlMatch = text.match(/<!DOCTYPE html[\s\S]*<\/html>/i) ?? text.match(/<html[\s\S]*<\/html>/i);
+  if (htmlMatch) {
+    return <HtmlPreview html={htmlMatch[0]} />;
+  }
+
   const svgBlocks = extractSvgBlocks(text);
 
   // For svg-icons format: FAVICON: <svg...> APP ICON: <svg...>

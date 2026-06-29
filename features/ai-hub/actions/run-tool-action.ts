@@ -29,6 +29,11 @@ export async function runToolAction(
       ? "seo_generation"
       : "content_generation";
 
+  const maxTokens =
+    tool.outputFormat === "html" ? 8000
+    : tool.outputFormat === "svg" || tool.outputFormat === "svg-icons" ? 4000
+    : 3500;
+
   let result;
   try {
     result = await aiRouter.generate({
@@ -38,7 +43,7 @@ export async function runToolAction(
         { role: "user", content: prompt },
       ],
       temperature: 0.72,
-      maxTokens: 3500,
+      maxTokens,
     });
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Błąd generowania AI.";
