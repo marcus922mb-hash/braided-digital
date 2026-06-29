@@ -64,36 +64,6 @@ export default async function ToolPage({ params }: Props) {
 
             {/* Right — info sidebar */}
             <aside className="aihub-tool-sidebar">
-              {/* Example snippet */}
-              <div className="aihub-sidebar-card">
-                <p className="sidebar-label">Przykładowy wynik</p>
-                <pre className="aihub-snippet">{tool.exampleSnippet}</pre>
-              </div>
-
-              {/* What you get */}
-              <div className="aihub-sidebar-card">
-                <p className="sidebar-label">Co otrzymujesz</p>
-                <ul className="aihub-gets">
-                  <li>✓ Wynik wygenerowany przez AI</li>
-                  <li>✓ Gotowy do użycia na stronie</li>
-                  <li>✓ Bez rejestracji i karty</li>
-                  <li>✓ Możesz kopiować i edytować</li>
-                </ul>
-              </div>
-
-              {/* CTA */}
-              <div className="aihub-sidebar-cta">
-                <p className="sidebar-label">Chcesz gotową stronę?</p>
-                <p>
-                  AI generuje podstawę. Braided Digital tworzy
-                  profesjonalne strony z indywidualnym designem,
-                  SEO i pełnym wdrożeniem.
-                </p>
-                <Link href="/kontakt" className="btn-primary mt-4 w-full text-center">
-                  Porozmawiajmy →
-                </Link>
-              </div>
-
               {/* Related tools */}
               {relatedTools.length > 0 && (
                 <div className="aihub-sidebar-card">
