@@ -9,11 +9,16 @@ import {
   updateToolOutputAction,
   type AIToolOutput,
 } from "@/features/ai-hub/actions/admin-tool-actions";
-import type { AIToolDef } from "@/features/ai-hub/types";
+import type { ToolField } from "@/features/ai-hub/types";
+
+type SerializableTool = {
+  id: string;
+  fields: ToolField[];
+};
 
 type Step = "form" | "loading" | "result";
 
-export function AdminToolWorkspace({ tool }: { tool: AIToolDef }) {
+export function AdminToolWorkspace({ tool }: { tool: SerializableTool }) {
   const router = useRouter();
   const [step, setStep] = useState<Step>("form");
   const [values, setValues] = useState<Record<string, string>>({});

@@ -5,11 +5,17 @@ import {
   runToolAction,
   saveLeadContactAction,
 } from "@/features/ai-hub/actions/run-tool-action";
-import type { AIToolDef, ToolResult } from "@/features/ai-hub/types";
+import type { ToolField, ToolResult } from "@/features/ai-hub/types";
+
+type SerializableTool = {
+  id: string;
+  fields: ToolField[];
+  ctaLabel: string;
+};
 
 type Step = "form" | "loading" | "result" | "lead" | "done";
 
-export function ToolWorkspace({ tool }: { tool: AIToolDef }) {
+export function ToolWorkspace({ tool }: { tool: SerializableTool }) {
   const [step, setStep] = useState<Step>("form");
   const [values, setValues] = useState<Record<string, string>>({});
   const [result, setResult] = useState<ToolResult | null>(null);

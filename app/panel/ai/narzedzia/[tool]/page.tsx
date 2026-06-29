@@ -67,7 +67,7 @@ export default async function PanelToolPage({ params }: Props) {
               <span className="panel-card-title">Generator</span>
             </div>
             <div className="panel-card-body">
-              <AdminToolWorkspace tool={tool} />
+              <AdminToolWorkspace tool={{ id: tool.id, fields: tool.fields }} />
             </div>
           </div>
         </div>

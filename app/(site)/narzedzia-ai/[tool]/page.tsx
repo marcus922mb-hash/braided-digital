@@ -59,7 +59,7 @@ export default async function ToolPage({ params }: Props) {
                 <p className="aihub-tool-desc mt-4">{tool.description}</p>
               </div>
 
-              <ToolWorkspace tool={tool} />
+              <ToolWorkspace tool={{ id: tool.id, fields: tool.fields, ctaLabel: tool.ctaLabel }} />
             </div>
 
             {/* Right — info sidebar */}
