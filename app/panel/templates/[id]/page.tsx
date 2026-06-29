@@ -5,6 +5,8 @@ import { ArrowLeft, Check, Star } from "lucide-react";
 import { getTemplateById, templates } from "@/features/templates/catalog";
 import { TemplateVisual } from "@/features/templates/components/template-visual";
 import { UseTemplateButton } from "@/features/templates/components/use-template-button";
+import { TEMPLATE_WEBSITE_TYPE_LABELS } from "@/features/templates/types";
+import { formatPriceFrom } from "@/config/public-offer";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -27,12 +29,14 @@ export default async function TemplateDetailsPage({ params }: Props) {
     <div className="tpl-detail">
       <div className="tpl-detail-nav">
         <Link href="/panel/templates"><ArrowLeft size={13} /> Wszystkie szablony</Link>
-        <span>{template.industry} / {template.style}</span>
+        <span>{TEMPLATE_WEBSITE_TYPE_LABELS[template.websiteType]} / {template.industry} / {template.style}</span>
       </div>
 
       <div className="tpl-detail-header">
         <div>
-          <span className="tpl-kicker">Premium template / {template.industry}</span>
+          <span className="tpl-kicker">
+            {TEMPLATE_WEBSITE_TYPE_LABELS[template.websiteType]} / {formatPriceFrom(template.priceFrom)}
+          </span>
           <h1>{template.name}</h1>
           <p>{template.summary}</p>
           <div className="tpl-detail-tags">

@@ -5,6 +5,7 @@ import type {
   LeadFormData,
   ProjectType,
 } from "./types";
+import { PUBLIC_PACKAGE_PRICES } from "@/config/public-offer";
 
 export const PROJECT_LABELS: Record<ProjectType, string> = {
   website: "Strona internetowa",
@@ -31,8 +32,8 @@ export function calculateEstimate(data: LeadFormData): EstimateResult {
   };
 
   if (data.projectType === "website") {
-    if (data.websitePages === "one-page") add("projekt i wdrożenie strony one page", 690, 890);
-    if (data.websitePages === "2-5") add("strona firmowa do 5 podstron", 1390, 1790);
+    if (data.websitePages === "one-page") add("projekt i wdrożenie strony one page", PUBLIC_PACKAGE_PRICES["one-page"], 890);
+    if (data.websitePages === "2-5") add("strona firmowa do 5 podstron", PUBLIC_PACKAGE_PRICES["strona-firmowa"], 1790);
     if (data.websitePages === "6-10") add("rozbudowana strona 6–10 podstron", 1990, 2690);
     if (data.serviceCount === "4-8") add("rozbudowana prezentacja usług", 120, 220);
     if (data.serviceCount === "9+") add("katalog wielu usług", 250, 450);
@@ -45,8 +46,8 @@ export function calculateEstimate(data: LeadFormData): EstimateResult {
   }
 
   if (data.projectType === "shop") {
-    if (data.productCount === "1-10") add("mini sklep do 10 produktów", 1790, 2290);
-    if (data.productCount === "11-30") add("sklep do 30 produktów", 2890, 3590);
+    if (data.productCount === "1-10") add("mini sklep do 10 produktów", PUBLIC_PACKAGE_PRICES["mini-sklep-handmade"], 2290);
+    if (data.productCount === "11-30") add("sklep do 30 produktów", PUBLIC_PACKAGE_PRICES["sklep-online"], 3590);
     if (data.productCount === "31-100") add("sklep 31–100 produktów", 3590, 5190);
     if (data.productCount === "100+") add("rozbudowany sklep 100+ produktów", 4990, 6990);
     if (!data.productContentReady) add("przygotowanie i wprowadzenie produktów", 200, data.productCount === "100+" ? 1200 : 600);
@@ -62,8 +63,8 @@ export function calculateEstimate(data: LeadFormData): EstimateResult {
   }
 
   if (data.projectType === "landing") {
-    if (data.landingSize === "single-screen") add("cyfrowa wizytówka / pojedynczy ekran", 290, 390);
-    if (data.landingSize === "standard") add("landing page 4–6 sekcji", 490, 790);
+    if (data.landingSize === "single-screen") add("cyfrowa wizytówka / pojedynczy ekran", PUBLIC_PACKAGE_PRICES["cyfrowa-wizytowka"], 390);
+    if (data.landingSize === "standard") add("landing page 4–6 sekcji", PUBLIC_PACKAGE_PRICES["one-page"], 890);
     if (data.landingSize === "sales") add("rozbudowany landing sprzedażowy", 790, 1290);
     if (!data.hasBrandAssetsLanding) add("przygotowanie materiałów wizualnych (kolory, typografia)", 150, 350);
     if (data.needsCopywriting) add("opracowanie treści sprzedażowej", 200, 450);
@@ -75,7 +76,7 @@ export function calculateEstimate(data: LeadFormData): EstimateResult {
   }
 
   if (data.projectType === "bio") {
-    add("indywidualna strona link w bio", 390, 490);
+    add("indywidualna strona link w bio", PUBLIC_PACKAGE_PRICES["link-w-bio"], 490);
     if (data.bioLinks === "6-10") add("rozszerzony układ 6–10 linków", 60, 120);
     if (data.bioLinks === "10+") add("ponad 10 linków i sekcji", 120, 220);
     if (data.needsGallery) add("galeria lub wyróżnione realizacje", 90, 180);

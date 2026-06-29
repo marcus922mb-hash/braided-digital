@@ -25,19 +25,19 @@ export const WEBSITE_TYPE_LABELS: Record<EstimateType, string> = {
 };
 
 export const BASE_PRICES: Record<EstimateType, number> = {
-  landing_page: 700,
-  business_website: 1200,
-  portfolio: 900,
-  blog: 1100,
-  wordpress_website: 1500,
-  nextjs_website: 1800,
-  woocommerce_shop: 2500,
-  headless_woocommerce: 4500,
-  web_app: 5000,
+  landing_page: PUBLIC_PACKAGE_PRICES["cyfrowa-wizytowka"],
+  business_website: PUBLIC_PACKAGE_PRICES["strona-firmowa"],
+  portfolio: PUBLIC_PACKAGE_PRICES["one-page"],
+  blog: PUBLIC_PACKAGE_PRICES["strona-firmowa"],
+  wordpress_website: PUBLIC_PACKAGE_PRICES["strona-firmowa"],
+  nextjs_website: PUBLIC_PACKAGE_PRICES["strona-firmowa"],
+  woocommerce_shop: PUBLIC_PACKAGE_PRICES["mini-sklep-handmade"],
+  headless_woocommerce: PUBLIC_PACKAGE_PRICES["sklep-online"],
+  web_app: PUBLIC_PACKAGE_PRICES["sklep-online"],
 };
 
 export const ADDON_PRICES = {
-  extra_page: 250,
+  extra_page: 190,
   wordpress: 500,
   woocommerce: 1000,
   nextjs: 700,
@@ -87,3 +87,4 @@ export function getPriceBreakdown(params: CalcParams): PriceBreakdownItem[] {
 export function calculateBasePrice(params: CalcParams): number {
   return getPriceBreakdown(params).reduce((sum, item) => sum + item.price, 0);
 }
+import { PUBLIC_PACKAGE_PRICES } from "@/config/public-offer";

@@ -88,9 +88,16 @@ export async function runToolAction(
 
     if (outputError) throw outputError;
   } catch (error) {
+    const message =
+      error &&
+      typeof error === "object" &&
+      "message" in error &&
+      typeof error.message === "string"
+        ? error.message
+        : String(error);
     console.error("[ai-tools] Nie udało się zapisać publicznego wyniku", {
       toolId,
-      error: error instanceof Error ? error.message : String(error),
+      error: message,
     });
     return {
       success: false,

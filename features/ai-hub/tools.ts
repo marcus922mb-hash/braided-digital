@@ -816,15 +816,15 @@ Odpowiedz TYLKO kodem SVG. Zacznij od <svg xmlns="http://www.w3.org/2000/svg" vi
   {
     id: "generator-czatu-ai",
     name: "Czat AI dla Twojej firmy",
-    tagline: "Asystent, który zna Twoją ofertę na pamięć",
-    description: "Skonfiguruj własnego chatbota AI, który odpowiada na pytania klientów 24/7, zna Twoje usługi i zbiera leady.",
+    tagline: "Gotowy widget do wklejenia na stronę klienta",
+    description: "Podłącz model i klucz API klienta, skonfiguruj wiedzę firmy i otrzymaj jedną linię kodu do wdrożenia. Klucz pozostaje zaszyfrowany, a rozmowy zapisują się w panelu.",
     iconName: "Bot",
     category: "business",
     badge: "Beta",
     fields: [
       { key: "firma", label: "Nazwa firmy", type: "text", placeholder: "np. Biuro Nieruchomości Bezpieczny Dom", required: true },
       { key: "branza", label: "Branża i usługi", type: "text", placeholder: "np. sprzedaż i wynajem nieruchomości w Krakowie", required: true },
-      { key: "pytania", label: "Typowe pytania od klientów", type: "textarea", placeholder: "np. Jakie mieszkania macie w ofercie? Jak wygląda proces kupna? Ile kosztuje pośrednictwo?", rows: 3 },
+      { key: "pytania", label: "Wiedza, cennik i typowe pytania", type: "textarea", placeholder: "Godziny pracy, ceny, zasady rezerwacji i odpowiedzi na częste pytania klientów", rows: 5 },
       { key: "cel", label: "Cel czatu", type: "select", options: [
         { value: "info", label: "Informowanie o ofercie" },
         { value: "leady", label: "Zbieranie kontaktów (leadów)" },

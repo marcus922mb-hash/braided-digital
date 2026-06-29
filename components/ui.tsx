@@ -30,7 +30,7 @@ function EditorialVisual({ variant }: { variant: HeroVisual }) {
     {variant === "offer" && <><div className="visual-screen screen-a"><span>WEB</span><i/><i/><i/></div><div className="visual-screen screen-b"><span>SHOP</span><i/><i/></div><div className="visual-phone"><i/><i/><i/></div></>}
     {variant === "portfolio" && <><div className="visual-frame frame-a"><i/></div><div className="visual-frame frame-b"><i/></div><div className="visual-caption">MA / 01</div></>}
     {variant === "process" && <><div className="visual-path"/>{["01","02","03","04"].map((n,i)=><span key={n} className={`visual-node node-${i+1}`}>{n}</span>)}</>}
-    {variant === "pricing" && <>{["390","990","2490"].map((price,i)=><div key={price} className={`visual-price price-${i+1}`}><small>OD</small><strong>{price}</strong><span>PLN</span></div>)}</>}
+    {variant === "pricing" && <>{["290","690","1790"].map((price,i)=><div key={price} className={`visual-price price-${i+1}`}><small>OD</small><strong>{price}</strong><span>PLN</span></div>)}</>}
     {variant === "faq" && <><div className="visual-bubble bubble-a">Ile trwa projekt?</div><div className="visual-bubble bubble-b">Czy pomagasz z treścią?</div><div className="visual-bubble bubble-c">Tak. Ustalamy zakres.</div></>}
     {variant === "contact" && <><div className="visual-pin"><span>BD</span></div><div className="visual-contact-line"/><div className="visual-message">Napisz kilka zdań.<br/><b>Odpowiem osobiście.</b></div></>}
     {variant === "estimate" && <><div className="visual-chart">{[34,58,82,68].map((h,i)=><i key={i} style={{height:`${h}%`}}/>)}</div><div className="visual-total"><small>TWÓJ ZAKRES</small><strong>z pozycji,<br/>nie z przypadku</strong></div></>}

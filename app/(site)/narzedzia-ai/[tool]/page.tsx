@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getToolById, AI_TOOLS, TOOL_CATEGORIES } from "@/features/ai-hub/tools";
 import { ToolWorkspace } from "@/features/ai-hub/components/tool-workspace";
+import { DeployableChatWorkspace } from "@/features/ai-hub/components/deployable-chat-workspace";
 import { canonical } from "@/lib/seo";
 
 type Props = { params: Promise<{ tool: string }> };
@@ -59,7 +60,11 @@ export default async function ToolPage({ params }: Props) {
                 <p className="aihub-tool-desc mt-4">{tool.description}</p>
               </div>
 
-              <ToolWorkspace tool={{ id: tool.id, fields: tool.fields, ctaLabel: tool.ctaLabel }} />
+              {tool.id === "generator-czatu-ai" ? (
+                <DeployableChatWorkspace />
+              ) : (
+                <ToolWorkspace tool={{ id: tool.id, fields: tool.fields, ctaLabel: tool.ctaLabel }} />
+              )}
             </div>
 
             {/* Right — info sidebar */}

@@ -1,4 +1,5 @@
 import { BagIcon, GlobeIcon, LinkIcon, ToolsIcon } from "@/components/icons";
+import { PUBLIC_PACKAGES, formatPriceFrom } from "@/config/public-offer";
 
 export const navItems = [
   { href: "/oferta", label: "Oferta" },
@@ -24,26 +25,11 @@ export const processSteps = [
   { number: "04", title: "Start i wsparcie", text: "Testuję stronę, pomagam z publikacją i pokazuję Ci, jak swobodnie korzystać z gotowego rozwiązania." },
 ];
 
-type PricingPlan = {
-  slug: string;
-  title: string;
-  price: string;
-  time: string;
-  tag: string;
-  lead: string;
-  features: string[];
-  featured?: boolean;
-  handmade?: boolean;
-};
-
-export const pricing: PricingPlan[] = [
-  { slug: "cyfrowa-wizytowka", title: "Cyfrowa wizytówka", price: "od 290 zł", time: "3-5 dni", tag: "Dobry początek", lead: "Prosta, estetyczna strona z najważniejszymi informacjami dla marki, która dopiero rusza.", features: ["jedna sekcja / ekran", "opis i dane kontaktowe", "wersja mobilna", "przycisk WhatsApp"] },
-  { slug: "link-w-bio", title: "Link w bio", price: "od 390 zł", time: "5-7 dni", tag: "Dla social media", lead: "Własne miejsce na wszystkie linki, produkty i kontakt - spójne z charakterem marki.", features: ["do 8 linków lub sekcji", "indywidualne kolory", "wersja mobilna", "podpięcie domeny"] },
-  { slug: "one-page", title: "One page", price: "od 690 zł", time: "1-2 tygodnie", tag: "Najlepszy na start", lead: "Pełna strona na jednym ekranie przewijania dla usług, rękodzieła i marek osobistych.", features: ["do 6 rozbudowanych sekcji", "oferta i o marce", "formularz kontaktowy", "podstawowe SEO"], featured: true },
-  { slug: "strona-firmowa", title: "Strona firmowa", price: "od 1 390 zł", time: "2-4 tygodnie", tag: "Więcej przestrzeni", lead: "Wielostronicowy serwis dla firmy, która ma szerszą ofertę i chce budować widoczność.", features: ["do 5 podstron", "indywidualny kierunek", "formularz i SEO", "instrukcja obsługi"] },
-  { slug: "mini-sklep-handmade", title: "Mini sklep handmade", price: "od 1 790 zł", time: "3-5 tygodni", tag: "Dla rękodzieła", lead: "Lekki sklep dla niewielkiej kolekcji - idealny, gdy sprzedajesz własne produkty w małych seriach.", features: ["do 10 produktów", "płatności i dostawa", "kupony rabatowe", "szkolenie z zamówień"], handmade: true },
-  { slug: "sklep-online", title: "Sklep online", price: "od 2 890 zł", time: "4-7 tygodni", tag: "Pełna sprzedaż", lead: "Rozbudowany sklep dla marki gotowej rozwijać ofertę i prowadzić regularną sprzedaż online.", features: ["do 30 produktów", "kategorie i filtry", "płatności i dostawy", "analityka i szkolenie"] },
-];
+export const pricing = PUBLIC_PACKAGES.map((item) => ({
+  ...item,
+  features: [...item.features],
+  price: formatPriceFrom(item.priceFrom),
+}));
 
 export const faqs = [
   { q: "Ile trwa stworzenie strony?", a: "Najczęściej od 3 do 5 tygodni. Sklep internetowy zwykle wymaga 5-8 tygodni. Dokładny termin zależy od zakresu i sprawnego przekazania materiałów." },

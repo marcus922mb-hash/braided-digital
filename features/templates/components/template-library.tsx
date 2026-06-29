@@ -14,27 +14,20 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import type { TemplateDefinition } from "@/features/templates/types";
+import {
+  TEMPLATE_WEBSITE_TYPE_LABELS,
+  type TemplateDefinition,
+  type TemplateWebsiteType,
+} from "@/features/templates/types";
+import { formatPriceFrom } from "@/config/public-offer";
 import { TemplateVisual } from "./template-visual";
 
 const ALL = "Wszystkie";
 
-const GROUP_LABELS: Record<string, string> = {
-  "handmade": "Rękodzieło",
-  "beauty": "Uroda",
-  "restaurant": "Restauracja",
-  "services": "Usługi",
-  "medical": "Medycyna",
-  "creative": "Creative",
-  "ecommerce": "E-commerce",
-  "one-page": "One Page",
-  "link-in-bio": "Link in Bio",
-};
-
 export function TemplateLibrary({ templates }: { templates: TemplateDefinition[] }) {
   const [query, setQuery] = useState("");
   const [industry, setIndustry] = useState(ALL);
-  const [group, setGroup] = useState(ALL);
+  const [websiteType, setWebsiteType] = useState<string>(ALL);
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const [favorites, setFavorites] = useState<string[]>(() => {
     try { return JSON.parse(localStorage.getItem("ma-template-favorites") ?? "[]") as string[]; }
@@ -47,8 +40,8 @@ export function TemplateLibrary({ templates }: { templates: TemplateDefinition[]
     [templates]
   );
 
-  const groups = useMemo(
-    () => [ALL, ...Array.from(new Set(templates.map((template) => template.group)))],
+  const websiteTypes = useMemo(
+    () => [ALL, ...Array.from(new Set(templates.map((template) => template.websiteType)))],
     [templates]
   );
 
@@ -60,16 +53,17 @@ export function TemplateLibrary({ templates }: { templates: TemplateDefinition[]
         template.industry,
         template.summary,
         template.style,
+        TEMPLATE_WEBSITE_TYPE_LABELS[template.websiteType],
         ...template.tags,
       ].join(" ").toLocaleLowerCase("pl");
       return (
         (!normalizedQuery || searchable.includes(normalizedQuery)) &&
         (industry === ALL || template.industry === industry) &&
-        (group === ALL || template.group === group) &&
+        (websiteType === ALL || template.websiteType === websiteType) &&
         (!favoritesOnly || favorites.includes(template.id))
       );
     });
-  }, [favorites, favoritesOnly, group, industry, query, templates]);
+  }, [favorites, favoritesOnly, industry, query, templates, websiteType]);
 
   function toggleFavorite(id: string) {
     setFavorites((current) => {
@@ -84,11 +78,11 @@ export function TemplateLibrary({ templates }: { templates: TemplateDefinition[]
   function resetFilters() {
     setQuery("");
     setIndustry(ALL);
-    setGroup(ALL);
+    setWebsiteType(ALL);
     setFavoritesOnly(false);
   }
 
-  const hasFilters = query || industry !== ALL || group !== ALL || favoritesOnly;
+  const hasFilters = query || industry !== ALL || websiteType !== ALL || favoritesOnly;
 
   return (
     <div className="tpl-library">
@@ -151,15 +145,17 @@ export function TemplateLibrary({ templates }: { templates: TemplateDefinition[]
             <div className="tpl-filter-panel-inner">
               <span>Typ strony</span>
               <div className="tpl-industry-list">
-                {groups.map((item) => (
+                {websiteTypes.map((item) => (
                   <button
                     type="button"
                     key={item}
-                    className={group === item ? "is-active" : ""}
-                    onClick={() => setGroup(item)}
+                    className={websiteType === item ? "is-active" : ""}
+                    onClick={() => setWebsiteType(item)}
                   >
-                    {group === item && <Check size={10} />}
-                    {item === ALL ? "Wszystkie typy" : (GROUP_LABELS[item] ?? item)}
+                    {websiteType === item && <Check size={10} />}
+                    {item === ALL
+                      ? "Wszystkie typy"
+                      : TEMPLATE_WEBSITE_TYPE_LABELS[item as TemplateWebsiteType]}
                   </button>
                 ))}
               </div>
@@ -209,7 +205,10 @@ export function TemplateLibrary({ templates }: { templates: TemplateDefinition[]
                   </Link>
                   <div className="tpl-card-body">
                     <div className="tpl-card-topline">
-                      <span>{template.industry}</span>
+                      <span>
+                        {TEMPLATE_WEBSITE_TYPE_LABELS[template.websiteType]} ·{" "}
+                        {formatPriceFrom(template.priceFrom)}
+                      </span>
                       <span><Star size={11} fill="currentColor" /> {template.rating.toFixed(1)}</span>
                     </div>
                     <div className="tpl-card-title-row">

@@ -4,11 +4,12 @@ import { Arrow } from "@/components/icons";
 import { LivePortfolio } from "@/components/live-portfolio";
 import { canonical } from "@/lib/seo";
 import { faqs, pricing, processSteps } from "@/lib/data";
+import { PUBLIC_PACKAGE_PRICES, formatPriceFrom } from "@/config/public-offer";
 
 export const metadata: Metadata = {
   title: "Strony i sklepy dla małych marek",
   description:
-    "Braided Digital projektuje strony, sklepy internetowe i linki w bio dla rękodzieła, lokalnych usług i małych firm. Ceny od 390 zł.",
+    "Braided Digital projektuje strony, sklepy internetowe i linki w bio dla rękodzieła, lokalnych usług i małych firm. Ceny od 290 zł.",
   alternates: canonical("/"),
 };
 
@@ -31,9 +32,9 @@ const audiences = [
 ];
 
 const services = [
-  { number: "01", title: "Link w bio", price: "od 490 zł", time: "5–7 dni", text: "Własny, spójny adres zamiast przypadkowej listy linków.", href: "/oferta#link-bio" },
-  { number: "02", title: "Strona one page", price: "od 990 zł", time: "1–2 tyg.", text: "Oferta, historia marki, odpowiedzi i kontakt na jednej dobrze ułożonej stronie.", href: "/oferta#strony" },
-  { number: "03", title: "Mały sklep handmade", price: "od 2490 zł", time: "3–5 tyg.", text: "Produkty, płatności i wysyłka przygotowane bez zbędnego rozmachu.", href: "/oferta#sklepy" },
+  { number: "01", title: "Link w bio", price: formatPriceFrom(PUBLIC_PACKAGE_PRICES["link-w-bio"]), time: "5–7 dni", text: "Własny, spójny adres zamiast przypadkowej listy linków.", href: "/oferta#link-bio" },
+  { number: "02", title: "Strona one page", price: formatPriceFrom(PUBLIC_PACKAGE_PRICES["one-page"]), time: "1–2 tyg.", text: "Oferta, historia marki, odpowiedzi i kontakt na jednej dobrze ułożonej stronie.", href: "/oferta#strony" },
+  { number: "03", title: "Mały sklep handmade", price: formatPriceFrom(PUBLIC_PACKAGE_PRICES["mini-sklep-handmade"]), time: "3–5 tyg.", text: "Produkty, płatności i wysyłka przygotowane bez zbędnego rozmachu.", href: "/oferta#sklepy" },
   { number: "04", title: "Pomoc WordPress", price: "od 120 zł", time: "od 1 godz.", text: "Drobne poprawki, nowe sekcje, konfiguracja i porządkowanie sklepu.", href: "/oferta#wordpress" },
 ];
 
@@ -58,7 +59,7 @@ export default function Home() {
               <Link href="/portfolio" className="btn-secondary">Zobacz MA Atelier</Link>
             </div>
             <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 border-t border-ink/12 pt-5 text-[.67rem] font-semibold uppercase tracking-[.12em] text-ink/50">
-              <span>Strony od 390 zł</span><span>Praca zdalna</span><span>Kontakt bezpośrednio ze mną</span>
+              <span>Strony od 290 zł</span><span>Praca zdalna</span><span>Kontakt bezpośrednio ze mną</span>
             </div>
           </div>
 
@@ -153,7 +154,7 @@ export default function Home() {
       <section className="border-y border-ink/10 bg-[#e9e1d3]">
         <div className="container-page py-16 md:py-20">
           <div className="grid gap-8 lg:grid-cols-[.85fr_1.15fr]" data-reveal>
-            <div><p className="kicker">Budżet bez zgadywania</p><h2 className="section-title mt-5">Możesz zacząć mało.</h2><p className="mt-5 max-w-md text-sm leading-7 text-ink/60">Najmniejszy pakiet kosztuje 390 zł. Przy większych projektach płatność można podzielić na etapy.</p></div>
+            <div><p className="kicker">Budżet bez zgadywania</p><h2 className="section-title mt-5">Możesz zacząć mało.</h2><p className="mt-5 max-w-md text-sm leading-7 text-ink/60">Najmniejszy pakiet kosztuje 290 zł. Przy większych projektach płatność można podzielić na etapy.</p></div>
             <div className="grid gap-px bg-ink/12 sm:grid-cols-3">
               {pricing.slice(0, 3).map((plan) => <article key={plan.slug} className="bg-[#e9e1d3] p-6"><p className="index">{plan.tag}</p><h3 className="mt-8 font-serif text-2xl">{plan.title}</h3><strong className="mt-2 block text-brass">{plan.price}</strong><p className="mt-4 text-xs leading-6 text-ink/55">{plan.lead}</p></article>)}
             </div>

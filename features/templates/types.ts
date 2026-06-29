@@ -10,6 +10,7 @@ export const TEMPLATE_GROUPS = [
   "ecommerce",
   "one-page",
   "link-in-bio",
+  "digital-card",
 ] as const;
 
 export type TemplateGroup = (typeof TEMPLATE_GROUPS)[number];
@@ -23,11 +24,35 @@ export type TemplateColors = {
   light: string;
 };
 
+export const TEMPLATE_WEBSITE_TYPES = [
+  "digital-card",
+  "link-in-bio",
+  "one-page",
+  "business-website",
+  "mini-shop",
+  "online-shop",
+] as const;
+
+export type TemplateWebsiteType = (typeof TEMPLATE_WEBSITE_TYPES)[number];
+
+export const TEMPLATE_WEBSITE_TYPE_LABELS: Record<TemplateWebsiteType, string> = {
+  "digital-card": "Cyfrowa wizytówka",
+  "link-in-bio": "Link w bio",
+  "one-page": "One page",
+  "business-website": "Strona firmowa",
+  "mini-shop": "Mini sklep handmade",
+  "online-shop": "Sklep online",
+};
+
 export type TemplateDefinition = {
   id: string;
   name: string;
   industry: string;
   group: TemplateGroup;
+  websiteType: TemplateWebsiteType;
+  priceFrom: number;
+  previewImages: string[];
+  imageQuery: string;
   summary: string;
   style: string;
   tags: string[];

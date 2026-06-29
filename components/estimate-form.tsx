@@ -11,6 +11,7 @@ import type {
   ProjectType,
   Timeline,
 } from "@/lib/types";
+import { PUBLIC_PACKAGE_PRICES, formatPriceFrom } from "@/config/public-offer";
 
 const STEPS = 5;
 
@@ -65,10 +66,10 @@ const DEFAULT_DATA: LeadFormData = {
 };
 
 const PROJECTS: { id: ProjectType; title: string; price: string; text: string }[] = [
-  { id: "website", title: "Strona internetowa", price: "od 990 zł", text: "One page lub serwis firmowy" },
-  { id: "shop", title: "Sklep internetowy", price: "od 2490 zł", text: "Produkty, płatności i dostawa" },
-  { id: "landing", title: "Landing page", price: "od 390 zł", text: "Jedna kampania lub oferta" },
-  { id: "bio", title: "Link w bio", price: "od 490 zł", text: "Mobilna mini-strona marki" },
+  { id: "website", title: "Strona internetowa", price: formatPriceFrom(PUBLIC_PACKAGE_PRICES["one-page"]), text: "One page lub serwis firmowy" },
+  { id: "shop", title: "Sklep internetowy", price: formatPriceFrom(PUBLIC_PACKAGE_PRICES["mini-sklep-handmade"]), text: "Produkty, płatności i dostawa" },
+  { id: "landing", title: "Landing page", price: formatPriceFrom(PUBLIC_PACKAGE_PRICES["cyfrowa-wizytowka"]), text: "Jedna kampania lub oferta" },
+  { id: "bio", title: "Link w bio", price: formatPriceFrom(PUBLIC_PACKAGE_PRICES["link-w-bio"]), text: "Mobilna mini-strona marki" },
   { id: "wordpress", title: "WordPress / WooCommerce", price: "od 120 zł", text: "Poprawka, audyt lub rozwój" },
 ];
 

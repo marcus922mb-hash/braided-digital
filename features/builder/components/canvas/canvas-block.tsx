@@ -4,7 +4,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
   GripVertical, Copy, Trash2, ChevronUp, ChevronDown,
-  Layout, Type, Image, Grid, MessageSquare, HelpCircle,
+  Layout, Type, Image as ImageIconLucide, Grid, MessageSquare, HelpCircle,
   DollarSign, Megaphone, BarChart2, Users, Clock, List,
   Phone, Anchor, Video, MapPin, Mail,
   ShoppingBag, FileText, Newspaper, Play,
@@ -16,12 +16,12 @@ import type { BuilderComponent } from "@/features/builder/types";
 import { useBuilderStore } from "@/features/builder/store/builder-store";
 
 const TYPE_ICONS: Record<string, React.ElementType> = {
-  hero: Image,
+  hero: ImageIconLucide,
   navbar: Layout,
   about: Type,
   services: Grid,
   features: List,
-  gallery: Image,
+  gallery: ImageIconLucide,
   testimonials: MessageSquare,
   faq: HelpCircle,
   pricing: DollarSign,
@@ -35,7 +35,7 @@ const TYPE_ICONS: Record<string, React.ElementType> = {
   video: Play,
   map: MapPin,
   newsletter: Mail,
-  instagram: Image,
+  instagram: ImageIconLucide,
   tiktok: Video,
   "woo-products": ShoppingBag,
   blog: Newspaper,
@@ -52,7 +52,7 @@ const TYPE_ICONS: Record<string, React.ElementType> = {
   "navbar-centered": Layout,
   "footer-minimal": Anchor,
   "footer-extended": Mail,
-  "hero-split": Image,
+  "hero-split": ImageIconLucide,
   process: List,
   awards: Award,
   comparison: Table2,
@@ -62,15 +62,15 @@ const TYPE_ICONS: Record<string, React.ElementType> = {
   "reservation": Phone,
   "accordion": List,
   "tabs": Layout,
-  "slider": Image,
+  "slider": ImageIconLucide,
   "hero-video": Play,
-  "hero-fullscreen": Image,
+  "hero-fullscreen": ImageIconLucide,
   "reviews-grid": Star,
   "media-row": Columns,
   "icon-grid": Grid,
   "pricing-toggle": DollarSign,
   "sticky-cta": Megaphone,
-  "before-after": Image,
+  "before-after": ImageIconLucide,
   "links-list": FileText,
   "event": Calendar,
 };
@@ -113,10 +113,21 @@ function BlockPreview({ component }: { component: BuilderComponent }) {
   const subtitle = (p.subtitle || p.content || p.description || "") as string;
 
   switch (component.type) {
-    case "hero":
+    case "hero": {
+      const heroImage = (p.backgroundImage || p.imageUrl) as string | undefined;
       return (
         <div className="bldr-preview bldr-preview--hero">
-          <div className="bldr-preview-hero-bg" style={{ background: component.styles.background || "#1a1a2e" }} />
+          <div
+            className="bldr-preview-hero-bg"
+            style={{
+              backgroundColor: component.styles.background || "#1a1a2e",
+              backgroundImage: heroImage
+                ? `linear-gradient(rgba(8,8,12,.48), rgba(8,8,12,.65)), url("${heroImage}")`
+                : undefined,
+              backgroundPosition: "center",
+              backgroundSize: "cover",
+            }}
+          />
           <div className="bldr-preview-hero-content">
             <div className="bldr-preview-tag">Hero</div>
             <div className="bldr-preview-h1">{title || "Tytuł hero"}</div>
@@ -128,6 +139,7 @@ function BlockPreview({ component }: { component: BuilderComponent }) {
           </div>
         </div>
       );
+    }
 
     case "navbar":
       return (
@@ -150,8 +162,15 @@ function BlockPreview({ component }: { component: BuilderComponent }) {
             <div className="bldr-preview-h2">{title || "O nas"}</div>
             <div className="bldr-preview-body">{(subtitle || "").slice(0, 120)}</div>
           </div>
-          <div className="bldr-preview-image-placeholder">
-            <Image size={20} style={{ opacity: .3 }} />
+          <div
+            className="bldr-preview-image-placeholder"
+            style={{
+              backgroundImage: p.imageUrl ? `url("${p.imageUrl as string}")` : undefined,
+              backgroundPosition: "center",
+              backgroundSize: "cover",
+            }}
+          >
+            {!p.imageUrl && <ImageIconLucide size={20} style={{ opacity: .3 }} />}
           </div>
         </div>
       );
@@ -175,17 +194,30 @@ function BlockPreview({ component }: { component: BuilderComponent }) {
         </div>
       );
 
-    case "gallery":
+    case "gallery": {
+      const galleryItems = (p.items as Array<{ imageUrl?: string }> | undefined) ?? [];
+      const visibleGalleryItems: Array<{ imageUrl?: string }> = galleryItems.length
+        ? galleryItems
+        : Array.from({ length: 6 }, () => ({}));
       return (
         <div className="bldr-preview bldr-preview--gallery">
           <div className="bldr-preview-h2">{title || "Galeria"}</div>
           <div className="bldr-preview-gallery-grid">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="bldr-preview-gallery-item" />
+            {visibleGalleryItems.slice(0, 6).map((item, i) => (
+              <div
+                key={i}
+                className="bldr-preview-gallery-item"
+                style={{
+                  backgroundImage: item.imageUrl ? `url("${item.imageUrl}")` : undefined,
+                  backgroundPosition: "center",
+                  backgroundSize: "cover",
+                }}
+              />
             ))}
           </div>
         </div>
       );
+    }
 
     case "testimonials":
       return (
@@ -244,9 +276,9 @@ function BlockPreview({ component }: { component: BuilderComponent }) {
         <div className="bldr-preview bldr-preview--statistics">
           {title && <div className="bldr-preview-h2">{title}</div>}
           <div className="bldr-preview-stats-row">
-            {((p.items || []) as Array<{ number: string; label: string }>).map((s, i) => (
+            {((p.items || []) as Array<{ number?: string; value?: string; label: string }>).map((s, i) => (
               <div key={i} className="bldr-preview-stat">
-                <div className="bldr-preview-stat-num">{s.number}</div>
+                <div className="bldr-preview-stat-num">{s.number || s.value}</div>
                 <div className="bldr-preview-stat-label">{s.label}</div>
               </div>
             ))}
@@ -384,22 +416,37 @@ function BlockPreview({ component }: { component: BuilderComponent }) {
         </div>
       );
 
-    case "woo-products":
+    case "woo-products": {
+      const products = (p.items as Array<{ name?: string; price?: string; imageUrl?: string }> | undefined) ?? [];
+      const visibleProducts: Array<{ name?: string; price?: string; imageUrl?: string }> = products.length
+        ? products
+        : Array.from({ length: 3 }, (_, i) => ({
+            name: `Produkt ${i + 1}`,
+            price: "99,00 zł",
+          }));
       return (
         <div className="bldr-preview bldr-preview--woo">
           <div className="bldr-preview-h2">{title || "Produkty"}</div>
           <div className="bldr-preview-cards">
-            {Array.from({ length: 3 }).map((_, i) => (
+            {visibleProducts.slice(0, 4).map((product, i) => (
               <div key={i} className="bldr-preview-card">
-                <div className="bldr-preview-card-image" />
-                <div className="bldr-preview-card-title">Produkt {i + 1}</div>
-                <div className="bldr-preview-card-price">99,00 zł</div>
+                <div
+                  className="bldr-preview-card-image"
+                  style={{
+                    backgroundImage: product.imageUrl ? `url("${product.imageUrl}")` : undefined,
+                    backgroundPosition: "center",
+                    backgroundSize: "cover",
+                  }}
+                />
+                <div className="bldr-preview-card-title">{product.name}</div>
+                <div className="bldr-preview-card-price">{product.price}</div>
               </div>
             ))}
           </div>
           <div className="bldr-preview-placeholder-badge">Placeholder — wymaga WooCommerce</div>
         </div>
       );
+    }
 
     case "blog":
       return (
@@ -422,7 +469,14 @@ function BlockPreview({ component }: { component: BuilderComponent }) {
       const links = (p.links as Array<{ label: string; url: string }> | undefined) ?? [];
       return (
         <div className="bldr-preview bldr-preview--linkinbio">
-          <div className="bldr-preview-lib-avatar" />
+          <div
+            className="bldr-preview-lib-avatar"
+            style={{
+              backgroundImage: p.avatarUrl ? `url("${p.avatarUrl as string}")` : undefined,
+              backgroundPosition: "center",
+              backgroundSize: "cover",
+            }}
+          />
           <div className="bldr-preview-lib-name">{(p.name as string) || "Imię / Marka"}</div>
           <div className="bldr-preview-lib-bio">{(p.bio as string) || "Krótki opis..."}</div>
           <div className="bldr-preview-lib-links">
@@ -466,8 +520,10 @@ function BlockPreview({ component }: { component: BuilderComponent }) {
         <div className="bldr-preview bldr-preview--logos">
           {title && <div className="bldr-preview-h2">{title}</div>}
           <div className="bldr-preview-logos-row">
-            {((p.items || []) as Array<{ name: string }>).slice(0, 6).map((item, i) => (
-              <div key={i} className="bldr-preview-logo-box">{item.name}</div>
+            {((p.items || []) as Array<string | { name: string }>).slice(0, 6).map((item, i) => (
+              <div key={i} className="bldr-preview-logo-box">
+                {typeof item === "string" ? item : item.name}
+              </div>
             ))}
           </div>
         </div>
@@ -611,7 +667,7 @@ function BlockPreview({ component }: { component: BuilderComponent }) {
             </div>
           </div>
           <div className="bldr-preview-image-placeholder" style={{ background: component.styles.background || "#1a1a2e" }}>
-            <Image size={20} style={{ opacity: .3 }} />
+            <ImageIconLucide size={20} style={{ opacity: .3 }} />
           </div>
         </div>
       );

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { getToolById, TOOL_CATEGORIES } from "@/features/ai-hub/tools";
 import { AdminToolWorkspace } from "@/features/ai-hub/components/admin-tool-workspace";
+import { DeployableChatWorkspace } from "@/features/ai-hub/components/deployable-chat-workspace";
 import { createClient } from "@/lib/supabase/server";
 
 type Props = { params: Promise<{ tool: string }> };
@@ -67,7 +68,11 @@ export default async function PanelToolPage({ params }: Props) {
               <span className="panel-card-title">Generator</span>
             </div>
             <div className="panel-card-body">
-              <AdminToolWorkspace tool={{ id: tool.id, fields: tool.fields }} />
+              {tool.id === "generator-czatu-ai" ? (
+                <DeployableChatWorkspace />
+              ) : (
+                <AdminToolWorkspace tool={{ id: tool.id, fields: tool.fields }} />
+              )}
             </div>
           </div>
         </div>

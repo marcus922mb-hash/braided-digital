@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: "%s | Braided Digital",
   },
   description:
-    "Projektuję strony, małe sklepy internetowe i linki w bio dla rękodzieła, lokalnych usług i małych firm. Ceny od 390 zł.",
+    "Projektuję strony, małe sklepy internetowe i linki w bio dla rękodzieła, lokalnych usług i małych firm. Ceny od 290 zł.",
   keywords: [
     "strony internetowe",
     "sklep internetowy WooCommerce",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Braided Digital",
-    description: "Strony i sklepy dla małych firm. Ceny od 390 zł.",
+    description: "Strony i sklepy dla małych firm. Ceny od 290 zł.",
   },
   robots: { index: true, follow: true },
 };

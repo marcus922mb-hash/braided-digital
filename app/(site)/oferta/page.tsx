@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Arrow, CheckIcon } from "@/components/icons";
 import { CtaBand, PageHero } from "@/components/ui";
 import { canonical } from "@/lib/seo";
+import { PUBLIC_PACKAGE_PRICES, formatPriceFrom } from "@/config/public-offer";
 
 export const metadata: Metadata = {
   title: "Oferta",
@@ -12,19 +13,19 @@ export const metadata: Metadata = {
 
 const services = [
   {
-    id: "strony", number: "01", title: "Strony internetowe", price: "od 390 zł",
+    id: "strony", number: "01", title: "Strony internetowe", price: formatPriceFrom(PUBLIC_PACKAGE_PRICES["cyfrowa-wizytowka"]),
     intro: "Od cyfrowej wizytówki po pełną stronę firmową. Układam treść tak, żeby klient szybko zrozumiał ofertę i wiedział, co zrobić dalej.",
     scope: ["indywidualny układ", "wersja mobilna", "formularz lub WhatsApp", "podstawowe SEO", "wdrożenie domeny"],
     goodFor: "usługi lokalne, marki osobiste, małe pracownie",
   },
   {
-    id: "sklepy", number: "02", title: "Sklepy internetowe", price: "od 2490 zł",
+    id: "sklepy", number: "02", title: "Sklepy internetowe", price: formatPriceFrom(PUBLIC_PACKAGE_PRICES["mini-sklep-handmade"]),
     intro: "Niewielki, czytelny sklep dla własnych produktów. Bez funkcji, których nie użyjesz, ale z porządnym procesem zakupu i obsługą zamówień.",
     scope: ["produkty i kategorie", "płatności", "metody dostawy", "kupony", "szkolenie z obsługi"],
     goodFor: "rękodzieło, krótkie serie, małe kolekcje",
   },
   {
-    id: "link-bio", number: "03", title: "Link w bio", price: "od 490 zł",
+    id: "link-bio", number: "03", title: "Link w bio", price: formatPriceFrom(PUBLIC_PACKAGE_PRICES["link-w-bio"]),
     intro: "Własna mini-strona pod jednym adresem. Zamiast generycznej listy linków dostajesz miejsce spójne z charakterem marki.",
     scope: ["do 8 linków lub sekcji", "kolory marki", "kontakt", "własna domena", "szybkie wdrożenie"],
     goodFor: "Instagram, TikTok, start marki bez pełnej strony",
