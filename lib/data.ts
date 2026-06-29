@@ -3,6 +3,7 @@ import { BagIcon, GlobeIcon, LinkIcon, ToolsIcon } from "@/components/icons";
 export const navItems = [
   { href: "/oferta", label: "Oferta" },
   { href: "/portfolio", label: "Portfolio" },
+  { href: "/narzedzia-ai", label: "Narzędzia AI" },
   { href: "/proces", label: "Proces" },
   { href: "/cennik", label: "Cennik" },
   { href: "/o-mnie", label: "O mnie" },

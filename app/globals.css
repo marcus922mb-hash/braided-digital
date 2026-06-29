@@ -3988,3 +3988,289 @@ body:has(.login-shell) {
 }
 .settings-ai-current strong { color: rgba(232,232,232,.7); }
 .settings-ai-current svg { flex-shrink: 0; color: rgba(232,232,232,.3); }
+
+/* =====================================================================
+   BTN UTILITIES
+   ===================================================================== */
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .5rem 1rem; border-radius: 6px; font-size: .8rem; font-weight: 600;
+  background: transparent; border: 1px solid rgba(25,24,21,.12);
+  color: var(--ink); cursor: pointer; transition: background .15s, border-color .15s;
+  text-decoration: none;
+}
+.btn-ghost:hover { background: rgba(25,24,21,.06); border-color: rgba(25,24,21,.2); }
+.btn-sm { padding: .35rem .75rem; font-size: .75rem; }
+.w-full { width: 100%; }
+.mt-2 { margin-top: .5rem; }
+.mt-4 { margin-top: 1rem; }
+.mt-6 { margin-top: 1.5rem; }
+.mt-8 { margin-top: 2rem; }
+.flex-wrap { flex-wrap: wrap; }
+.gap-4 { gap: 1rem; }
+.text-center { text-align: center; }
+.text-white { color: #fff; }
+.text-white\/65 { color: rgba(255,255,255,.65); }
+.max-w-xl { max-width: 36rem; }
+
+/* =====================================================================
+   AI HUB — PUBLIC TOOLS
+   ===================================================================== */
+
+/* Hero */
+.aihub-hero {
+  padding-block: clamp(6rem, 11vw, 10rem) clamp(4rem, 7vw, 7rem);
+  background: var(--paper);
+  border-bottom: 1px solid rgba(25,24,21,.08);
+}
+.aihub-hero-lead {
+  margin-top: 2rem;
+  max-width: 44rem;
+  font-size: clamp(.95rem, 1.5vw, 1.05rem);
+  line-height: 1.75;
+  color: var(--ink);
+  opacity: .7;
+}
+.aihub-stats {
+  display: flex; flex-wrap: wrap; gap: 2.5rem;
+  margin-top: 3rem;
+}
+.aihub-stat {
+  display: flex; flex-direction: column; gap: .2rem;
+}
+.aihub-stat strong {
+  font-family: var(--font-cormorant), serif;
+  font-size: 2.8rem; font-weight: 500;
+  letter-spacing: -.04em; line-height: 1;
+  color: var(--ink);
+}
+.aihub-stat span { font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(25,24,21,.45); }
+
+/* How it works */
+.aihub-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5rem; }
+.aihub-step { display: flex; flex-direction: column; gap: 1rem; }
+.aihub-step .index {
+  font-family: var(--font-cormorant), serif;
+  font-size: 3.5rem; font-weight: 400; letter-spacing: -.05em;
+  color: rgba(25,24,21,.12); line-height: 1;
+}
+.aihub-step h3 { font-size: .85rem; font-weight: 700; margin: 0; color: var(--ink); }
+.aihub-step p { font-size: .8rem; line-height: 1.65; color: rgba(25,24,21,.55); margin: 0; }
+
+/* Category section */
+.aihub-category { margin-bottom: 4rem; }
+.aihub-category-title {
+  font-size: .62rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--brass); display: flex; align-items: center; gap: .7rem;
+  margin-bottom: 1.5rem;
+}
+.aihub-category-title::before { content: ""; width: 2rem; height: 1px; background: currentColor; }
+
+/* Grid of cards */
+.aihub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+
+.aihub-card {
+  display: flex; align-items: flex-start; gap: 1rem;
+  padding: 1.25rem 1.25rem 1.25rem 1rem;
+  border: 1px solid rgba(25,24,21,.08); border-radius: 12px;
+  background: white; text-decoration: none; color: inherit;
+  transition: border-color .15s, box-shadow .15s, transform .15s;
+}
+.aihub-card:hover {
+  border-color: rgba(151,115,60,.25);
+  box-shadow: 0 4px 20px rgba(25,24,21,.07);
+  transform: translateY(-2px);
+}
+
+.aihub-card-icon {
+  flex-shrink: 0; width: 40px; height: 40px; border-radius: 10px;
+  background: linear-gradient(135deg, rgba(151,115,60,.12) 0%, rgba(154,79,56,.08) 100%);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold);
+}
+.aihub-card-body { flex: 1; min-width: 0; }
+.aihub-card-header { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+.aihub-card-header h4 { font-size: .82rem; font-weight: 700; margin: 0; color: var(--ink); }
+.aihub-card-tagline { font-size: .75rem; color: rgba(25,24,21,.5); margin: .2rem 0 0; line-height: 1.4; }
+.aihub-card-arrow { font-size: .8rem; color: rgba(25,24,21,.2); flex-shrink: 0; align-self: center; transition: color .15s, transform .15s; }
+.aihub-card:hover .aihub-card-arrow { color: var(--gold); transform: translateX(3px); }
+
+.aihub-badge {
+  display: inline-block;
+  padding: .1rem .45rem; border-radius: 4px;
+  font-size: .58rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  background: rgba(151,115,60,.1); color: var(--gold);
+}
+
+/* Bottom CTA section */
+.aihub-cta-section { padding-block: clamp(5rem, 9vw, 8rem); background: var(--ink); }
+.aihub-cta-box { max-width: 680px; }
+.aihub-cta-section .kicker-light { color: rgba(151,115,60,.8); }
+.aihub-cta-section .section-title { color: white; }
+.aihub-cta-section .btn-light { border-color: rgba(255,255,255,.3); }
+
+/* ───── Individual tool page ───── */
+.aihub-breadcrumb {
+  display: flex; align-items: center; gap: .5rem;
+  font-size: .72rem; color: rgba(25,24,21,.4);
+}
+.aihub-breadcrumb a { color: var(--gold); text-decoration: none; }
+.aihub-breadcrumb a:hover { text-decoration: underline; }
+.aihub-breadcrumb span { color: rgba(25,24,21,.3); }
+
+.aihub-tool-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 4rem;
+  align-items: start;
+}
+.aihub-tool-header { margin-bottom: 2.5rem; }
+.aihub-tool-header h1 { font-size: clamp(2.8rem, 5vw, 4.5rem); }
+.aihub-tool-desc {
+  font-size: .92rem; line-height: 1.7;
+  color: rgba(25,24,21,.6); max-width: 44rem;
+}
+
+/* Sidebar */
+.aihub-tool-sidebar {
+  position: sticky; top: 6rem;
+  display: flex; flex-direction: column; gap: 1.25rem;
+}
+.aihub-sidebar-card {
+  padding: 1.25rem; border: 1px solid rgba(25,24,21,.08);
+  border-radius: 12px; background: white;
+}
+.sidebar-label {
+  font-size: .6rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase;
+  color: rgba(25,24,21,.35); margin: 0 0 .75rem;
+}
+.aihub-snippet {
+  font-size: .72rem; line-height: 1.6;
+  white-space: pre-wrap; color: rgba(25,24,21,.65);
+  background: rgba(25,24,21,.03); padding: .75rem; border-radius: 6px;
+  margin: 0; overflow: auto; max-height: 200px;
+}
+.aihub-gets { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .4rem; }
+.aihub-gets li { font-size: .78rem; color: rgba(25,24,21,.65); }
+.aihub-sidebar-cta {
+  padding: 1.5rem; border-radius: 12px;
+  background: linear-gradient(135deg, var(--ink) 0%, #2d2b27 100%);
+  color: white;
+}
+.aihub-sidebar-cta .sidebar-label { color: rgba(255,255,255,.35); }
+.aihub-sidebar-cta p { font-size: .78rem; line-height: 1.65; color: rgba(255,255,255,.6); margin: 0; }
+.aihub-sidebar-cta .btn-primary { display: block; }
+.aihub-related { display: flex; flex-direction: column; gap: .6rem; }
+.aihub-related-item {
+  display: flex; flex-direction: column; gap: .15rem;
+  padding: .6rem .75rem; border-radius: 8px;
+  text-decoration: none; color: inherit;
+  border: 1px solid rgba(25,24,21,.07);
+  transition: border-color .12s, background .12s;
+}
+.aihub-related-item:hover { border-color: rgba(151,115,60,.2); background: rgba(151,115,60,.04); }
+.aihub-related-item strong { font-size: .78rem; color: var(--ink); }
+.aihub-related-item span { font-size: .7rem; color: rgba(25,24,21,.45); }
+
+/* ───── Workspace ───── */
+.aihub-workspace { /* container for the form/result area */ }
+
+/* Form */
+.aihub-form { display: flex; flex-direction: column; gap: 1.25rem; }
+.aihub-field { display: flex; flex-direction: column; gap: .4rem; }
+.aihub-field label {
+  font-size: .75rem; font-weight: 700; color: var(--ink);
+  display: flex; align-items: center; gap: .25rem;
+}
+.aihub-field .required { color: var(--rust); }
+.aihub-field input,
+.aihub-field textarea,
+.aihub-field select {
+  width: 100%; padding: .65rem .85rem;
+  border: 1px solid rgba(25,24,21,.14); border-radius: 8px;
+  font-size: .85rem; font-family: inherit; color: var(--ink);
+  background: white; resize: vertical;
+  transition: border-color .15s, box-shadow .15s;
+  appearance: none;
+}
+.aihub-field input:focus,
+.aihub-field textarea:focus,
+.aihub-field select:focus {
+  outline: none;
+  border-color: rgba(151,115,60,.4);
+  box-shadow: 0 0 0 3px rgba(151,115,60,.08);
+}
+.aihub-submit { width: 100%; justify-content: center; padding: .9rem; font-size: .9rem; }
+.aihub-disclaimer { font-size: .7rem; color: rgba(25,24,21,.35); text-align: center; margin: 0; }
+.aihub-error { color: var(--rust); font-size: .78rem; margin: 0; padding: .6rem .75rem; background: rgba(154,79,56,.06); border-radius: 6px; border-left: 3px solid var(--rust); }
+
+/* Loading spinner */
+.aihub-spinner { display: flex; align-items: center; gap: .5rem; }
+.aihub-spinner .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: white;
+  animation: aihub-dot 1.2s infinite ease-in-out;
+}
+.aihub-spinner .dot:nth-child(2) { animation-delay: .2s; }
+.aihub-spinner .dot:nth-child(3) { animation-delay: .4s; }
+@keyframes aihub-dot { 0%, 80%, 100% { opacity: .25; transform: scale(.8); } 40% { opacity: 1; transform: scale(1); } }
+
+/* Result */
+.aihub-result {
+  border: 1px solid rgba(25,24,21,.08); border-radius: 12px;
+  background: white; overflow: hidden;
+}
+.aihub-result-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .75rem 1.25rem;
+  border-bottom: 1px solid rgba(25,24,21,.06);
+  background: rgba(25,24,21,.02);
+}
+.aihub-result-badge { font-size: .7rem; font-weight: 700; color: var(--gold); letter-spacing: .05em; }
+.aihub-result-body { padding: 1.5rem; max-height: 520px; overflow-y: auto; }
+.aihub-result-actions {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .75rem 1.25rem;
+  border-top: 1px solid rgba(25,24,21,.06);
+  gap: 1rem;
+}
+
+/* Prose renderer */
+.aihub-prose { font-size: .85rem; line-height: 1.7; color: var(--ink); }
+.aihub-prose h2 { font-size: 1rem; font-weight: 700; margin: 1.5rem 0 .5rem; color: var(--ink); }
+.aihub-prose h3 { font-size: .9rem; font-weight: 700; margin: 1.2rem 0 .4rem; color: var(--ink); }
+.aihub-prose p { margin: .35rem 0; }
+.aihub-prose .bold-line { margin: .6rem 0; }
+.aihub-prose .list-item { margin: .2rem 0; padding-left: .5rem; }
+.aihub-prose hr { border: none; border-top: 1px solid rgba(25,24,21,.08); margin: 1rem 0; }
+
+/* Lead form */
+.aihub-lead { padding: 1.5rem; border: 1px solid rgba(151,115,60,.2); border-radius: 12px; background: rgba(151,115,60,.03); }
+.aihub-lead h3 { font-size: 1.2rem; font-weight: 700; margin: 0 0 .5rem; }
+.aihub-lead > p { font-size: .82rem; line-height: 1.65; color: rgba(25,24,21,.6); margin: 0 0 1.5rem; }
+
+/* Done */
+.aihub-done { text-align: center; padding: 3rem 2rem; }
+.aihub-done-icon {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--rust));
+  color: white; font-size: 1.5rem;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+.aihub-done h3 { font-size: 1.4rem; font-weight: 700; margin: 0 0 .75rem; }
+.aihub-done p { font-size: .85rem; line-height: 1.65; color: rgba(25,24,21,.6); max-width: 28rem; margin: 0 auto; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .aihub-tool-layout { grid-template-columns: 1fr; }
+  .aihub-tool-sidebar { position: static; }
+}
+@media (max-width: 768px) {
+  .aihub-steps { grid-template-columns: repeat(2, 1fr); }
+  .aihub-stats { gap: 1.5rem; }
+}
+@media (max-width: 480px) {
+  .aihub-steps { grid-template-columns: 1fr; }
+  .aihub-result-actions { flex-direction: column; align-items: stretch; }
+  .aihub-result-actions .btn-ghost { text-align: center; }
+}
