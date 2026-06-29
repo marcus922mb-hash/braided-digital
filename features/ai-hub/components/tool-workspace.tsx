@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useEffect, useRef } from "react";
+import { useState, useTransition } from "react";
 import { runToolAction } from "@/features/ai-hub/actions/run-tool-action";
 import type { ToolField, ToolResult } from "@/features/ai-hub/types";
 
@@ -168,16 +168,6 @@ export function ToolWorkspace({ tool }: { tool: SerializableTool }) {
 function HtmlPreview({ html }: { html: string }) {
   const [fullscreen, setFullscreen] = useState(false);
   const [mobile, setMobile] = useState(false);
-  const downloadRef = useRef<HTMLAnchorElement>(null);
-
-  useEffect(() => {
-    const a = downloadRef.current;
-    if (!a) return;
-    const blob = new Blob([html], { type: "text/html" });
-    const url = URL.createObjectURL(blob);
-    a.href = url;
-    return () => URL.revokeObjectURL(url);
-  }, [html]);
 
   return (
     <div className={`aihub-html-wrap${fullscreen ? " is-fullscreen" : ""}`}>
@@ -198,13 +188,6 @@ function HtmlPreview({ html }: { html: string }) {
           >
             {fullscreen ? "Zmniejsz" : "Pełny ekran"}
           </button>
-          <a
-            ref={downloadRef}
-            download="prototype.html"
-            className="btn-ghost btn-sm"
-          >
-            ↓ Pobierz HTML
-          </a>
         </div>
       </div>
       <div className={`aihub-html-frame${mobile ? " is-mobile" : ""}`}>
@@ -219,7 +202,7 @@ function HtmlPreview({ html }: { html: string }) {
   );
 }
 
-function SvgPreview({ svgCode, label, fileName }: { svgCode: string; label?: string; fileName?: string }) {
+function SvgPreview({ svgCode, label }: { svgCode: string; label?: string; fileName?: string }) {
   const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgCode)}`;
   return (
     <div className="aihub-svg-preview">
@@ -227,9 +210,6 @@ function SvgPreview({ svgCode, label, fileName }: { svgCode: string; label?: str
       <div className="aihub-svg-frame">
         <img src={url} alt={label ?? "Wygenerowana grafika SVG"} />
       </div>
-      <a href={url} download={fileName ?? "export.svg"} className="btn-ghost btn-sm aihub-svg-download">
-        ↓ Pobierz {fileName ?? "SVG"}
-      </a>
     </div>
   );
 }
