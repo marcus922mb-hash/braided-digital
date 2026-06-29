@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Copy, Download, Trash2, RefreshCw, User } from "lucide-react";
 import {
   deleteToolOutputAction,
@@ -79,9 +80,9 @@ export function AdminResultsTable({ outputs, clients }: Props) {
       <div className="crm-empty-state">
         <RefreshCw size={32} strokeWidth={1.2} />
         <p>Brak wygenerowanych wyników. Przejdź do narzędzi i wygeneruj pierwszy wynik.</p>
-        <a href="/panel/ai/narzedzia" className="crm-btn crm-btn--sm crm-btn--primary">
+        <Link href="/panel/ai/narzedzia" className="crm-btn crm-btn--sm crm-btn--primary">
           Otwórz narzędzia →
-        </a>
+        </Link>
       </div>
     );
   }
@@ -176,13 +177,13 @@ export function AdminResultsTable({ outputs, clients }: Props) {
                   >
                     <Download size={13} />
                   </button>
-                  <a
+                  <Link
                     href={`/panel/ai/narzedzia/${o.tool_id}`}
                     title="Regeneruj"
                     className="crm-icon-btn"
                   >
                     <RefreshCw size={13} />
-                  </a>
+                  </Link>
                   <button
                     type="button"
                     title="Usuń"
@@ -207,7 +208,9 @@ export function AdminResultsTable({ outputs, clients }: Props) {
                         <details className="pa-expanded-inputs">
                           <summary>Dane wejściowe</summary>
                           <div className="pa-inputs-grid">
-                            {Object.entries(o.input_values).map(([k, v]) => (
+                            {Object.entries(o.input_values)
+                              .filter(([key]) => !key.toLowerCase().includes("encrypted"))
+                              .map(([k, v]) => (
                               v ? (
                                 <div key={k} className="pa-input-row">
                                   <span className="crm-td-muted">{k}</span>

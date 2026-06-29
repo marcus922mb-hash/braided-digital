@@ -208,6 +208,7 @@ function SvgPreview({ svgCode, label }: { svgCode: string; label?: string; fileN
     <div className="aihub-svg-preview">
       {label && <p className="aihub-svg-label">{label}</p>}
       <div className="aihub-svg-frame">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={url} alt={label ?? "Wygenerowana grafika SVG"} />
       </div>
     </div>
