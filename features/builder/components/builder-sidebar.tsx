@@ -1,15 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useDraggable } from "@dnd-kit/core";
-import { Search, Layers, ChevronDown, ChevronRight, GripVertical, LayoutTemplate } from "lucide-react";
+import { Search, Layers, ChevronDown, ChevronRight, GripVertical, LayoutTemplate, Sparkles, Loader2 } from "lucide-react";
 import { nanoid } from "nanoid";
 import {
   COMPONENT_DEFINITIONS,
   COMPONENT_CATEGORIES,
 } from "@/lib/builder/component-definitions";
 import { useBuilderStore } from "@/features/builder/store/builder-store";
+import { generateInBuilderAction, PRESETS } from "@/features/builder/actions/generate-in-builder";
 import type { BuilderComponent, ComponentDefinition } from "@/features/builder/types";
+import type { PresetId } from "@/features/builder/actions/generate-in-builder";
 
 // ── Draggable library item ───────────────────────────────────
 function LibraryItem({ def }: { def: ComponentDefinition }) {
@@ -234,6 +236,146 @@ function TemplatesPanel() {
   );
 }
 
+// ── Generator panel ──────────────────────────────────────────
+const PRESET_ICONS: Record<string, string> = {
+  agencja: "🎨", restauracja: "🍽️", salon: "💆", lekarz: "🏥",
+  portfolio: "👤", landing: "🚀", sklep: "🛒", nieruchomosci: "🏠",
+  edukacja: "📚", linkinbio: "📱",
+};
+
+function GeneratorPanel() {
+  const { loadTemplate } = useBuilderStore();
+  const [selectedPreset, setSelectedPreset] = useState<PresetId>("agencja");
+  const [companyName, setCompanyName] = useState("");
+  const [description, setDescription] = useState("");
+  const [services, setServices] = useState("");
+  const [city, setCity] = useState("");
+  const [tone, setTone] = useState("profesjonalny, ciepły");
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
+
+  function handleGenerate() {
+    setError(null);
+    setDone(false);
+    startTransition(async () => {
+      const result = await generateInBuilderAction({
+        presetId: selectedPreset,
+        companyName: companyName.trim(),
+        description: description.trim(),
+        services: services.trim(),
+        city: city.trim(),
+        tone: tone.trim(),
+      });
+      if (!result.success) {
+        setError(result.error);
+        return;
+      }
+      loadTemplate(result.components);
+      setDone(true);
+    });
+  }
+
+  return (
+    <div className="bldr-gen-panel">
+      <p className="bldr-gen-hint">
+        Wybierz branżę, uzupełnij dane firmy — AI wygeneruje treści i załaduje kompletną stronę do buildera.
+      </p>
+
+      {/* Preset grid */}
+      <div className="bldr-gen-section-label">Układ strony</div>
+      <div className="bldr-gen-presets">
+        {PRESETS.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            className={`bldr-gen-preset${selectedPreset === p.id ? " bldr-gen-preset--active" : ""}`}
+            onClick={() => setSelectedPreset(p.id as PresetId)}
+            title={p.label}
+          >
+            <span className="bldr-gen-preset-icon">{PRESET_ICONS[p.id] ?? "📄"}</span>
+            <span className="bldr-gen-preset-label">{p.label}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Form */}
+      <div className="bldr-gen-section-label">Dane firmy</div>
+      <div className="bldr-gen-fields">
+        <label className="bldr-gen-field">
+          <span>Nazwa firmy</span>
+          <input
+            className="bldr-gen-input"
+            placeholder="np. Luna Atelier"
+            value={companyName}
+            onChange={(e) => setCompanyName(e.target.value)}
+            disabled={isPending}
+          />
+        </label>
+        <label className="bldr-gen-field">
+          <span>Opis firmy</span>
+          <textarea
+            className="bldr-gen-input bldr-gen-textarea"
+            placeholder="Czym się zajmujecie? Co wyróżnia firmę?"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={2}
+            disabled={isPending}
+          />
+        </label>
+        <label className="bldr-gen-field">
+          <span>Usługi / oferta <span className="bldr-gen-hint-inline">(oddziel przecinkami)</span></span>
+          <input
+            className="bldr-gen-input"
+            placeholder="np. strony www, sklepy, SEO"
+            value={services}
+            onChange={(e) => setServices(e.target.value)}
+            disabled={isPending}
+          />
+        </label>
+        <label className="bldr-gen-field">
+          <span>Miasto <span className="bldr-gen-hint-inline">(opcjonalnie)</span></span>
+          <input
+            className="bldr-gen-input"
+            placeholder="np. Warszawa"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            disabled={isPending}
+          />
+        </label>
+        <label className="bldr-gen-field">
+          <span>Ton komunikacji</span>
+          <input
+            className="bldr-gen-input"
+            placeholder="profesjonalny, ciepły, bezpośredni..."
+            value={tone}
+            onChange={(e) => setTone(e.target.value)}
+            disabled={isPending}
+          />
+        </label>
+      </div>
+
+      {error && <p className="bldr-gen-error">{error}</p>}
+      {done && <p className="bldr-gen-success">Strona załadowana! Edytuj sekcje po lewej.</p>}
+
+      <button
+        type="button"
+        className="bldr-gen-btn"
+        onClick={handleGenerate}
+        disabled={isPending}
+      >
+        {isPending
+          ? <><Loader2 size={13} className="bldr-spin" /> Generuję z AI…</>
+          : <><Sparkles size={13} /> Generuj z AI</>}
+      </button>
+
+      <p className="bldr-gen-footer">
+        Jeśli AI nie odpowie — ładuje układ z domyślnymi tekstami.
+      </p>
+    </div>
+  );
+}
+
 // ── Main sidebar ─────────────────────────────────────────────
 export function BuilderSidebar() {
   const { sidebarTab, setSidebarTab } = useBuilderStore();
@@ -270,6 +412,14 @@ export function BuilderSidebar() {
         >
           <LayoutTemplate size={12} style={{ marginRight: "3px" }} />
           Szablony
+        </button>
+        <button
+          className={`bldr-sidebar-tab${sidebarTab === "generator" ? " bldr-sidebar-tab--active" : ""}`}
+          onClick={() => setSidebarTab("generator")}
+          title="Generator AI — generuj stronę z AI"
+        >
+          <Sparkles size={12} style={{ marginRight: "3px" }} />
+          Generator
         </button>
       </div>
 
@@ -311,6 +461,8 @@ export function BuilderSidebar() {
         </>
       ) : sidebarTab === "layers" ? (
         <LayersPanel />
+      ) : sidebarTab === "generator" ? (
+        <GeneratorPanel />
       ) : (
         <TemplatesPanel />
       )}

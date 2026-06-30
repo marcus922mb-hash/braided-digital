@@ -146,5 +146,5 @@ export type PropSchema = {
 
 export type BuilderHistoryEntry = BuilderComponent[];
 
-export type SidebarTab = "components" | "layers" | "templates";
+export type SidebarTab = "components" | "layers" | "templates" | "generator";
 export type PropsTab = "content" | "style" | "animations" | "visibility";
