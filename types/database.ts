@@ -407,6 +407,336 @@ export interface Database {
         Update: Partial<Database["public"]["Tables"]["ai_templates"]["Insert"]>;
         Relationships: [];
       };
+      components: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string;
+          name: string;
+          slug: string;
+          category_id: string;
+          category_name: string;
+          tags: Json;
+          thumbnail_url: string | null;
+          description: string | null;
+          technology: string;
+          component_code: string;
+          style_code: string;
+          dependencies: Json;
+          difficulty: string;
+          requires_javascript: boolean;
+          responsive: boolean;
+          animated: boolean;
+          source_type: string;
+          source_url: string | null;
+          author: string | null;
+          license_id: string;
+          license_name: string;
+          license_status: string;
+          is_free: boolean;
+          commercial_use: boolean;
+          attribution_required: boolean;
+          date_added: string;
+          status: string;
+          industry_tags: Json;
+          style_tags: Json;
+          is_favorite: boolean;
+          is_premium: boolean;
+          preview_html: string;
+          preview_dark_html: string;
+          ai_analysis: Json | null;
+        };
+        Insert: Partial<Database["public"]["Tables"]["components"]["Row"]> & {
+          name: string;
+          slug: string;
+          category_id: string;
+          category_name: string;
+          technology: string;
+          component_code: string;
+          style_code: string;
+          dependencies?: Json;
+          difficulty?: string;
+          requires_javascript?: boolean;
+          responsive?: boolean;
+          animated?: boolean;
+          source_type?: string;
+          license_id?: string;
+          license_name?: string;
+          license_status?: string;
+          is_free?: boolean;
+          commercial_use?: boolean;
+          attribution_required?: boolean;
+          date_added?: string;
+          status?: string;
+          industry_tags?: Json;
+          style_tags?: Json;
+          is_favorite?: boolean;
+          is_premium?: boolean;
+          preview_html?: string;
+          preview_dark_html?: string;
+          ai_analysis?: Json | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["components"]["Insert"]>;
+        Relationships: [];
+      };
+      sections: {
+        Row: Database["public"]["Tables"]["components"]["Row"] & {
+          variants?: Json | null;
+        };
+        Insert: Database["public"]["Tables"]["components"]["Insert"] & {
+          variants?: Json | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["sections"]["Insert"]>;
+        Relationships: [];
+      };
+      section_categories: {
+        Row: {
+          id: string;
+          created_at: string;
+          name: string;
+          description: string | null;
+          tags: Json;
+          sort_order: number;
+          is_active: boolean;
+        };
+        Insert: {
+          id: string;
+          created_at?: string;
+          name: string;
+          description?: string | null;
+          tags?: Json;
+          sort_order?: number;
+          is_active?: boolean;
+        };
+        Update: Partial<Database["public"]["Tables"]["section_categories"]["Insert"]>;
+        Relationships: [];
+      };
+      section_tags: {
+        Row: {
+          id: string;
+          created_at: string;
+          name: string;
+          slug: string;
+          category_id: string | null;
+          usage_count: number;
+          is_active: boolean;
+        };
+        Insert: {
+          id: string;
+          created_at?: string;
+          name: string;
+          slug: string;
+          category_id?: string | null;
+          usage_count?: number;
+          is_active?: boolean;
+        };
+        Update: Partial<Database["public"]["Tables"]["section_tags"]["Insert"]>;
+        Relationships: [];
+      };
+      section_sources: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string;
+          name: string;
+          description: string | null;
+          github_url: string;
+          technology: string;
+          license: string;
+          author: string | null;
+          last_synced_at: string | null;
+          component_count: number;
+          section_count: number;
+          sync_status: string;
+          auto_sync: boolean;
+          tags: Json;
+          categories: Json;
+          thumbnail_url: string | null;
+        };
+        Insert: {
+          id: string;
+          created_at?: string;
+          updated_at?: string;
+          name: string;
+          description?: string | null;
+          github_url: string;
+          technology: string;
+          license: string;
+          author?: string | null;
+          last_synced_at?: string | null;
+          component_count?: number;
+          section_count?: number;
+          sync_status?: string;
+          auto_sync?: boolean;
+          tags?: Json;
+          categories?: Json;
+          thumbnail_url?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["section_sources"]["Insert"]>;
+        Relationships: [];
+      };
+      section_variants: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string;
+          section_id: string;
+          name: string;
+          variant_key: string;
+          component_code: string;
+          style_code: string;
+          thumbnail_url: string | null;
+          notes: string | null;
+          is_default: boolean;
+        };
+        Insert: {
+          id: string;
+          created_at?: string;
+          updated_at?: string;
+          section_id: string;
+          name: string;
+          variant_key: string;
+          component_code: string;
+          style_code: string;
+          thumbnail_url?: string | null;
+          notes?: string | null;
+          is_default?: boolean;
+        };
+        Update: Partial<Database["public"]["Tables"]["section_variants"]["Insert"]>;
+        Relationships: [];
+      };
+      component_licenses: {
+        Row: {
+          id: string;
+          created_at: string;
+          name: string;
+          is_free: boolean;
+          commercial_use: boolean;
+          attribution_required: boolean;
+          source_url: string | null;
+          author: string | null;
+          status: string;
+        };
+        Insert: {
+          id: string;
+          created_at?: string;
+          name: string;
+          is_free?: boolean;
+          commercial_use?: boolean;
+          attribution_required?: boolean;
+          source_url?: string | null;
+          author?: string | null;
+          status?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["component_licenses"]["Insert"]>;
+        Relationships: [];
+      };
+      page_templates: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string;
+          slug: string;
+          name: string;
+          industry: string;
+          style: string;
+          description: string | null;
+          section_ids: Json;
+          seo_title: string;
+          seo_description: string;
+          thumbnail_url: string | null;
+          status: string;
+          is_premium: boolean;
+        };
+        Insert: {
+          id: string;
+          created_at?: string;
+          updated_at?: string;
+          slug: string;
+          name: string;
+          industry: string;
+          style: string;
+          description?: string | null;
+          section_ids?: Json;
+          seo_title: string;
+          seo_description: string;
+          thumbnail_url?: string | null;
+          status?: string;
+          is_premium?: boolean;
+        };
+        Update: Partial<Database["public"]["Tables"]["page_templates"]["Insert"]>;
+        Relationships: [];
+      };
+      generated_pages: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string;
+          title: string;
+          slug: string;
+          template_id: string | null;
+          status: string;
+          seo_title: string;
+          seo_description: string;
+          section_ids: Json;
+          published_at: string | null;
+        };
+        Insert: {
+          id: string;
+          created_at?: string;
+          updated_at?: string;
+          title: string;
+          slug: string;
+          template_id?: string | null;
+          status?: string;
+          seo_title: string;
+          seo_description: string;
+          section_ids?: Json;
+          published_at?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["generated_pages"]["Insert"]>;
+        Relationships: [];
+      };
+      github_imports: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string;
+          repository_url: string;
+          source_name: string | null;
+          source_description: string | null;
+          license: string | null;
+          author: string | null;
+          auto_sync: boolean;
+          status: string;
+          files_scanned: number;
+          component_count: number;
+          section_count: number;
+          warnings: Json;
+          last_sync_at: string | null;
+          last_error: string | null;
+        };
+        Insert: {
+          id: string;
+          created_at?: string;
+          updated_at?: string;
+          repository_url: string;
+          source_name?: string | null;
+          source_description?: string | null;
+          license?: string | null;
+          author?: string | null;
+          auto_sync?: boolean;
+          status?: string;
+          files_scanned?: number;
+          component_count?: number;
+          section_count?: number;
+          warnings?: Json;
+          last_sync_at?: string | null;
+          last_error?: string | null;
+        };
+        Update: Partial<Database["public"]["Tables"]["github_imports"]["Insert"]>;
+        Relationships: [];
+      };
       leads: {
         Row: {
           id: string;
