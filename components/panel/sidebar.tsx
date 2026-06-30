@@ -19,6 +19,7 @@ import {
   History,
   FileText,
   Code,
+  MessagesSquare,
 } from "lucide-react";
 import type { PanelShellUser } from "./shell";
 
@@ -35,6 +36,7 @@ const sections = [
   {
     label: "AI Hub",
     items: [
+      { href: "/panel/ai/chat", label: "AI Chat (multi)", Icon: MessagesSquare },
       { href: "/panel/ai/narzedzia", label: "Narzędzia AI", Icon: Bot },
       { href: "/panel/ai/wyniki", label: "Wyniki AI", Icon: History },
       { href: "/panel/ai/szablony", label: "Szablony branżowe", Icon: FileText },
