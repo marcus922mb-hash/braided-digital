@@ -1558,6 +1558,8 @@ body:has(.panel-shell) {
 .panel-nav-item { display: flex; align-items: center; gap: .65rem; padding: .6rem .75rem; border-radius: 6px; color: rgba(232,232,232,.42); font-size: .71rem; font-weight: 600; letter-spacing: .04em; text-decoration: none; transition: color .18s, background .18s; border-left: 2px solid transparent; }
 .panel-nav-item:hover { color: rgba(232,232,232,.85); background: rgba(255,255,255,.04); }
 .panel-nav-item.is-active { color: #c9a96e; background: rgba(201,169,110,.07); border-left-color: #c9a96e; padding-left: calc(.75rem - 2px); }
+.panel-nav-item--external { color: rgba(129,140,248,.55); }
+.panel-nav-item--external:hover { color: rgba(129,140,248,.9); background: rgba(99,102,241,.06); }
 
 .panel-sidebar-footer { padding: .8rem .65rem; border-top: 1px solid rgba(255,255,255,.06); }
 .panel-user { display: flex; align-items: center; gap: .65rem; padding: .45rem .5rem; border-radius: 6px; }

@@ -20,8 +20,18 @@ import {
   FileText,
   Code,
   MessagesSquare,
+  Palette,
 } from "lucide-react";
 import type { PanelShellUser } from "./shell";
+
+const EXTERNAL_LINKS = [
+  {
+    href: "https://vengenceui-ivory.vercel.app",
+    label: "VengeanceUI",
+    Icon: Palette,
+    description: "Biblioteka animowanych komponentów",
+  },
+];
 
 const sections = [
   {
@@ -125,6 +135,24 @@ export function PanelSidebar({ user, open, collapsed, onClose, onToggleCollapse 
                 );
               })}
             </div>
+          ))}
+
+          {/* External tools */}
+          {!collapsed && (
+            <span className="panel-nav-section">Zasoby</span>
+          )}
+          {EXTERNAL_LINKS.map(({ href, label, Icon }) => (
+            <a
+              key={href}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={collapsed ? label : undefined}
+              className="panel-nav-item panel-nav-item--external"
+            >
+              <Icon size={15} aria-hidden="true" />
+              {!collapsed && <span className="panel-nav-label">{label}</span>}
+            </a>
           ))}
 
           {/* Collapse toggle */}
