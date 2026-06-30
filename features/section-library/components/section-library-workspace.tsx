@@ -5,7 +5,6 @@ import {
   ArrowRight,
   Check,
   Copy,
-  Download,
   ExternalLink,
   Heart,
   Loader2,
@@ -52,17 +51,6 @@ function fromCsv(value: string) {
     .split(",")
     .map((item) => item.trim())
     .filter(Boolean);
-}
-
-function formatDate(value: string) {
-  try {
-    return new Intl.DateTimeFormat("pl-PL", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    }).format(new Date(value));
-  } catch {
-    return value;
-  }
 }
 
 function createInitialDraft(section: SectionRecord): SectionRecord {
@@ -189,7 +177,14 @@ export function SectionLibraryWorkspace({
   const [pending, startTransition] = useTransition();
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [localFavorites, setLocalFavorites] = useState<string[]>([]);
+  const [localFavorites, setLocalFavorites] = useState<string[]>(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem("section-library-favorites") ?? "[]") as string[];
+      return Array.isArray(stored) ? stored : [];
+    } catch {
+      return [];
+    }
+  });
   const [githubUrl, setGithubUrl] = useState("https://github.com/Animmaster/online_shop.git");
   const [sourceName, setSourceName] = useState("");
   const [sourceDescription, setSourceDescription] = useState("");
@@ -203,21 +198,10 @@ export function SectionLibraryWorkspace({
 
   useEffect(() => {
     const stored = sections.find((section) => section.id === selectedId) ?? null;
-    setDraft(stored ? createInitialDraft(stored) : null);
+    startTransition(() => {
+      setDraft(stored ? createInitialDraft(stored) : null);
+    });
   }, [selectedId, sections]);
-
-  useEffect(() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem("section-library-favorites") ?? "[]") as string[];
-      setLocalFavorites(Array.isArray(stored) ? stored : []);
-    } catch {
-      setLocalFavorites([]);
-    }
-  }, []);
-
-  useEffect(() => {
-    setFilters((current) => ({ ...current, query }));
-  }, [query]);
 
   const selectedSection = draft ?? sections.find((section) => section.id === selectedId) ?? null;
 
@@ -556,7 +540,8 @@ export function SectionLibraryWorkspace({
                     active ? "border-stone-950 bg-stone-950 text-white" : "border-stone-200 bg-white hover:border-stone-400"
                   )}
                 >
-                  <img src={section.thumbnailUrl} alt="" className="h-16 w-24 rounded-xl object-cover" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={section.thumbnailUrl ?? ""} alt="" className="h-16 w-24 rounded-xl object-cover" />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="truncate text-sm font-medium">{section.name}</span>

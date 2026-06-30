@@ -6,7 +6,7 @@ const EXTERNAL_SCRIPT_RE = /<script[^>]+src\s*=\s*["'][^"']+/i;
 const TOKEN_RE = /(sk-[A-Za-z0-9]{16,}|api[_-]?key|secret[_-]?key|bearer\s+[A-Za-z0-9\-_\.=]+)/i;
 const SUSPICIOUS_LINK_RE = /href\s*=\s*["'](?:javascript:|data:|vbscript:)/i;
 const ON_EVENT_RE = /\son[a-z]+\s*=\s*["'][^"']+["']/i;
-const FETCH_RE = /\bfetch\s*\(|\bXMLHttpRequest\b|\baxios\s*\(/i;
+
 const NEW_FUNCTION_RE = /\bnew Function\s*\(|\beval\s*\(/i;
 const PRIVATE_KEY_RE = /-----BEGIN (?:RSA |EC |OPENSSH |PRIVATE )?PRIVATE KEY-----/i;
 

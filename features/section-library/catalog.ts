@@ -8,7 +8,7 @@ import {
   type SectionSource,
   type SectionTechnology,
 } from "@/features/section-library/types";
-import { dataUriSvg, escapeHtml, nowIso, slugify } from "@/features/section-library/utils";
+import { dataUriSvg, escapeHtml, nowIso } from "@/features/section-library/utils";
 
 type FamilyStyle = {
   key: string;

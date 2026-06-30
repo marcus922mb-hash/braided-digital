@@ -161,7 +161,8 @@ async function bootstrapSectionLibrary() {
     const sectionPayloads = sections.map((section) => sectionRecordToDbPayload(section)) as Database["public"]["Tables"]["sections"]["Insert"][];
     const componentPayloads = sections.map((section) => {
       const payload = sectionRecordToDbPayload(section);
-      const { variants, ...componentPayload } = payload;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { variants: _v, ...componentPayload } = payload;
       return componentPayload;
     }) as Database["public"]["Tables"]["components"]["Insert"][];
     const variantPayloads = sections.flatMap((section) =>

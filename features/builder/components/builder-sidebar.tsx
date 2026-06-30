@@ -43,11 +43,10 @@ function LibraryItem({ def }: { def: ComponentDefinition }) {
 
 // ── Category group ───────────────────────────────────────────
 function CategoryGroup({
-  categoryKey,
   categoryLabel,
   defs,
 }: {
-  categoryKey: string;
+  categoryKey?: string;
   categoryLabel: string;
   defs: ComponentDefinition[];
 }) {
