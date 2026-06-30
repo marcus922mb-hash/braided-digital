@@ -49,6 +49,13 @@
   background: rgba(212,168,58,.12); border-color: rgba(212,168,58,.3); color: #d4a83a;
 }
 .bldr-toolbar-btn--save.bldr-toolbar-btn--dirty:hover { background: rgba(212,168,58,.2); }
+.bldr-toolbar-btn--publish {
+  background: rgba(99,102,241,.12); border: 1px solid rgba(99,102,241,.3); color: #818cf8;
+}
+.bldr-toolbar-btn--publish:hover:not(:disabled) { background: rgba(99,102,241,.22); }
+.bldr-toolbar-btn--publish.bldr-toolbar-btn--ok {
+  background: rgba(16,185,129,.12); border-color: rgba(16,185,129,.35); color: #34d399;
+}
 .bldr-device-switcher {
   display: flex; background: rgba(255,255,255,.05); border-radius: 8px; padding: 2px; gap: 2px;
 }

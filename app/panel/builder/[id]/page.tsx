@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BuilderEditor } from "@/features/builder/components/builder-editor";
 import { createClient } from "@/lib/supabase/server";
+import { demoContentToBuilderComponents } from "@/lib/builder/demo-to-builder";
+import { parseDemoContent } from "@/features/demos/types";
 import type { BuilderPage } from "@/features/builder/types";
+import type { Json } from "@/types/database";
 
 export const metadata: Metadata = { title: "Builder" };
 
@@ -14,10 +17,10 @@ async function getOrCreateBuilderPage(demoId: string): Promise<BuilderPage | nul
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
 
-  // Verify the demo exists
+  // Verify the demo exists and fetch its content for auto-import
   const { data: demo } = await supabase
     .from("demos")
-    .select("id, title")
+    .select("id, title, content, style, primary_color, secondary_color")
     .eq("id", demoId)
     .maybeSingle();
   if (!demo) return null;
@@ -29,15 +32,36 @@ async function getOrCreateBuilderPage(demoId: string): Promise<BuilderPage | nul
     .eq("demo_id", demoId)
     .maybeSingle();
 
-  if (existing) return existing as unknown as BuilderPage;
+  if (existing) {
+    // If page has no components but demo has content, auto-import
+    const existingComponents = Array.isArray(existing.components) ? existing.components : [];
+    if (existingComponents.length === 0 && demo.content) {
+      const content = parseDemoContent(demo.content);
+      const components = demoContentToBuilderComponents(content, demo);
+      if (components.length > 0) {
+        await supabase
+          .from("builder_pages")
+          .update({ components: components as unknown as Json, updated_at: new Date().toISOString() })
+          .eq("demo_id", demoId);
+        return { ...existing, components } as unknown as BuilderPage;
+      }
+    }
+    return existing as unknown as BuilderPage;
+  }
 
-  // Create a new page for this demo
+  // Create a new page — auto-import from demo content if available
+  let initialComponents: unknown[] = [];
+  if (demo.content) {
+    const content = parseDemoContent(demo.content);
+    initialComponents = demoContentToBuilderComponents(content, demo);
+  }
+
   const { data: created } = await supabase
     .from("builder_pages")
     .insert({
       demo_id: demoId,
       name: demo.title || "Nowa strona",
-      components: [],
+      components: initialComponents as unknown as Json,
       settings: {},
     })
     .select("*")

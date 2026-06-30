@@ -4,10 +4,11 @@ import { useState, useTransition, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   ArrowLeft, Monitor, Tablet, Smartphone,
-  Undo2, Redo2, Save, Eye, Sparkles, Loader2, X, Check,
+  Undo2, Redo2, Save, Eye, Sparkles, Loader2, X, Check, Upload, Download,
 } from "lucide-react";
 import { useBuilderStore } from "@/features/builder/store/builder-store";
 import { saveBuilderPage } from "@/features/builder/actions/builder-actions";
+import { publishBuilderToDemo, importDemoToBuilder } from "@/features/builder/actions/publish-to-demo";
 import { templates } from "@/features/templates/catalog";
 import type { ResolvedTemplate } from "@/features/templates/types";
 
@@ -122,6 +123,9 @@ export function BuilderToolbar() {
 
   const [saving, startTransition] = useTransition();
   const [showTemplatePicker, setShowTemplatePicker] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [publishOk, setPublishOk] = useState(false);
+  const [importing, setImporting] = useState(false);
 
   const canUndo = historyIndex > 0;
   const canRedo = historyIndex < history.length - 1;
@@ -139,6 +143,36 @@ export function BuilderToolbar() {
       setSaving(false);
       if (res.success) markSaved();
     });
+  }
+
+  async function handlePublish() {
+    if (!demoId) return;
+    if (!confirm("Opublikować zmiany? Zaktualizuje to treść na żywym demo.")) return;
+    setPublishing(true);
+    const res = await publishBuilderToDemo(demoId, components);
+    setPublishing(false);
+    if (res.success) {
+      setPublishOk(true);
+      setTimeout(() => setPublishOk(false), 2500);
+    } else {
+      alert(`Błąd publikowania: ${res.error}`);
+    }
+  }
+
+  async function handleImportFromDemo() {
+    if (!demoId) return;
+    if (
+      components.length > 0 &&
+      !confirm("Importowanie z demo zastąpi obecne bloki w builderze. Kontynuować?")
+    ) return;
+    setImporting(true);
+    const res = await importDemoToBuilder(demoId);
+    setImporting(false);
+    if (res.success) {
+      window.location.reload();
+    } else {
+      alert(`Błąd importu: ${res.error}`);
+    }
   }
 
   function handleTemplateSelect(t: ResolvedTemplate) {
@@ -228,6 +262,18 @@ export function BuilderToolbar() {
             <span>Szablon</span>
           </button>
 
+          {demoId && (
+            <button
+              className="bldr-toolbar-btn"
+              title="Importuj sekcje z wygenerowanego AI demo"
+              onClick={handleImportFromDemo}
+              disabled={importing}
+            >
+              {importing ? <Loader2 size={15} className="bldr-spin" /> : <Download size={15} />}
+              <span>Importuj</span>
+            </button>
+          )}
+
           <div className="bldr-toolbar-divider" />
 
           {demoId && (
@@ -250,6 +296,22 @@ export function BuilderToolbar() {
             {(isSaving || saving) ? <Loader2 size={15} className="bldr-spin" /> : <Save size={15} />}
             <span>{isSaving || saving ? "Zapisuję..." : "Zapisz"}</span>
           </button>
+
+          {demoId && (
+            <button
+              className={`bldr-toolbar-btn bldr-toolbar-btn--publish${publishOk ? " bldr-toolbar-btn--ok" : ""}`}
+              onClick={handlePublish}
+              disabled={publishing}
+              title="Opublikuj zmiany na demo"
+            >
+              {publishing
+                ? <Loader2 size={15} className="bldr-spin" />
+                : publishOk
+                ? <Check size={15} />
+                : <Upload size={15} />}
+              <span>{publishing ? "Publikuję…" : publishOk ? "Opublikowano!" : "Publikuj"}</span>
+            </button>
+          )}
         </div>
       </header>
 

@@ -57,14 +57,19 @@ export function BuilderEditor({ page, initialDevice = "desktop" }: BuilderEditor
     });
   }, [page.id, initialDevice]);
 
-  // Auto-save debounce (3s)
+  // Auto-save debounce (4s)
   useEffect(() => {
     if (!isDirty) return;
+    const { demoId: id, components: comps, settings: sets, pageName: name, markSaved: saved, setSaving } = useBuilderStore.getState();
+    if (!id) return;
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(async () => {
-      // auto-save happens via Ctrl+S shortcut or Save button
-      // here we just mark that it should be saved
-    }, 3000);
+      setSaving(true);
+      const { saveBuilderPage } = await import("@/features/builder/actions/builder-actions");
+      const res = await saveBuilderPage({ demoId: id, name, components: comps, settings: sets });
+      setSaving(false);
+      if (res.success) saved();
+    }, 4000);
     return () => { if (saveTimerRef.current) clearTimeout(saveTimerRef.current); };
   }, [isDirty, components]);
 
