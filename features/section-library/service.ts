@@ -29,6 +29,8 @@ type Snapshot = {
   categories: ReturnType<typeof getSectionLibraryCategories>;
 };
 
+let bootstrapPromise: Promise<void> | null = null;
+
 function sourceRowToRecord(row: Record<string, unknown>): SectionSource {
   return {
     id: String(row.id ?? ""),
@@ -119,6 +121,83 @@ function generatedPageRecordToDb(page: GeneratedPageRecord) {
   };
 }
 
+function licenseRecordToDb(license: ReturnType<typeof getSectionLibraryLicenses>[number]) {
+  return {
+    id: license.id,
+    name: license.name,
+    is_free: license.isFree,
+    commercial_use: license.commercialUse,
+    attribution_required: license.attributionRequired,
+    source_url: license.sourceUrl ?? null,
+    author: license.author ?? null,
+    status: license.status,
+  };
+}
+
+function categoryRecordToDb(category: ReturnType<typeof getSectionLibraryCategories>[number], index: number) {
+  return {
+    id: category.id,
+    name: category.name,
+    description: category.description,
+    tags: category.tags,
+    sort_order: (index + 1) * 10,
+    is_active: true,
+  };
+}
+
+async function bootstrapSectionLibrary() {
+  if (bootstrapPromise) {
+    return bootstrapPromise;
+  }
+
+  bootstrapPromise = (async () => {
+    const supabase = createAdminClient();
+    const sections = getSectionLibrarySeeds();
+    const sources = getSectionLibrarySources();
+    const templates = getSectionLibraryPageTemplates();
+    const licenses = getSectionLibraryLicenses();
+    const categories = getSectionLibraryCategories();
+
+    const sectionPayloads = sections.map((section) => sectionRecordToDbPayload(section)) as Database["public"]["Tables"]["sections"]["Insert"][];
+    const componentPayloads = sections.map((section) => {
+      const payload = sectionRecordToDbPayload(section);
+      const { variants, ...componentPayload } = payload;
+      return componentPayload;
+    }) as Database["public"]["Tables"]["components"]["Insert"][];
+    const variantPayloads = sections.flatMap((section) =>
+      (section.variants ?? []).map((variant) => ({
+        id: variant.id,
+        section_id: variant.sectionId,
+        name: variant.name,
+        variant_key: variant.key,
+        component_code: variant.componentCode,
+        style_code: variant.styleCode,
+        thumbnail_url: variant.thumbnailUrl ?? null,
+        notes: variant.notes ?? null,
+        is_default: variant.isDefault,
+      }))
+    ) as Database["public"]["Tables"]["section_variants"]["Insert"][];
+    const licensePayloads = licenses.map(licenseRecordToDb) as Database["public"]["Tables"]["component_licenses"]["Insert"][];
+    const categoryPayloads = categories.map(categoryRecordToDb) as Database["public"]["Tables"]["section_categories"]["Insert"][];
+    const sourcePayloads = sources.map(sourceRecordToDb) as Database["public"]["Tables"]["section_sources"]["Insert"][];
+    const templatePayloads = templates.map(templateRecordToDb) as Database["public"]["Tables"]["page_templates"]["Insert"][];
+
+    await Promise.all([
+      supabase.from("component_licenses").upsert(licensePayloads, { onConflict: "id" }),
+      supabase.from("section_categories").upsert(categoryPayloads, { onConflict: "id" }),
+      supabase.from("section_sources").upsert(sourcePayloads, { onConflict: "id" }),
+      supabase.from("page_templates").upsert(templatePayloads, { onConflict: "id" }),
+      sectionPayloads.length > 0 ? supabase.from("sections").upsert(sectionPayloads, { onConflict: "id" }) : Promise.resolve(null),
+      componentPayloads.length > 0 ? supabase.from("components").upsert(componentPayloads, { onConflict: "id" }) : Promise.resolve(null),
+      variantPayloads.length > 0 ? supabase.from("section_variants").upsert(variantPayloads, { onConflict: "id" }) : Promise.resolve(null),
+    ]);
+  })().finally(() => {
+    bootstrapPromise = null;
+  });
+
+  return bootstrapPromise;
+}
+
 async function safeSelect(table: string, columns = "*") {
   try {
     const supabase = await createClient();
@@ -136,6 +215,32 @@ export async function getSectionLibrarySnapshot(): Promise<Snapshot> {
     safeSelect("section_sources"),
     safeSelect("page_templates"),
   ]);
+
+  if (!sectionsData || sectionsData.length === 0) {
+    try {
+      await bootstrapSectionLibrary();
+      const [bootstrappedSections, bootstrappedSources, bootstrappedTemplates] = await Promise.all([
+        safeSelect("sections"),
+        safeSelect("section_sources"),
+        safeSelect("page_templates"),
+      ]);
+      return {
+        sections: bootstrappedSections && bootstrappedSections.length > 0
+          ? bootstrappedSections.map((row) => sectionRowToRecord(row as Record<string, unknown>))
+          : getSectionLibrarySeeds(),
+        sources: bootstrappedSources && bootstrappedSources.length > 0
+          ? bootstrappedSources.map((row) => sourceRowToRecord(row as Record<string, unknown>))
+          : getSectionLibrarySources(),
+        templates: bootstrappedTemplates && bootstrappedTemplates.length > 0
+          ? bootstrappedTemplates.map((row) => templateRowToRecord(row as Record<string, unknown>))
+          : getSectionLibraryPageTemplates(),
+        licenses: getSectionLibraryLicenses(),
+        categories: getSectionLibraryCategories(),
+      };
+    } catch {
+      // Fall back to local seeds if Supabase bootstrap is not available.
+    }
+  }
 
   const sections = (sectionsData && sectionsData.length > 0)
     ? sectionsData.map((row) => sectionRowToRecord(row as Record<string, unknown>))

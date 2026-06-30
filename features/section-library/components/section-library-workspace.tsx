@@ -297,6 +297,27 @@ export function SectionLibraryWorkspace({
     }
   }
 
+  async function addSource() {
+    try {
+      setError(null);
+      const payload = await postJson<{ success: boolean; source?: SectionSource }>("/api/sections/sources", {
+        repositoryUrl: githubUrl,
+        sourceName: sourceName || undefined,
+        sourceDescription: sourceDescription || undefined,
+        license: sourceLicense || undefined,
+        author: sourceAuthor || undefined,
+        autoSync,
+      });
+
+      if (payload.source) {
+        setSources((current) => [payload.source!, ...current.filter((item) => item.id !== payload.source!.id)]);
+        setMessage(`Dodano źródło: ${payload.source.name}.`);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Nie udało się dodać źródła.");
+    }
+  }
+
   async function duplicateSelected() {
     if (!selectedSection) return;
     try {
@@ -760,7 +781,7 @@ export function SectionLibraryWorkspace({
         <section>
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold uppercase tracking-[0.3em] text-stone-500">Źródła komponentów</h3>
-            <button onClick={() => setMessage("Dodaj nowe repozytorium GitHub w formularzu importu.")} className="text-xs font-medium text-stone-700">
+            <button onClick={() => startTransition(() => { void addSource(); })} className="text-xs font-medium text-stone-700">
               <Plus size={12} className="mr-1 inline" />
               Dodaj
             </button>
