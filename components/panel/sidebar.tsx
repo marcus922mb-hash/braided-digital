@@ -21,6 +21,7 @@ import {
   Code,
   MessagesSquare,
   Palette,
+  LayoutTemplate,
 } from "lucide-react";
 import type { PanelShellUser } from "./shell";
 
@@ -59,6 +60,7 @@ const sections = [
     items: [
       { href: "/panel/demo", label: "Demo", Icon: Globe },
       { href: "/panel/templates", label: "Szablony", Icon: PanelsTopLeft },
+      { href: "/panel/sekcje", label: "Biblioteka sekcji", Icon: LayoutTemplate },
       { href: "/panel/builder", label: "Builder", Icon: Layers },
       { href: "/panel/wordpress", label: "WordPress", Icon: Layout },
       { href: "/panel/woocommerce", label: "WooCommerce", Icon: ShoppingBag },

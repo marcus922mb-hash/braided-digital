@@ -36,6 +36,9 @@ export default async function PanelBuilderPage() {
           <h1 className="crm-page-title">Builder</h1>
           <p className="crm-page-desc">Kreator stron drag &amp; drop</p>
         </div>
+        <Link href="/panel/sekcje" className="crm-btn crm-btn--primary crm-btn--sm">
+          Biblioteka sekcji →
+        </Link>
       </div>
 
       {/* Existing builder pages */}

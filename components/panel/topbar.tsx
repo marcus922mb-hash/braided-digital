@@ -13,6 +13,7 @@ const breadcrumbLabels: Record<string, string> = {
   wyceny: "Wyceny",
   demo: "Demo",
   templates: "Szablony",
+  sekcje: "Biblioteka sekcji",
   builder: "Builder",
   projekty: "Projekty",
   ai: "AI",
